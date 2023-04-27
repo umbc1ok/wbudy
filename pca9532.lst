@@ -1,0 +1,1108 @@
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"pca9532.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 92000000 		.text
+   9      02005400 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.align	2
+  12              		.global	getPca9532Pin
+  13              		.code 16
+  14              		.thumb_func
+  15              		.type	getPca9532Pin, %function
+  16              	getPca9532Pin:
+  17              	.LFB4:
+  18              		.file 1 "pca9532.c"
+   1:pca9532.c     **** /******************************************************************************
+   2:pca9532.c     ****  *
+   3:pca9532.c     ****  * Copyright:
+   4:pca9532.c     ****  *    (C) 2006 Embedded Artists AB
+   5:pca9532.c     ****  *
+   6:pca9532.c     ****  * File:
+   7:pca9532.c     ****  *    pca9532.c
+   8:pca9532.c     ****  *
+   9:pca9532.c     ****  * Description:
+  10:pca9532.c     ****  *    Implements hardware specific routines
+  11:pca9532.c     ****  *
+  12:pca9532.c     ****  *****************************************************************************/
+  13:pca9532.c     **** 
+  14:pca9532.c     **** /******************************************************************************
+  15:pca9532.c     ****  * Includes
+  16:pca9532.c     ****  *****************************************************************************/
+  17:pca9532.c     **** #include "../pre_emptive_os/api/osapi.h"
+  18:pca9532.c     **** #include "../pre_emptive_os/api/general.h"
+  19:pca9532.c     **** #include <lpc2xxx.h>
+  20:pca9532.c     **** #include <printf_P.h>
+  21:pca9532.c     **** #include "i2c.h"
+  22:pca9532.c     **** #include "eeprom.h"
+  23:pca9532.c     **** #include "pca9532.h"
+  24:pca9532.c     **** 
+  25:pca9532.c     **** /******************************************************************************
+  26:pca9532.c     ****  * Typedefs and defines
+  27:pca9532.c     ****  *****************************************************************************/
+  28:pca9532.c     **** 
+  29:pca9532.c     **** 
+  30:pca9532.c     **** /*****************************************************************************
+  31:pca9532.c     ****  * Global variables
+  32:pca9532.c     ****  ****************************************************************************/
+  33:pca9532.c     **** 
+  34:pca9532.c     **** /*****************************************************************************
+  35:pca9532.c     ****  * Local variables
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 2
+
+
+  36:pca9532.c     ****  ****************************************************************************/
+  37:pca9532.c     **** 
+  38:pca9532.c     **** /*****************************************************************************
+  39:pca9532.c     ****  * Local prototypes
+  40:pca9532.c     ****  ****************************************************************************/
+  41:pca9532.c     **** 
+  42:pca9532.c     **** 
+  43:pca9532.c     **** /*****************************************************************************
+  44:pca9532.c     ****  *
+  45:pca9532.c     ****  * Description:
+  46:pca9532.c     ****  *    Initialize the io-pins and find out if HW is ver 1.0 or ver 1.1
+  47:pca9532.c     ****  *
+  48:pca9532.c     ****  ****************************************************************************/
+  49:pca9532.c     **** tBool
+  50:pca9532.c     **** pca9532Init(void)
+  51:pca9532.c     **** {
+  52:pca9532.c     ****   tU8 initCommand[] = {0x12, 0x97, 0x80, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
+  53:pca9532.c     ****   //                                                         04 = LCD_RST# low
+  54:pca9532.c     ****   //                                                         10 = BT_RST# low
+  55:pca9532.c     **** 
+  56:pca9532.c     ****   //initialize PCA9532
+  57:pca9532.c     ****   if (I2C_CODE_OK == pca9532(initCommand, sizeof(initCommand), NULL, 0))
+  58:pca9532.c     ****     return TRUE;
+  59:pca9532.c     ****   else
+  60:pca9532.c     ****     return FALSE;
+  61:pca9532.c     **** }
+  62:pca9532.c     **** 
+  63:pca9532.c     **** 
+  64:pca9532.c     **** /*****************************************************************************
+  65:pca9532.c     ****  *
+  66:pca9532.c     ****  * Description:
+  67:pca9532.c     ****  *
+  68:pca9532.c     ****  ****************************************************************************/
+  69:pca9532.c     **** void
+  70:pca9532.c     **** setPca9532Pin(tU8 pinNum, tU8 value)
+  71:pca9532.c     **** {
+  72:pca9532.c     ****   tU8 command[] = {0x00, 0x00};
+  73:pca9532.c     ****   tU8 regValue;
+  74:pca9532.c     ****   tU8 mask;
+  75:pca9532.c     ****   
+  76:pca9532.c     ****   if (pinNum < 4)
+  77:pca9532.c     ****     command[0] = 0x06;
+  78:pca9532.c     ****   else if (pinNum < 8)
+  79:pca9532.c     ****     command[0] = 0x07;
+  80:pca9532.c     ****   else if (pinNum < 12)
+  81:pca9532.c     ****     command[0] = 0x08;
+  82:pca9532.c     ****   else
+  83:pca9532.c     ****     command[0] = 0x09;
+  84:pca9532.c     ****     
+  85:pca9532.c     ****   pca9532(command, 1, &regValue, 1);
+  86:pca9532.c     ****   
+  87:pca9532.c     ****   mask = (3 << 2*(pinNum % 4));
+  88:pca9532.c     ****   
+  89:pca9532.c     ****   regValue &= ~mask;
+  90:pca9532.c     ****   
+  91:pca9532.c     ****   if (value == 0)
+  92:pca9532.c     ****     command[1] = 0x01;
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 3
+
+
+  93:pca9532.c     ****   else
+  94:pca9532.c     ****     command[1] = 0x00;
+  95:pca9532.c     ****     
+  96:pca9532.c     ****   command[1] <<= 2*(pinNum % 4);
+  97:pca9532.c     ****   
+  98:pca9532.c     ****   command[1] |= regValue;
+  99:pca9532.c     **** 
+ 100:pca9532.c     ****   pca9532(command, sizeof(command), NULL, 0);
+ 101:pca9532.c     **** }
+ 102:pca9532.c     **** 
+ 103:pca9532.c     **** 
+ 104:pca9532.c     **** /*****************************************************************************
+ 105:pca9532.c     ****  *
+ 106:pca9532.c     ****  * Description:
+ 107:pca9532.c     ****  *
+ 108:pca9532.c     ****  ****************************************************************************/
+ 109:pca9532.c     **** tU16
+ 110:pca9532.c     **** getPca9532Pin(void)
+ 111:pca9532.c     **** {
+  19              		.loc 1 111 0
+  20 0000 10B5     		push	{r4, lr}
+  21              	.LCFI0:
+  22 0002 81B0     		sub	sp, sp, #4
+  23              	.LCFI1:
+ 112:pca9532.c     ****   tU8 command[] = {0x19};
+  24              		.loc 1 112 0
+  25 0004 6846     		mov	r0, sp
+  26 0006 0330     		add	r0, r0, #3
+  27 0008 1923     		mov	r3, #25
+ 113:pca9532.c     ****   tU8 regValue[3];
+ 114:pca9532.c     ****   
+ 115:pca9532.c     ****   pca9532(command, 1, regValue, 3);
+  28              		.loc 1 115 0
+  29 000a 6A46     		mov	r2, sp
+  30              		.loc 1 112 0
+  31 000c 0370     		strb	r3, [r0]
+  32              		.loc 1 115 0
+  33 000e 0121     		mov	r1, #1
+  34 0010 0323     		mov	r3, #3
+  35 0012 FFF7FEFF 		bl	pca9532
+  36 0016 6C46     		mov	r4, sp
+  37 0018 A378     		ldrb	r3, [r4, #2]
+  38 001a 6078     		ldrb	r0, [r4, #1]
+  39 001c 1B02     		lsl	r3, r3, #8
+  40 001e 1843     		orr	r0, r0, r3
+ 116:pca9532.c     ****   
+ 117:pca9532.c     ****   return (tU16)regValue[1] | ((tU16)regValue[2] << 8);
+ 118:pca9532.c     **** }
+  41              		.loc 1 118 0
+  42 0020 01B0     		add	sp, sp, #4
+  43              		@ sp needed for prologue
+  44 0022 10BC     		pop	{r4}
+  45 0024 02BC     		pop	{r1}
+  46 0026 0847     		bx	r1
+  47              	.LFE4:
+  48              		.size	getPca9532Pin, .-getPca9532Pin
+  49              		.align	2
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 4
+
+
+  50              		.global	setPca9532Pin
+  51              		.code 16
+  52              		.thumb_func
+  53              		.type	setPca9532Pin, %function
+  54              	setPca9532Pin:
+  55              	.LFB3:
+  56              		.loc 1 71 0
+  57 0028 F0B5     		push	{r4, r5, r6, r7, lr}
+  58              	.LCFI2:
+  59              	.LVL0:
+  60 002a 81B0     		sub	sp, sp, #4
+  61              	.LCFI3:
+  62              		.loc 1 72 0
+  63 002c 6C46     		mov	r4, sp
+  64              		.loc 1 71 0
+  65 002e 0006     		lsl	r0, r0, #24
+  66              	.LVL1:
+  67 0030 0906     		lsl	r1, r1, #24
+  68              	.LVL2:
+  69              		.loc 1 72 0
+  70 0032 0134     		add	r4, r4, #1
+  71              		.loc 1 71 0
+  72 0034 050E     		lsr	r5, r0, #24
+  73              	.LVL3:
+  74 0036 0F0E     		lsr	r7, r1, #24
+  75              	.LVL4:
+  76              		.loc 1 72 0
+  77 0038 201C     		mov	r0, r4
+  78 003a 1D49     		ldr	r1, .L17
+  79 003c 0222     		mov	r2, #2
+  80 003e FFF7FEFF 		bl	memcpy
+  81              		.loc 1 76 0
+  82 0042 032D     		cmp	r5, #3
+  83 0044 01D8     		bhi	.L4
+  84              		.loc 1 77 0
+  85 0046 0623     		mov	r3, #6
+  86 0048 08E0     		b	.L15
+  87              	.L4:
+  88              		.loc 1 78 0
+  89 004a 072D     		cmp	r5, #7
+  90 004c 01D8     		bhi	.L7
+  91              		.loc 1 79 0
+  92 004e 0723     		mov	r3, #7
+  93 0050 04E0     		b	.L15
+  94              	.L7:
+  95              		.loc 1 80 0
+  96 0052 0B2D     		cmp	r5, #11
+  97 0054 01D8     		bhi	.L9
+  98              		.loc 1 81 0
+  99 0056 0823     		mov	r3, #8
+ 100 0058 00E0     		b	.L15
+ 101              	.L9:
+ 102              		.loc 1 83 0
+ 103 005a 0923     		mov	r3, #9
+ 104              	.L15:
+ 105 005c 2370     		strb	r3, [r4]
+ 106              		.loc 1 85 0
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 5
+
+
+ 107 005e 6E46     		mov	r6, sp
+ 108 0060 6C46     		mov	r4, sp
+ 109 0062 0334     		add	r4, r4, #3
+ 110 0064 0136     		add	r6, r6, #1
+ 111 0066 0121     		mov	r1, #1
+ 112 0068 221C     		mov	r2, r4
+ 113 006a 0123     		mov	r3, #1
+ 114 006c 301C     		mov	r0, r6
+ 115 006e FFF7FEFF 		bl	pca9532
+ 116              		.loc 1 87 0
+ 117 0072 0323     		mov	r3, #3
+ 118 0074 2A1C     		mov	r2, r5
+ 119 0076 1A40     		and	r2, r2, r3
+ 120 0078 5100     		lsl	r1, r2, #1
+ 121              		.loc 1 89 0
+ 122 007a 2278     		ldrb	r2, [r4]
+ 123              	.LVL5:
+ 124 007c 8B40     		lsl	r3, r3, r1
+ 125 007e 9A43     		bic	r2, r2, r3
+ 126              	.LVL6:
+ 127              		.loc 1 91 0
+ 128 0080 002F     		cmp	r7, #0
+ 129 0082 01D1     		bne	.L11
+ 130              		.loc 1 92 0
+ 131 0084 0123     		mov	r3, #1
+ 132 0086 00E0     		b	.L16
+ 133              	.L11:
+ 134              		.loc 1 94 0
+ 135 0088 0023     		mov	r3, #0
+ 136              	.L16:
+ 137 008a 7370     		strb	r3, [r6, #1]
+ 138              		.loc 1 98 0
+ 139 008c 6846     		mov	r0, sp
+ 140 008e 0130     		add	r0, r0, #1
+ 141 0090 4378     		ldrb	r3, [r0, #1]
+ 142 0092 8B40     		lsl	r3, r3, r1
+ 143 0094 1343     		orr	r3, r3, r2
+ 144 0096 4370     		strb	r3, [r0, #1]
+ 145              		.loc 1 89 0
+ 146 0098 6B46     		mov	r3, sp
+ 147 009a 0333     		add	r3, r3, #3
+ 148 009c 1A70     		strb	r2, [r3]
+ 149              	.LVL7:
+ 150              		.loc 1 100 0
+ 151 009e 0221     		mov	r1, #2
+ 152 00a0 0022     		mov	r2, #0
+ 153 00a2 0023     		mov	r3, #0
+ 154 00a4 FFF7FEFF 		bl	pca9532
+ 155              		.loc 1 101 0
+ 156 00a8 01B0     		add	sp, sp, #4
+ 157              		@ sp needed for prologue
+ 158              	.LVL8:
+ 159              	.LVL9:
+ 160 00aa F0BC     		pop	{r4, r5, r6, r7}
+ 161 00ac 01BC     		pop	{r0}
+ 162 00ae 0047     		bx	r0
+ 163              	.L18:
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 6
+
+
+ 164              		.align	2
+ 165              	.L17:
+ 166 00b0 00000000 		.word	C.1.1683
+ 167              	.LFE3:
+ 168              		.size	setPca9532Pin, .-setPca9532Pin
+ 169              		.align	2
+ 170              		.global	pca9532Init
+ 171              		.code 16
+ 172              		.thumb_func
+ 173              		.type	pca9532Init, %function
+ 174              	pca9532Init:
+ 175              	.LFB2:
+ 176              		.loc 1 51 0
+ 177 00b4 10B5     		push	{r4, lr}
+ 178              	.LCFI4:
+ 179 00b6 83B0     		sub	sp, sp, #12
+ 180              	.LCFI5:
+ 181              		.loc 1 52 0
+ 182 00b8 6C46     		mov	r4, sp
+ 183 00ba 0334     		add	r4, r4, #3
+ 184 00bc 0A49     		ldr	r1, .L22
+ 185 00be 0922     		mov	r2, #9
+ 186 00c0 201C     		mov	r0, r4
+ 187 00c2 FFF7FEFF 		bl	memcpy
+ 188              		.loc 1 57 0
+ 189 00c6 0023     		mov	r3, #0
+ 190 00c8 201C     		mov	r0, r4
+ 191 00ca 0921     		mov	r1, #9
+ 192 00cc 0022     		mov	r2, #0
+ 193 00ce FFF7FEFF 		bl	pca9532
+ 194 00d2 0006     		lsl	r0, r0, #24
+ 195 00d4 0016     		asr	r0, r0, #24
+ 196 00d6 0023     		mov	r3, #0
+ 197 00d8 0128     		cmp	r0, #1
+ 198 00da 00D1     		bne	.L20
+ 199 00dc 0123     		mov	r3, #1
+ 200              	.L20:
+ 201              		.loc 1 61 0
+ 202 00de 181C     		mov	r0, r3
+ 203 00e0 03B0     		add	sp, sp, #12
+ 204              		@ sp needed for prologue
+ 205 00e2 10BC     		pop	{r4}
+ 206 00e4 02BC     		pop	{r1}
+ 207 00e6 0847     		bx	r1
+ 208              	.L23:
+ 209              		.align	2
+ 210              	.L22:
+ 211 00e8 02000000 		.word	C.0.1673
+ 212              	.LFE2:
+ 213              		.size	pca9532Init, .-pca9532Init
+ 214              		.section	.rodata
+ 215              		.type	C.1.1683, %object
+ 216              		.size	C.1.1683, 2
+ 217              	C.1.1683:
+ 218 0000 0000     		.space	2
+ 219              		.type	C.0.1673, %object
+ 220              		.size	C.0.1673, 9
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 7
+
+
+ 221              	C.0.1673:
+ 222 0002 12       		.byte	18
+ 223 0003 97       		.byte	-105
+ 224 0004 80       		.byte	-128
+ 225 0005 00       		.byte	0
+ 226 0006 40       		.byte	64
+ 227 0007 00       		.byte	0
+ 228 0008 00       		.byte	0
+ 229 0009 00       		.byte	0
+ 230 000a 00       		.byte	0
+ 231              		.section	.debug_frame,"",%progbits
+ 232              	.Lframe0:
+ 233 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 234              	.LSCIE0:
+ 235 0004 FFFFFFFF 		.4byte	0xffffffff
+ 236 0008 01       		.byte	0x1
+ 237 0009 00       		.ascii	"\000"
+ 238 000a 01       		.uleb128 0x1
+ 239 000b 7C       		.sleb128 -4
+ 240 000c 0E       		.byte	0xe
+ 241 000d 0C       		.byte	0xc
+ 242 000e 0D       		.uleb128 0xd
+ 243 000f 00       		.uleb128 0x0
+ 244              		.align	2
+ 245              	.LECIE0:
+ 246              	.LSFDE0:
+ 247 0010 18000000 		.4byte	.LEFDE0-.LASFDE0
+ 248              	.LASFDE0:
+ 249 0014 00000000 		.4byte	.Lframe0
+ 250 0018 00000000 		.4byte	.LFB4
+ 251 001c 28000000 		.4byte	.LFE4-.LFB4
+ 252 0020 42       		.byte	0x4
+ 253              		.4byte	.LCFI0-.LFB4
+ 254 0021 0E       		.byte	0xe
+ 255 0022 08       		.uleb128 0x8
+ 256 0023 84       		.byte	0x84
+ 257 0024 02       		.uleb128 0x2
+ 258 0025 8E       		.byte	0x8e
+ 259 0026 01       		.uleb128 0x1
+ 260 0027 42       		.byte	0x4
+ 261              		.4byte	.LCFI1-.LCFI0
+ 262 0028 0E       		.byte	0xe
+ 263 0029 0C       		.uleb128 0xc
+ 264 002a 0000     		.align	2
+ 265              	.LEFDE0:
+ 266              	.LSFDE2:
+ 267 002c 1C000000 		.4byte	.LEFDE2-.LASFDE2
+ 268              	.LASFDE2:
+ 269 0030 00000000 		.4byte	.Lframe0
+ 270 0034 28000000 		.4byte	.LFB3
+ 271 0038 8C000000 		.4byte	.LFE3-.LFB3
+ 272 003c 42       		.byte	0x4
+ 273              		.4byte	.LCFI2-.LFB3
+ 274 003d 0E       		.byte	0xe
+ 275 003e 14       		.uleb128 0x14
+ 276 003f 84       		.byte	0x84
+ 277 0040 05       		.uleb128 0x5
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 8
+
+
+ 278 0041 85       		.byte	0x85
+ 279 0042 04       		.uleb128 0x4
+ 280 0043 86       		.byte	0x86
+ 281 0044 03       		.uleb128 0x3
+ 282 0045 87       		.byte	0x87
+ 283 0046 02       		.uleb128 0x2
+ 284 0047 8E       		.byte	0x8e
+ 285 0048 01       		.uleb128 0x1
+ 286 0049 42       		.byte	0x4
+ 287              		.4byte	.LCFI3-.LCFI2
+ 288 004a 0E       		.byte	0xe
+ 289 004b 18       		.uleb128 0x18
+ 290              		.align	2
+ 291              	.LEFDE2:
+ 292              	.LSFDE4:
+ 293 004c 18000000 		.4byte	.LEFDE4-.LASFDE4
+ 294              	.LASFDE4:
+ 295 0050 00000000 		.4byte	.Lframe0
+ 296 0054 B4000000 		.4byte	.LFB2
+ 297 0058 38000000 		.4byte	.LFE2-.LFB2
+ 298 005c 42       		.byte	0x4
+ 299              		.4byte	.LCFI4-.LFB2
+ 300 005d 0E       		.byte	0xe
+ 301 005e 08       		.uleb128 0x8
+ 302 005f 84       		.byte	0x84
+ 303 0060 02       		.uleb128 0x2
+ 304 0061 8E       		.byte	0x8e
+ 305 0062 01       		.uleb128 0x1
+ 306 0063 42       		.byte	0x4
+ 307              		.4byte	.LCFI5-.LCFI4
+ 308 0064 0E       		.byte	0xe
+ 309 0065 14       		.uleb128 0x14
+ 310 0066 0000     		.align	2
+ 311              	.LEFDE4:
+ 312              		.text
+ 313              	.Letext0:
+ 314              		.section	.debug_loc,"",%progbits
+ 315              	.Ldebug_loc0:
+ 316              	.LLST0:
+ 317 0000 00000000 		.4byte	.LFB4-.Ltext0
+ 318 0004 02000000 		.4byte	.LCFI0-.Ltext0
+ 319 0008 0100     		.2byte	0x1
+ 320 000a 5D       		.byte	0x5d
+ 321 000b 02000000 		.4byte	.LCFI0-.Ltext0
+ 322 000f 04000000 		.4byte	.LCFI1-.Ltext0
+ 323 0013 0200     		.2byte	0x2
+ 324 0015 7D       		.byte	0x7d
+ 325 0016 08       		.sleb128 8
+ 326 0017 04000000 		.4byte	.LCFI1-.Ltext0
+ 327 001b 28000000 		.4byte	.LFE4-.Ltext0
+ 328 001f 0200     		.2byte	0x2
+ 329 0021 7D       		.byte	0x7d
+ 330 0022 0C       		.sleb128 12
+ 331 0023 00000000 		.4byte	0x0
+ 332 0027 00000000 		.4byte	0x0
+ 333              	.LLST1:
+ 334 002b 28000000 		.4byte	.LFB3-.Ltext0
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 9
+
+
+ 335 002f 2A000000 		.4byte	.LCFI2-.Ltext0
+ 336 0033 0100     		.2byte	0x1
+ 337 0035 5D       		.byte	0x5d
+ 338 0036 2A000000 		.4byte	.LCFI2-.Ltext0
+ 339 003a 2C000000 		.4byte	.LCFI3-.Ltext0
+ 340 003e 0200     		.2byte	0x2
+ 341 0040 7D       		.byte	0x7d
+ 342 0041 14       		.sleb128 20
+ 343 0042 2C000000 		.4byte	.LCFI3-.Ltext0
+ 344 0046 B4000000 		.4byte	.LFE3-.Ltext0
+ 345 004a 0200     		.2byte	0x2
+ 346 004c 7D       		.byte	0x7d
+ 347 004d 18       		.sleb128 24
+ 348 004e 00000000 		.4byte	0x0
+ 349 0052 00000000 		.4byte	0x0
+ 350              	.LLST2:
+ 351 0056 2A000000 		.4byte	.LVL0-.Ltext0
+ 352 005a 30000000 		.4byte	.LVL1-.Ltext0
+ 353 005e 0100     		.2byte	0x1
+ 354 0060 50       		.byte	0x50
+ 355 0061 36000000 		.4byte	.LVL3-.Ltext0
+ 356 0065 AA000000 		.4byte	.LVL8-.Ltext0
+ 357 0069 0100     		.2byte	0x1
+ 358 006b 55       		.byte	0x55
+ 359 006c 00000000 		.4byte	0x0
+ 360 0070 00000000 		.4byte	0x0
+ 361              	.LLST3:
+ 362 0074 2A000000 		.4byte	.LVL0-.Ltext0
+ 363 0078 32000000 		.4byte	.LVL2-.Ltext0
+ 364 007c 0100     		.2byte	0x1
+ 365 007e 51       		.byte	0x51
+ 366 007f 38000000 		.4byte	.LVL4-.Ltext0
+ 367 0083 AA000000 		.4byte	.LVL9-.Ltext0
+ 368 0087 0100     		.2byte	0x1
+ 369 0089 57       		.byte	0x57
+ 370 008a 00000000 		.4byte	0x0
+ 371 008e 00000000 		.4byte	0x0
+ 372              	.LLST4:
+ 373 0092 7C000000 		.4byte	.LVL5-.Ltext0
+ 374 0096 7C000000 		.4byte	.LVL5-.Ltext0
+ 375 009a 0200     		.2byte	0x2
+ 376 009c 74       		.byte	0x74
+ 377 009d 00       		.sleb128 0
+ 378 009e 7C000000 		.4byte	.LVL5-.Ltext0
+ 379 00a2 80000000 		.4byte	.LVL6-.Ltext0
+ 380 00a6 0100     		.2byte	0x1
+ 381 00a8 52       		.byte	0x52
+ 382 00a9 9E000000 		.4byte	.LVL7-.Ltext0
+ 383 00ad B4000000 		.4byte	.LFE3-.Ltext0
+ 384 00b1 0200     		.2byte	0x2
+ 385 00b3 73       		.byte	0x73
+ 386 00b4 00       		.sleb128 0
+ 387 00b5 00000000 		.4byte	0x0
+ 388 00b9 00000000 		.4byte	0x0
+ 389              	.LLST5:
+ 390 00bd B4000000 		.4byte	.LFB2-.Ltext0
+ 391 00c1 B6000000 		.4byte	.LCFI4-.Ltext0
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 10
+
+
+ 392 00c5 0100     		.2byte	0x1
+ 393 00c7 5D       		.byte	0x5d
+ 394 00c8 B6000000 		.4byte	.LCFI4-.Ltext0
+ 395 00cc B8000000 		.4byte	.LCFI5-.Ltext0
+ 396 00d0 0200     		.2byte	0x2
+ 397 00d2 7D       		.byte	0x7d
+ 398 00d3 08       		.sleb128 8
+ 399 00d4 B8000000 		.4byte	.LCFI5-.Ltext0
+ 400 00d8 EC000000 		.4byte	.LFE2-.Ltext0
+ 401 00dc 0200     		.2byte	0x2
+ 402 00de 7D       		.byte	0x7d
+ 403 00df 14       		.sleb128 20
+ 404 00e0 00000000 		.4byte	0x0
+ 405 00e4 00000000 		.4byte	0x0
+ 406              		.file 2 "./startup/../pre_emptive_os/api/../api/general.h"
+ 407              		.section	.debug_info
+ 408 0000 72010000 		.4byte	0x172
+ 409 0004 0200     		.2byte	0x2
+ 410 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 411 000a 04       		.byte	0x4
+ 412 000b 01       		.uleb128 0x1
+ 413 000c 00000000 		.4byte	.LASF14
+ 414 0010 01       		.byte	0x1
+ 415 0011 A7000000 		.4byte	.LASF15
+ 416 0015 0C000000 		.4byte	.LASF16
+ 417 0019 00000000 		.4byte	.Ltext0
+ 418 001d EC000000 		.4byte	.Letext0
+ 419 0021 00000000 		.4byte	.Ldebug_line0
+ 420 0025 02       		.uleb128 0x2
+ 421 0026 74553800 		.ascii	"tU8\000"
+ 422 002a 02       		.byte	0x2
+ 423 002b 47       		.byte	0x47
+ 424 002c 30000000 		.4byte	0x30
+ 425 0030 03       		.uleb128 0x3
+ 426 0031 01       		.byte	0x1
+ 427 0032 08       		.byte	0x8
+ 428 0033 BF000000 		.4byte	.LASF1
+ 429 0037 04       		.uleb128 0x4
+ 430 0038 13010000 		.4byte	.LASF0
+ 431 003c 02       		.byte	0x2
+ 432 003d 48       		.byte	0x48
+ 433 003e 42000000 		.4byte	0x42
+ 434 0042 03       		.uleb128 0x3
+ 435 0043 02       		.byte	0x2
+ 436 0044 07       		.byte	0x7
+ 437 0045 CD000000 		.4byte	.LASF2
+ 438 0049 03       		.uleb128 0x3
+ 439 004a 04       		.byte	0x4
+ 440 004b 07       		.byte	0x7
+ 441 004c EE000000 		.4byte	.LASF3
+ 442 0050 03       		.uleb128 0x3
+ 443 0051 01       		.byte	0x1
+ 444 0052 06       		.byte	0x6
+ 445 0053 2D010000 		.4byte	.LASF4
+ 446 0057 03       		.uleb128 0x3
+ 447 0058 02       		.byte	0x2
+ 448 0059 05       		.byte	0x5
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 11
+
+
+ 449 005a 23010000 		.4byte	.LASF5
+ 450 005e 05       		.uleb128 0x5
+ 451 005f 04       		.byte	0x4
+ 452 0060 05       		.byte	0x5
+ 453 0061 696E7400 		.ascii	"int\000"
+ 454 0065 04       		.uleb128 0x4
+ 455 0066 42010000 		.4byte	.LASF6
+ 456 006a 02       		.byte	0x2
+ 457 006b 4D       		.byte	0x4d
+ 458 006c 30000000 		.4byte	0x30
+ 459 0070 06       		.uleb128 0x6
+ 460 0071 04       		.byte	0x4
+ 461 0072 07       		.byte	0x7
+ 462 0073 07       		.uleb128 0x7
+ 463 0074 01       		.byte	0x1
+ 464 0075 B1000000 		.4byte	.LASF11
+ 465 0079 01       		.byte	0x1
+ 466 007a 6F       		.byte	0x6f
+ 467 007b 01       		.byte	0x1
+ 468 007c 37000000 		.4byte	0x37
+ 469 0080 00000000 		.4byte	.LFB4
+ 470 0084 28000000 		.4byte	.LFE4
+ 471 0088 00000000 		.4byte	.LLST0
+ 472 008c AD000000 		.4byte	0xad
+ 473 0090 08       		.uleb128 0x8
+ 474 0091 9F000000 		.4byte	.LASF7
+ 475 0095 01       		.byte	0x1
+ 476 0096 70       		.byte	0x70
+ 477 0097 AD000000 		.4byte	0xad
+ 478 009b 02       		.byte	0x2
+ 479 009c 91       		.byte	0x91
+ 480 009d 77       		.sleb128 -9
+ 481 009e 08       		.uleb128 0x8
+ 482 009f 39010000 		.4byte	.LASF8
+ 483 00a3 01       		.byte	0x1
+ 484 00a4 71       		.byte	0x71
+ 485 00a5 BD000000 		.4byte	0xbd
+ 486 00a9 02       		.byte	0x2
+ 487 00aa 91       		.byte	0x91
+ 488 00ab 74       		.sleb128 -12
+ 489 00ac 00       		.byte	0x0
+ 490 00ad 09       		.uleb128 0x9
+ 491 00ae 25000000 		.4byte	0x25
+ 492 00b2 BD000000 		.4byte	0xbd
+ 493 00b6 0A       		.uleb128 0xa
+ 494 00b7 70000000 		.4byte	0x70
+ 495 00bb 00       		.byte	0x0
+ 496 00bc 00       		.byte	0x0
+ 497 00bd 09       		.uleb128 0x9
+ 498 00be 25000000 		.4byte	0x25
+ 499 00c2 CD000000 		.4byte	0xcd
+ 500 00c6 0A       		.uleb128 0xa
+ 501 00c7 70000000 		.4byte	0x70
+ 502 00cb 02       		.byte	0x2
+ 503 00cc 00       		.byte	0x0
+ 504 00cd 0B       		.uleb128 0xb
+ 505 00ce 01       		.byte	0x1
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 12
+
+
+ 506 00cf E0000000 		.4byte	.LASF17
+ 507 00d3 01       		.byte	0x1
+ 508 00d4 47       		.byte	0x47
+ 509 00d5 01       		.byte	0x1
+ 510 00d6 28000000 		.4byte	.LFB3
+ 511 00da B4000000 		.4byte	.LFE3
+ 512 00de 2B000000 		.4byte	.LLST1
+ 513 00e2 2D010000 		.4byte	0x12d
+ 514 00e6 0C       		.uleb128 0xc
+ 515 00e7 98000000 		.4byte	.LASF9
+ 516 00eb 01       		.byte	0x1
+ 517 00ec 46       		.byte	0x46
+ 518 00ed 25000000 		.4byte	0x25
+ 519 00f1 56000000 		.4byte	.LLST2
+ 520 00f5 0C       		.uleb128 0xc
+ 521 00f6 1D010000 		.4byte	.LASF10
+ 522 00fa 01       		.byte	0x1
+ 523 00fb 46       		.byte	0x46
+ 524 00fc 25000000 		.4byte	0x25
+ 525 0100 74000000 		.4byte	.LLST3
+ 526 0104 08       		.uleb128 0x8
+ 527 0105 9F000000 		.4byte	.LASF7
+ 528 0109 01       		.byte	0x1
+ 529 010a 48       		.byte	0x48
+ 530 010b 2D010000 		.4byte	0x12d
+ 531 010f 02       		.byte	0x2
+ 532 0110 91       		.byte	0x91
+ 533 0111 69       		.sleb128 -23
+ 534 0112 0D       		.uleb128 0xd
+ 535 0113 39010000 		.4byte	.LASF8
+ 536 0117 01       		.byte	0x1
+ 537 0118 49       		.byte	0x49
+ 538 0119 25000000 		.4byte	0x25
+ 539 011d 92000000 		.4byte	.LLST4
+ 540 0121 0E       		.uleb128 0xe
+ 541 0122 18010000 		.4byte	.LASF18
+ 542 0126 01       		.byte	0x1
+ 543 0127 4A       		.byte	0x4a
+ 544 0128 25000000 		.4byte	0x25
+ 545 012c 00       		.byte	0x0
+ 546 012d 09       		.uleb128 0x9
+ 547 012e 25000000 		.4byte	0x25
+ 548 0132 3D010000 		.4byte	0x13d
+ 549 0136 0A       		.uleb128 0xa
+ 550 0137 70000000 		.4byte	0x70
+ 551 013b 01       		.byte	0x1
+ 552 013c 00       		.byte	0x0
+ 553 013d 07       		.uleb128 0x7
+ 554 013e 01       		.byte	0x1
+ 555 013f 07010000 		.4byte	.LASF12
+ 556 0143 01       		.byte	0x1
+ 557 0144 33       		.byte	0x33
+ 558 0145 01       		.byte	0x1
+ 559 0146 65000000 		.4byte	0x65
+ 560 014a B4000000 		.4byte	.LFB2
+ 561 014e EC000000 		.4byte	.LFE2
+ 562 0152 BD000000 		.4byte	.LLST5
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 13
+
+
+ 563 0156 69010000 		.4byte	0x169
+ 564 015a 08       		.uleb128 0x8
+ 565 015b FB000000 		.4byte	.LASF13
+ 566 015f 01       		.byte	0x1
+ 567 0160 34       		.byte	0x34
+ 568 0161 69010000 		.4byte	0x169
+ 569 0165 02       		.byte	0x2
+ 570 0166 91       		.byte	0x91
+ 571 0167 6F       		.sleb128 -17
+ 572 0168 00       		.byte	0x0
+ 573 0169 0F       		.uleb128 0xf
+ 574 016a 25000000 		.4byte	0x25
+ 575 016e 0A       		.uleb128 0xa
+ 576 016f 70000000 		.4byte	0x70
+ 577 0173 08       		.byte	0x8
+ 578 0174 00       		.byte	0x0
+ 579 0175 00       		.byte	0x0
+ 580              		.section	.debug_abbrev
+ 581 0000 01       		.uleb128 0x1
+ 582 0001 11       		.uleb128 0x11
+ 583 0002 01       		.byte	0x1
+ 584 0003 25       		.uleb128 0x25
+ 585 0004 0E       		.uleb128 0xe
+ 586 0005 13       		.uleb128 0x13
+ 587 0006 0B       		.uleb128 0xb
+ 588 0007 03       		.uleb128 0x3
+ 589 0008 0E       		.uleb128 0xe
+ 590 0009 1B       		.uleb128 0x1b
+ 591 000a 0E       		.uleb128 0xe
+ 592 000b 11       		.uleb128 0x11
+ 593 000c 01       		.uleb128 0x1
+ 594 000d 12       		.uleb128 0x12
+ 595 000e 01       		.uleb128 0x1
+ 596 000f 10       		.uleb128 0x10
+ 597 0010 06       		.uleb128 0x6
+ 598 0011 00       		.byte	0x0
+ 599 0012 00       		.byte	0x0
+ 600 0013 02       		.uleb128 0x2
+ 601 0014 16       		.uleb128 0x16
+ 602 0015 00       		.byte	0x0
+ 603 0016 03       		.uleb128 0x3
+ 604 0017 08       		.uleb128 0x8
+ 605 0018 3A       		.uleb128 0x3a
+ 606 0019 0B       		.uleb128 0xb
+ 607 001a 3B       		.uleb128 0x3b
+ 608 001b 0B       		.uleb128 0xb
+ 609 001c 49       		.uleb128 0x49
+ 610 001d 13       		.uleb128 0x13
+ 611 001e 00       		.byte	0x0
+ 612 001f 00       		.byte	0x0
+ 613 0020 03       		.uleb128 0x3
+ 614 0021 24       		.uleb128 0x24
+ 615 0022 00       		.byte	0x0
+ 616 0023 0B       		.uleb128 0xb
+ 617 0024 0B       		.uleb128 0xb
+ 618 0025 3E       		.uleb128 0x3e
+ 619 0026 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 14
+
+
+ 620 0027 03       		.uleb128 0x3
+ 621 0028 0E       		.uleb128 0xe
+ 622 0029 00       		.byte	0x0
+ 623 002a 00       		.byte	0x0
+ 624 002b 04       		.uleb128 0x4
+ 625 002c 16       		.uleb128 0x16
+ 626 002d 00       		.byte	0x0
+ 627 002e 03       		.uleb128 0x3
+ 628 002f 0E       		.uleb128 0xe
+ 629 0030 3A       		.uleb128 0x3a
+ 630 0031 0B       		.uleb128 0xb
+ 631 0032 3B       		.uleb128 0x3b
+ 632 0033 0B       		.uleb128 0xb
+ 633 0034 49       		.uleb128 0x49
+ 634 0035 13       		.uleb128 0x13
+ 635 0036 00       		.byte	0x0
+ 636 0037 00       		.byte	0x0
+ 637 0038 05       		.uleb128 0x5
+ 638 0039 24       		.uleb128 0x24
+ 639 003a 00       		.byte	0x0
+ 640 003b 0B       		.uleb128 0xb
+ 641 003c 0B       		.uleb128 0xb
+ 642 003d 3E       		.uleb128 0x3e
+ 643 003e 0B       		.uleb128 0xb
+ 644 003f 03       		.uleb128 0x3
+ 645 0040 08       		.uleb128 0x8
+ 646 0041 00       		.byte	0x0
+ 647 0042 00       		.byte	0x0
+ 648 0043 06       		.uleb128 0x6
+ 649 0044 24       		.uleb128 0x24
+ 650 0045 00       		.byte	0x0
+ 651 0046 0B       		.uleb128 0xb
+ 652 0047 0B       		.uleb128 0xb
+ 653 0048 3E       		.uleb128 0x3e
+ 654 0049 0B       		.uleb128 0xb
+ 655 004a 00       		.byte	0x0
+ 656 004b 00       		.byte	0x0
+ 657 004c 07       		.uleb128 0x7
+ 658 004d 2E       		.uleb128 0x2e
+ 659 004e 01       		.byte	0x1
+ 660 004f 3F       		.uleb128 0x3f
+ 661 0050 0C       		.uleb128 0xc
+ 662 0051 03       		.uleb128 0x3
+ 663 0052 0E       		.uleb128 0xe
+ 664 0053 3A       		.uleb128 0x3a
+ 665 0054 0B       		.uleb128 0xb
+ 666 0055 3B       		.uleb128 0x3b
+ 667 0056 0B       		.uleb128 0xb
+ 668 0057 27       		.uleb128 0x27
+ 669 0058 0C       		.uleb128 0xc
+ 670 0059 49       		.uleb128 0x49
+ 671 005a 13       		.uleb128 0x13
+ 672 005b 11       		.uleb128 0x11
+ 673 005c 01       		.uleb128 0x1
+ 674 005d 12       		.uleb128 0x12
+ 675 005e 01       		.uleb128 0x1
+ 676 005f 40       		.uleb128 0x40
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 15
+
+
+ 677 0060 06       		.uleb128 0x6
+ 678 0061 01       		.uleb128 0x1
+ 679 0062 13       		.uleb128 0x13
+ 680 0063 00       		.byte	0x0
+ 681 0064 00       		.byte	0x0
+ 682 0065 08       		.uleb128 0x8
+ 683 0066 34       		.uleb128 0x34
+ 684 0067 00       		.byte	0x0
+ 685 0068 03       		.uleb128 0x3
+ 686 0069 0E       		.uleb128 0xe
+ 687 006a 3A       		.uleb128 0x3a
+ 688 006b 0B       		.uleb128 0xb
+ 689 006c 3B       		.uleb128 0x3b
+ 690 006d 0B       		.uleb128 0xb
+ 691 006e 49       		.uleb128 0x49
+ 692 006f 13       		.uleb128 0x13
+ 693 0070 02       		.uleb128 0x2
+ 694 0071 0A       		.uleb128 0xa
+ 695 0072 00       		.byte	0x0
+ 696 0073 00       		.byte	0x0
+ 697 0074 09       		.uleb128 0x9
+ 698 0075 01       		.uleb128 0x1
+ 699 0076 01       		.byte	0x1
+ 700 0077 49       		.uleb128 0x49
+ 701 0078 13       		.uleb128 0x13
+ 702 0079 01       		.uleb128 0x1
+ 703 007a 13       		.uleb128 0x13
+ 704 007b 00       		.byte	0x0
+ 705 007c 00       		.byte	0x0
+ 706 007d 0A       		.uleb128 0xa
+ 707 007e 21       		.uleb128 0x21
+ 708 007f 00       		.byte	0x0
+ 709 0080 49       		.uleb128 0x49
+ 710 0081 13       		.uleb128 0x13
+ 711 0082 2F       		.uleb128 0x2f
+ 712 0083 0B       		.uleb128 0xb
+ 713 0084 00       		.byte	0x0
+ 714 0085 00       		.byte	0x0
+ 715 0086 0B       		.uleb128 0xb
+ 716 0087 2E       		.uleb128 0x2e
+ 717 0088 01       		.byte	0x1
+ 718 0089 3F       		.uleb128 0x3f
+ 719 008a 0C       		.uleb128 0xc
+ 720 008b 03       		.uleb128 0x3
+ 721 008c 0E       		.uleb128 0xe
+ 722 008d 3A       		.uleb128 0x3a
+ 723 008e 0B       		.uleb128 0xb
+ 724 008f 3B       		.uleb128 0x3b
+ 725 0090 0B       		.uleb128 0xb
+ 726 0091 27       		.uleb128 0x27
+ 727 0092 0C       		.uleb128 0xc
+ 728 0093 11       		.uleb128 0x11
+ 729 0094 01       		.uleb128 0x1
+ 730 0095 12       		.uleb128 0x12
+ 731 0096 01       		.uleb128 0x1
+ 732 0097 40       		.uleb128 0x40
+ 733 0098 06       		.uleb128 0x6
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 16
+
+
+ 734 0099 01       		.uleb128 0x1
+ 735 009a 13       		.uleb128 0x13
+ 736 009b 00       		.byte	0x0
+ 737 009c 00       		.byte	0x0
+ 738 009d 0C       		.uleb128 0xc
+ 739 009e 05       		.uleb128 0x5
+ 740 009f 00       		.byte	0x0
+ 741 00a0 03       		.uleb128 0x3
+ 742 00a1 0E       		.uleb128 0xe
+ 743 00a2 3A       		.uleb128 0x3a
+ 744 00a3 0B       		.uleb128 0xb
+ 745 00a4 3B       		.uleb128 0x3b
+ 746 00a5 0B       		.uleb128 0xb
+ 747 00a6 49       		.uleb128 0x49
+ 748 00a7 13       		.uleb128 0x13
+ 749 00a8 02       		.uleb128 0x2
+ 750 00a9 06       		.uleb128 0x6
+ 751 00aa 00       		.byte	0x0
+ 752 00ab 00       		.byte	0x0
+ 753 00ac 0D       		.uleb128 0xd
+ 754 00ad 34       		.uleb128 0x34
+ 755 00ae 00       		.byte	0x0
+ 756 00af 03       		.uleb128 0x3
+ 757 00b0 0E       		.uleb128 0xe
+ 758 00b1 3A       		.uleb128 0x3a
+ 759 00b2 0B       		.uleb128 0xb
+ 760 00b3 3B       		.uleb128 0x3b
+ 761 00b4 0B       		.uleb128 0xb
+ 762 00b5 49       		.uleb128 0x49
+ 763 00b6 13       		.uleb128 0x13
+ 764 00b7 02       		.uleb128 0x2
+ 765 00b8 06       		.uleb128 0x6
+ 766 00b9 00       		.byte	0x0
+ 767 00ba 00       		.byte	0x0
+ 768 00bb 0E       		.uleb128 0xe
+ 769 00bc 34       		.uleb128 0x34
+ 770 00bd 00       		.byte	0x0
+ 771 00be 03       		.uleb128 0x3
+ 772 00bf 0E       		.uleb128 0xe
+ 773 00c0 3A       		.uleb128 0x3a
+ 774 00c1 0B       		.uleb128 0xb
+ 775 00c2 3B       		.uleb128 0x3b
+ 776 00c3 0B       		.uleb128 0xb
+ 777 00c4 49       		.uleb128 0x49
+ 778 00c5 13       		.uleb128 0x13
+ 779 00c6 00       		.byte	0x0
+ 780 00c7 00       		.byte	0x0
+ 781 00c8 0F       		.uleb128 0xf
+ 782 00c9 01       		.uleb128 0x1
+ 783 00ca 01       		.byte	0x1
+ 784 00cb 49       		.uleb128 0x49
+ 785 00cc 13       		.uleb128 0x13
+ 786 00cd 00       		.byte	0x0
+ 787 00ce 00       		.byte	0x0
+ 788 00cf 00       		.byte	0x0
+ 789              		.section	.debug_pubnames,"",%progbits
+ 790 0000 42000000 		.4byte	0x42
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 17
+
+
+ 791 0004 0200     		.2byte	0x2
+ 792 0006 00000000 		.4byte	.Ldebug_info0
+ 793 000a 76010000 		.4byte	0x176
+ 794 000e 73000000 		.4byte	0x73
+ 795 0012 67657450 		.ascii	"getPca9532Pin\000"
+ 795      63613935 
+ 795      33325069 
+ 795      6E00
+ 796 0020 CD000000 		.4byte	0xcd
+ 797 0024 73657450 		.ascii	"setPca9532Pin\000"
+ 797      63613935 
+ 797      33325069 
+ 797      6E00
+ 798 0032 3D010000 		.4byte	0x13d
+ 799 0036 70636139 		.ascii	"pca9532Init\000"
+ 799      35333249 
+ 799      6E697400 
+ 800 0042 00000000 		.4byte	0x0
+ 801              		.section	.debug_aranges,"",%progbits
+ 802 0000 1C000000 		.4byte	0x1c
+ 803 0004 0200     		.2byte	0x2
+ 804 0006 00000000 		.4byte	.Ldebug_info0
+ 805 000a 04       		.byte	0x4
+ 806 000b 00       		.byte	0x0
+ 807 000c 0000     		.2byte	0x0
+ 808 000e 0000     		.2byte	0x0
+ 809 0010 00000000 		.4byte	.Ltext0
+ 810 0014 EC000000 		.4byte	.Letext0-.Ltext0
+ 811 0018 00000000 		.4byte	0x0
+ 812 001c 00000000 		.4byte	0x0
+ 813              		.section	.debug_str,"MS",%progbits,1
+ 814              	.LASF14:
+ 815 0000 474E5520 		.ascii	"GNU C 4.2.2\000"
+ 815      4320342E 
+ 815      322E3200 
+ 816              	.LASF16:
+ 817 000c 2F637967 		.ascii	"/cygdrive/c/Users/Anders/Fr\345n Gamla Datorn/Mina "
+ 817      64726976 
+ 817      652F632F 
+ 817      55736572 
+ 817      732F416E 
+ 818 003c 646F6B75 		.ascii	"dokument/Embedded Artists/Products/Education boards"
+ 818      6D656E74 
+ 818      2F456D62 
+ 818      65646465 
+ 818      64204172 
+ 819 006f 2F4C5043 		.ascii	"/LPC2138 EDU/testPrograms/productionTest\000"
+ 819      32313338 
+ 819      20454455 
+ 819      2F746573 
+ 819      7450726F 
+ 820              	.LASF9:
+ 821 0098 70696E4E 		.ascii	"pinNum\000"
+ 821      756D00
+ 822              	.LASF7:
+ 823 009f 636F6D6D 		.ascii	"command\000"
+ 823      616E6400 
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 18
+
+
+ 824              	.LASF15:
+ 825 00a7 70636139 		.ascii	"pca9532.c\000"
+ 825      3533322E 
+ 825      6300
+ 826              	.LASF11:
+ 827 00b1 67657450 		.ascii	"getPca9532Pin\000"
+ 827      63613935 
+ 827      33325069 
+ 827      6E00
+ 828              	.LASF1:
+ 829 00bf 756E7369 		.ascii	"unsigned char\000"
+ 829      676E6564 
+ 829      20636861 
+ 829      7200
+ 830              	.LASF2:
+ 831 00cd 73686F72 		.ascii	"short unsigned int\000"
+ 831      7420756E 
+ 831      7369676E 
+ 831      65642069 
+ 831      6E7400
+ 832              	.LASF17:
+ 833 00e0 73657450 		.ascii	"setPca9532Pin\000"
+ 833      63613935 
+ 833      33325069 
+ 833      6E00
+ 834              	.LASF3:
+ 835 00ee 756E7369 		.ascii	"unsigned int\000"
+ 835      676E6564 
+ 835      20696E74 
+ 835      00
+ 836              	.LASF13:
+ 837 00fb 696E6974 		.ascii	"initCommand\000"
+ 837      436F6D6D 
+ 837      616E6400 
+ 838              	.LASF12:
+ 839 0107 70636139 		.ascii	"pca9532Init\000"
+ 839      35333249 
+ 839      6E697400 
+ 840              	.LASF0:
+ 841 0113 74553136 		.ascii	"tU16\000"
+ 841      00
+ 842              	.LASF18:
+ 843 0118 6D61736B 		.ascii	"mask\000"
+ 843      00
+ 844              	.LASF10:
+ 845 011d 76616C75 		.ascii	"value\000"
+ 845      6500
+ 846              	.LASF5:
+ 847 0123 73686F72 		.ascii	"short int\000"
+ 847      7420696E 
+ 847      7400
+ 848              	.LASF4:
+ 849 012d 7369676E 		.ascii	"signed char\000"
+ 849      65642063 
+ 849      68617200 
+ 850              	.LASF8:
+ 851 0139 72656756 		.ascii	"regValue\000"
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 19
+
+
+ 851      616C7565 
+ 851      00
+ 852              	.LASF6:
+ 853 0142 74426F6F 		.ascii	"tBool\000"
+ 853      6C00
+ 854              		.ident	"GCC: (GNU) 4.2.2"
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pca9532.c
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:1      .text:00000000 $t
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:16     .text:00000000 getPca9532Pin
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:54     .text:00000028 setPca9532Pin
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:166    .text:000000b0 $d
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:217    .rodata:00000000 C.1.1683
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:174    .text:000000b4 pca9532Init
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:171    .text:000000b4 $t
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:211    .text:000000e8 $d
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:221    .rodata:00000002 C.0.1673
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJOz4J3.s:222    .rodata:00000002 $d
+
+UNDEFINED SYMBOLS
+pca9532
+memcpy

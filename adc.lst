@@ -1,0 +1,764 @@
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"adc.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 7A000000 		.text
+   9      02004300 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.align	2
+  12              		.global	getAnalogueInput
+  13              		.code 16
+  14              		.thumb_func
+  15              		.type	getAnalogueInput, %function
+  16              	getAnalogueInput:
+  17              	.LFB2:
+  18              		.file 1 "adc.c"
+   1:adc.c         **** /******************************************************************************
+   2:adc.c         ****  *
+   3:adc.c         ****  * Copyright:
+   4:adc.c         ****  *    (C) 2000 - 2005 Embedded Artists AB
+   5:adc.c         ****  *
+   6:adc.c         ****  * Description:
+   7:adc.c         ****  *    Christmas tree
+   8:adc.c         ****  *
+   9:adc.c         ****  *****************************************************************************/
+  10:adc.c         **** 
+  11:adc.c         **** #include "pre_emptive_os/api/osapi.h"
+  12:adc.c         **** #include "pre_emptive_os/api/general.h"
+  13:adc.c         **** #include <printf_P.h>
+  14:adc.c         **** #include <lpc2xxx.h>
+  15:adc.c         **** #include <config.h>
+  16:adc.c         **** #include "adc.h"
+  17:adc.c         **** 
+  18:adc.c         **** /******************************************************************************
+  19:adc.c         ****  * Defines and typedefs
+  20:adc.c         ****  *****************************************************************************/
+  21:adc.c         **** #define CRYSTAL_FREQUENCY FOSC
+  22:adc.c         **** #define PLL_FACTOR        PLL_MUL
+  23:adc.c         **** #define VPBDIV_FACTOR     PBSD
+  24:adc.c         **** 
+  25:adc.c         **** 
+  26:adc.c         **** /*****************************************************************************
+  27:adc.c         ****  *
+  28:adc.c         ****  * Description:
+  29:adc.c         ****  *    Start a conversion of one selected analogue input and return
+  30:adc.c         ****  *    10-bit result.
+  31:adc.c         ****  *
+  32:adc.c         ****  * Params:
+  33:adc.c         ****  *    [in] channel - analogue input channel to convert.
+  34:adc.c         ****  *
+  35:adc.c         ****  * Return:
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 2
+
+
+  36:adc.c         ****  *    10-bit conversion result
+  37:adc.c         ****  *
+  38:adc.c         ****  ****************************************************************************/
+  39:adc.c         **** tU16
+  40:adc.c         **** getAnalogueInput(tU8 channel)
+  41:adc.c         **** {
+  19              		.loc 1 41 0
+  20              	.LVL0:
+  42:adc.c         **** //  volatile tU32 cpsrReg;
+  43:adc.c         ****   tU16 returnResult;
+  44:adc.c         **** 
+  45:adc.c         ****   //disable IRQ
+  46:adc.c         **** //  cpsrReg = disIrq();
+  47:adc.c         **** 
+  48:adc.c         **** 	//start conversion now (for selected channel)
+  49:adc.c         **** 	ADCR = (ADCR & 0xFFFFFF00) | (1 << channel) | (1 << 24);
+  21              		.loc 1 49 0
+  22 0000 0A49     		ldr	r1, .L7
+  23 0002 0A68     		ldr	r2, [r1]
+  24 0004 FF23     		mov	r3, #255
+  25 0006 9A43     		bic	r2, r2, r3
+  26 0008 8023     		mov	r3, #128
+  27 000a 5B04     		lsl	r3, r3, #17
+  28              		.loc 1 41 0
+  29 000c 0006     		lsl	r0, r0, #24
+  30              	.LVL1:
+  31              		.loc 1 49 0
+  32 000e 1A43     		orr	r2, r2, r3
+  33              		.loc 1 41 0
+  34 0010 000E     		lsr	r0, r0, #24
+  35              	.LVL2:
+  36              		.loc 1 49 0
+  37 0012 0123     		mov	r3, #1
+  38 0014 8340     		lsl	r3, r3, r0
+  39 0016 1A43     		orr	r2, r2, r3
+  40 0018 0A60     		str	r2, [r1]
+  41              		.loc 1 41 0
+  42              		@ lr needed for prologue
+  43              	.L2:
+  50:adc.c         **** 	
+  51:adc.c         **** 	//wait til done
+  52:adc.c         **** 	while((ADDR & 0x80000000) == 0)
+  44              		.loc 1 52 0
+  45 001a 0548     		ldr	r0, .L7+4
+  46              	.LVL3:
+  47 001c 0368     		ldr	r3, [r0]
+  48 001e 002B     		cmp	r3, #0
+  49 0020 FBDA     		bge	.L2
+  53:adc.c         **** 	  ;
+  54:adc.c         **** 
+  55:adc.c         **** 	//get result and adjust to 10-bit integer
+  56:adc.c         **** 	returnResult = (ADDR>>6) & 0x3FF;
+  50              		.loc 1 56 0
+  51 0022 0068     		ldr	r0, [r0]
+  52 0024 0004     		lsl	r0, r0, #16
+  53 0026 800D     		lsr	r0, r0, #22
+  57:adc.c         **** 
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 3
+
+
+  58:adc.c         ****   //enable IRQ
+  59:adc.c         **** //  restoreIrq(cpsrReg);
+  60:adc.c         ****   
+  61:adc.c         ****   return returnResult;
+  62:adc.c         **** }
+  54              		.loc 1 62 0
+  55              		@ sp needed for prologue
+  56 0028 7047     		bx	lr
+  57              	.L8:
+  58 002a C046     		.align	2
+  59              	.L7:
+  60 002c 004003E0 		.word	-536657920
+  61 0030 044003E0 		.word	-536657916
+  62              	.LFE2:
+  63              		.size	getAnalogueInput, .-getAnalogueInput
+  64              		.align	2
+  65              		.global	initAdc
+  66              		.code 16
+  67              		.thumb_func
+  68              		.type	initAdc, %function
+  69              	initAdc:
+  70              	.LFB3:
+  63:adc.c         **** 
+  64:adc.c         **** /*****************************************************************************
+  65:adc.c         ****  *
+  66:adc.c         ****  * Description:
+  67:adc.c         ****  *
+  68:adc.c         ****  ****************************************************************************/
+  69:adc.c         **** void
+  70:adc.c         **** initAdc(void)
+  71:adc.c         **** {
+  71              		.loc 1 71 0
+  72 0034 00B5     		push	{lr}
+  73              	.LCFI0:
+  72:adc.c         **** 	volatile tU32 integerResult;
+  73:adc.c         **** 
+  74:adc.c         **** 	//
+  75:adc.c         ****   //Initialize ADC: AIN0 = P0.22
+  76:adc.c         ****   //
+  77:adc.c         **** //  PINSEL1 &= ~0x00003000;
+  78:adc.c         **** //  PINSEL1 |=  0x00003000;
+  79:adc.c         ****   
+  80:adc.c         **** 	//
+  81:adc.c         ****   //Initialize ADC: AIN1 = P0.28
+  82:adc.c         ****   //
+  83:adc.c         ****   PINSEL1 &= ~0x03000000;
+  74              		.loc 1 83 0
+  75 0036 1049     		ldr	r1, .L11
+  76 0038 104A     		ldr	r2, .L11+4
+  77 003a 0B68     		ldr	r3, [r1]
+  78 003c 1340     		and	r3, r3, r2
+  79 003e 0B60     		str	r3, [r1]
+  84:adc.c         ****   PINSEL1 |=  0x01000000;
+  80              		.loc 1 84 0
+  81 0040 8023     		mov	r3, #128
+  82 0042 0A68     		ldr	r2, [r1]
+  83 0044 5B04     		lsl	r3, r3, #17
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 4
+
+
+  84 0046 1A43     		orr	r2, r2, r3
+  85 0048 0A60     		str	r2, [r1]
+  85:adc.c         **** 
+  86:adc.c         **** 	//
+  87:adc.c         ****   //Initialize ADC: AIN2 = P0.29
+  88:adc.c         ****   //
+  89:adc.c         ****   PINSEL1 &= ~0x0C000000;
+  86              		.loc 1 89 0
+  87 004a 0D4A     		ldr	r2, .L11+8
+  88 004c 0B68     		ldr	r3, [r1]
+  89 004e 1340     		and	r3, r3, r2
+  90 0050 0B60     		str	r3, [r1]
+  90:adc.c         ****   PINSEL1 |=  0x04000000;
+  91              		.loc 1 90 0
+  92 0052 8023     		mov	r3, #128
+  93 0054 0A68     		ldr	r2, [r1]
+  94 0056 DB04     		lsl	r3, r3, #19
+  95 0058 1A43     		orr	r2, r2, r3
+  96 005a 0A60     		str	r2, [r1]
+  91:adc.c         **** 
+  92:adc.c         **** 	//
+  93:adc.c         ****   //Initialize ADC: AIN3 = P0.30
+  94:adc.c         ****   //
+  95:adc.c         **** //  PINSEL1 &= ~0x30000000;
+  96:adc.c         **** //  PINSEL1 |=  0x10000000;
+  97:adc.c         ****   
+  98:adc.c         **** 	//
+  99:adc.c         ****   //Initialize ADC: AIN14 = P0.21
+ 100:adc.c         ****   //
+ 101:adc.c         **** //  PINSEL1 &= ~0x00030000;
+ 102:adc.c         **** //  PINSEL1 |=  0x00030000;
+ 103:adc.c         **** 
+ 104:adc.c         **** 	//
+ 105:adc.c         ****   //Initialize ADC: AIN15 = P0.22
+ 106:adc.c         ****   //
+ 107:adc.c         **** //  PINSEL1 &= ~0x000C0000;
+ 108:adc.c         **** //  PINSEL1 |=  0x000C0000;
+ 109:adc.c         **** 
+ 110:adc.c         ****   //initialize ADC
+ 111:adc.c         ****   ADCR = (1 << 0)                             |  //SEL = 1, dummy channel #0
+  97              		.loc 1 111 0
+  98 005c 094B     		ldr	r3, .L11+12
+  99 005e 0A4A     		ldr	r2, .L11+16
+ 100              		.loc 1 71 0
+ 101 0060 81B0     		sub	sp, sp, #4
+ 102              	.LCFI1:
+ 103              		.loc 1 111 0
+ 104 0062 1A60     		str	r2, [r3]
+ 112:adc.c         ****          ((CRYSTAL_FREQUENCY *
+ 113:adc.c         ****            PLL_FACTOR /
+ 114:adc.c         ****            VPBDIV_FACTOR) / 4500000 - 1) << 8 |  //set clock division factor, so ADC clock is 4.5MH
+ 115:adc.c         ****          (0 << 16)                            |  //BURST = 0, conversions are SW controlled
+ 116:adc.c         ****          (0 << 17)                            |  //CLKS  = 0, 11 clocks = 10-bit result
+ 117:adc.c         ****          (1 << 21)                            |  //PDN   = 1, ADC is active
+ 118:adc.c         ****          (1 << 24)                            |  //START = 1, start a conversion now
+ 119:adc.c         ****          (0 << 27);							                 //EDGE  = 0, not relevant when start=1
+ 120:adc.c         **** 
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 5
+
+
+ 121:adc.c         ****   //short delay and dummy read
+ 122:adc.c         ****   osSleep(1);
+ 105              		.loc 1 122 0
+ 106 0064 0120     		mov	r0, #1
+ 107 0066 FFF7FEFF 		bl	osSleep
+ 123:adc.c         ****   integerResult = ADDR;
+ 108              		.loc 1 123 0
+ 109 006a 084B     		ldr	r3, .L11+20
+ 110 006c 1B68     		ldr	r3, [r3]
+ 111 006e 0093     		str	r3, [sp]
+ 112              	.LVL4:
+ 124:adc.c         **** }
+ 113              		.loc 1 124 0
+ 114 0070 01B0     		add	sp, sp, #4
+ 115              		@ sp needed for prologue
+ 116 0072 01BC     		pop	{r0}
+ 117 0074 0047     		bx	r0
+ 118              	.L12:
+ 119 0076 C046     		.align	2
+ 120              	.L11:
+ 121 0078 04C002E0 		.word	-536690684
+ 122 007c FFFFFFFC 		.word	-50331649
+ 123 0080 FFFFFFF3 		.word	-201326593
+ 124 0084 004003E0 		.word	-536657920
+ 125 0088 010C2001 		.word	18877441
+ 126 008c 044003E0 		.word	-536657916
+ 127              	.LFE3:
+ 128              		.size	initAdc, .-initAdc
+ 129              		.section	.debug_frame,"",%progbits
+ 130              	.Lframe0:
+ 131 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 132              	.LSCIE0:
+ 133 0004 FFFFFFFF 		.4byte	0xffffffff
+ 134 0008 01       		.byte	0x1
+ 135 0009 00       		.ascii	"\000"
+ 136 000a 01       		.uleb128 0x1
+ 137 000b 7C       		.sleb128 -4
+ 138 000c 0E       		.byte	0xe
+ 139 000d 0C       		.byte	0xc
+ 140 000e 0D       		.uleb128 0xd
+ 141 000f 00       		.uleb128 0x0
+ 142              		.align	2
+ 143              	.LECIE0:
+ 144              	.LSFDE0:
+ 145 0010 0C000000 		.4byte	.LEFDE0-.LASFDE0
+ 146              	.LASFDE0:
+ 147 0014 00000000 		.4byte	.Lframe0
+ 148 0018 00000000 		.4byte	.LFB2
+ 149 001c 34000000 		.4byte	.LFE2-.LFB2
+ 150              		.align	2
+ 151              	.LEFDE0:
+ 152              	.LSFDE2:
+ 153 0020 14000000 		.4byte	.LEFDE2-.LASFDE2
+ 154              	.LASFDE2:
+ 155 0024 00000000 		.4byte	.Lframe0
+ 156 0028 34000000 		.4byte	.LFB3
+ 157 002c 5C000000 		.4byte	.LFE3-.LFB3
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 6
+
+
+ 158 0030 42       		.byte	0x4
+ 159              		.4byte	.LCFI0-.LFB3
+ 160 0031 0E       		.byte	0xe
+ 161 0032 04       		.uleb128 0x4
+ 162 0033 8E       		.byte	0x8e
+ 163 0034 01       		.uleb128 0x1
+ 164 0035 6C       		.byte	0x4
+ 165              		.4byte	.LCFI1-.LCFI0
+ 166 0036 0E       		.byte	0xe
+ 167 0037 08       		.uleb128 0x8
+ 168              		.align	2
+ 169              	.LEFDE2:
+ 170              		.text
+ 171              	.Letext0:
+ 172              		.section	.debug_loc,"",%progbits
+ 173              	.Ldebug_loc0:
+ 174              	.LLST1:
+ 175 0000 00000000 		.4byte	.LVL0-.Ltext0
+ 176 0004 0E000000 		.4byte	.LVL1-.Ltext0
+ 177 0008 0100     		.2byte	0x1
+ 178 000a 50       		.byte	0x50
+ 179 000b 12000000 		.4byte	.LVL2-.Ltext0
+ 180 000f 1C000000 		.4byte	.LVL3-.Ltext0
+ 181 0013 0100     		.2byte	0x1
+ 182 0015 50       		.byte	0x50
+ 183 0016 00000000 		.4byte	0x0
+ 184 001a 00000000 		.4byte	0x0
+ 185              	.LLST2:
+ 186 001e 34000000 		.4byte	.LFB3-.Ltext0
+ 187 0022 36000000 		.4byte	.LCFI0-.Ltext0
+ 188 0026 0100     		.2byte	0x1
+ 189 0028 5D       		.byte	0x5d
+ 190 0029 36000000 		.4byte	.LCFI0-.Ltext0
+ 191 002d 62000000 		.4byte	.LCFI1-.Ltext0
+ 192 0031 0200     		.2byte	0x2
+ 193 0033 7D       		.byte	0x7d
+ 194 0034 04       		.sleb128 4
+ 195 0035 62000000 		.4byte	.LCFI1-.Ltext0
+ 196 0039 90000000 		.4byte	.LFE3-.Ltext0
+ 197 003d 0200     		.2byte	0x2
+ 198 003f 7D       		.byte	0x7d
+ 199 0040 08       		.sleb128 8
+ 200 0041 00000000 		.4byte	0x0
+ 201 0045 00000000 		.4byte	0x0
+ 202              		.file 2 "pre_emptive_os/api/../api/general.h"
+ 203              		.section	.debug_info
+ 204 0000 D3000000 		.4byte	0xd3
+ 205 0004 0200     		.2byte	0x2
+ 206 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 207 000a 04       		.byte	0x4
+ 208 000b 01       		.uleb128 0x1
+ 209 000c 00000000 		.4byte	.LASF7
+ 210 0010 01       		.byte	0x1
+ 211 0011 AE000000 		.4byte	.LASF8
+ 212 0015 22000000 		.4byte	.LASF9
+ 213 0019 00000000 		.4byte	.Ltext0
+ 214 001d 90000000 		.4byte	.Letext0
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 7
+
+
+ 215 0021 00000000 		.4byte	.Ldebug_line0
+ 216 0025 02       		.uleb128 0x2
+ 217 0026 74553800 		.ascii	"tU8\000"
+ 218 002a 02       		.byte	0x2
+ 219 002b 47       		.byte	0x47
+ 220 002c 30000000 		.4byte	0x30
+ 221 0030 03       		.uleb128 0x3
+ 222 0031 01       		.byte	0x1
+ 223 0032 08       		.byte	0x8
+ 224 0033 B4000000 		.4byte	.LASF1
+ 225 0037 04       		.uleb128 0x4
+ 226 0038 F7000000 		.4byte	.LASF0
+ 227 003c 02       		.byte	0x2
+ 228 003d 48       		.byte	0x48
+ 229 003e 42000000 		.4byte	0x42
+ 230 0042 03       		.uleb128 0x3
+ 231 0043 02       		.byte	0x2
+ 232 0044 07       		.byte	0x7
+ 233 0045 C2000000 		.4byte	.LASF2
+ 234 0049 04       		.uleb128 0x4
+ 235 004a FC000000 		.4byte	.LASF3
+ 236 004e 02       		.byte	0x2
+ 237 004f 49       		.byte	0x49
+ 238 0050 54000000 		.4byte	0x54
+ 239 0054 03       		.uleb128 0x3
+ 240 0055 04       		.byte	0x4
+ 241 0056 07       		.byte	0x7
+ 242 0057 EA000000 		.4byte	.LASF4
+ 243 005b 03       		.uleb128 0x3
+ 244 005c 01       		.byte	0x1
+ 245 005d 06       		.byte	0x6
+ 246 005e 0B010000 		.4byte	.LASF5
+ 247 0062 03       		.uleb128 0x3
+ 248 0063 02       		.byte	0x2
+ 249 0064 05       		.byte	0x5
+ 250 0065 01010000 		.4byte	.LASF6
+ 251 0069 05       		.uleb128 0x5
+ 252 006a 04       		.byte	0x4
+ 253 006b 05       		.byte	0x5
+ 254 006c 696E7400 		.ascii	"int\000"
+ 255 0070 06       		.uleb128 0x6
+ 256 0071 04       		.byte	0x4
+ 257 0072 07       		.byte	0x7
+ 258 0073 07       		.uleb128 0x7
+ 259 0074 01       		.byte	0x1
+ 260 0075 17010000 		.4byte	.LASF10
+ 261 0079 01       		.byte	0x1
+ 262 007a 29       		.byte	0x29
+ 263 007b 01       		.byte	0x1
+ 264 007c 37000000 		.4byte	0x37
+ 265 0080 00000000 		.4byte	.LFB2
+ 266 0084 34000000 		.4byte	.LFE2
+ 267 0088 01       		.byte	0x1
+ 268 0089 5D       		.byte	0x5d
+ 269 008a A9000000 		.4byte	0xa9
+ 270 008e 08       		.uleb128 0x8
+ 271 008f 0C000000 		.4byte	.LASF11
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 8
+
+
+ 272 0093 01       		.byte	0x1
+ 273 0094 28       		.byte	0x28
+ 274 0095 25000000 		.4byte	0x25
+ 275 0099 00000000 		.4byte	.LLST1
+ 276 009d 09       		.uleb128 0x9
+ 277 009e D5000000 		.4byte	.LASF12
+ 278 00a2 01       		.byte	0x1
+ 279 00a3 2B       		.byte	0x2b
+ 280 00a4 37000000 		.4byte	0x37
+ 281 00a8 00       		.byte	0x0
+ 282 00a9 0A       		.uleb128 0xa
+ 283 00aa 01       		.byte	0x1
+ 284 00ab E2000000 		.4byte	.LASF13
+ 285 00af 01       		.byte	0x1
+ 286 00b0 47       		.byte	0x47
+ 287 00b1 01       		.byte	0x1
+ 288 00b2 34000000 		.4byte	.LFB3
+ 289 00b6 90000000 		.4byte	.LFE3
+ 290 00ba 1E000000 		.4byte	.LLST2
+ 291 00be D1000000 		.4byte	0xd1
+ 292 00c2 0B       		.uleb128 0xb
+ 293 00c3 14000000 		.4byte	.LASF14
+ 294 00c7 01       		.byte	0x1
+ 295 00c8 48       		.byte	0x48
+ 296 00c9 D1000000 		.4byte	0xd1
+ 297 00cd 02       		.byte	0x2
+ 298 00ce 91       		.byte	0x91
+ 299 00cf 7C       		.sleb128 -4
+ 300 00d0 00       		.byte	0x0
+ 301 00d1 0C       		.uleb128 0xc
+ 302 00d2 49000000 		.4byte	0x49
+ 303 00d6 00       		.byte	0x0
+ 304              		.section	.debug_abbrev
+ 305 0000 01       		.uleb128 0x1
+ 306 0001 11       		.uleb128 0x11
+ 307 0002 01       		.byte	0x1
+ 308 0003 25       		.uleb128 0x25
+ 309 0004 0E       		.uleb128 0xe
+ 310 0005 13       		.uleb128 0x13
+ 311 0006 0B       		.uleb128 0xb
+ 312 0007 03       		.uleb128 0x3
+ 313 0008 0E       		.uleb128 0xe
+ 314 0009 1B       		.uleb128 0x1b
+ 315 000a 0E       		.uleb128 0xe
+ 316 000b 11       		.uleb128 0x11
+ 317 000c 01       		.uleb128 0x1
+ 318 000d 12       		.uleb128 0x12
+ 319 000e 01       		.uleb128 0x1
+ 320 000f 10       		.uleb128 0x10
+ 321 0010 06       		.uleb128 0x6
+ 322 0011 00       		.byte	0x0
+ 323 0012 00       		.byte	0x0
+ 324 0013 02       		.uleb128 0x2
+ 325 0014 16       		.uleb128 0x16
+ 326 0015 00       		.byte	0x0
+ 327 0016 03       		.uleb128 0x3
+ 328 0017 08       		.uleb128 0x8
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 9
+
+
+ 329 0018 3A       		.uleb128 0x3a
+ 330 0019 0B       		.uleb128 0xb
+ 331 001a 3B       		.uleb128 0x3b
+ 332 001b 0B       		.uleb128 0xb
+ 333 001c 49       		.uleb128 0x49
+ 334 001d 13       		.uleb128 0x13
+ 335 001e 00       		.byte	0x0
+ 336 001f 00       		.byte	0x0
+ 337 0020 03       		.uleb128 0x3
+ 338 0021 24       		.uleb128 0x24
+ 339 0022 00       		.byte	0x0
+ 340 0023 0B       		.uleb128 0xb
+ 341 0024 0B       		.uleb128 0xb
+ 342 0025 3E       		.uleb128 0x3e
+ 343 0026 0B       		.uleb128 0xb
+ 344 0027 03       		.uleb128 0x3
+ 345 0028 0E       		.uleb128 0xe
+ 346 0029 00       		.byte	0x0
+ 347 002a 00       		.byte	0x0
+ 348 002b 04       		.uleb128 0x4
+ 349 002c 16       		.uleb128 0x16
+ 350 002d 00       		.byte	0x0
+ 351 002e 03       		.uleb128 0x3
+ 352 002f 0E       		.uleb128 0xe
+ 353 0030 3A       		.uleb128 0x3a
+ 354 0031 0B       		.uleb128 0xb
+ 355 0032 3B       		.uleb128 0x3b
+ 356 0033 0B       		.uleb128 0xb
+ 357 0034 49       		.uleb128 0x49
+ 358 0035 13       		.uleb128 0x13
+ 359 0036 00       		.byte	0x0
+ 360 0037 00       		.byte	0x0
+ 361 0038 05       		.uleb128 0x5
+ 362 0039 24       		.uleb128 0x24
+ 363 003a 00       		.byte	0x0
+ 364 003b 0B       		.uleb128 0xb
+ 365 003c 0B       		.uleb128 0xb
+ 366 003d 3E       		.uleb128 0x3e
+ 367 003e 0B       		.uleb128 0xb
+ 368 003f 03       		.uleb128 0x3
+ 369 0040 08       		.uleb128 0x8
+ 370 0041 00       		.byte	0x0
+ 371 0042 00       		.byte	0x0
+ 372 0043 06       		.uleb128 0x6
+ 373 0044 24       		.uleb128 0x24
+ 374 0045 00       		.byte	0x0
+ 375 0046 0B       		.uleb128 0xb
+ 376 0047 0B       		.uleb128 0xb
+ 377 0048 3E       		.uleb128 0x3e
+ 378 0049 0B       		.uleb128 0xb
+ 379 004a 00       		.byte	0x0
+ 380 004b 00       		.byte	0x0
+ 381 004c 07       		.uleb128 0x7
+ 382 004d 2E       		.uleb128 0x2e
+ 383 004e 01       		.byte	0x1
+ 384 004f 3F       		.uleb128 0x3f
+ 385 0050 0C       		.uleb128 0xc
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 10
+
+
+ 386 0051 03       		.uleb128 0x3
+ 387 0052 0E       		.uleb128 0xe
+ 388 0053 3A       		.uleb128 0x3a
+ 389 0054 0B       		.uleb128 0xb
+ 390 0055 3B       		.uleb128 0x3b
+ 391 0056 0B       		.uleb128 0xb
+ 392 0057 27       		.uleb128 0x27
+ 393 0058 0C       		.uleb128 0xc
+ 394 0059 49       		.uleb128 0x49
+ 395 005a 13       		.uleb128 0x13
+ 396 005b 11       		.uleb128 0x11
+ 397 005c 01       		.uleb128 0x1
+ 398 005d 12       		.uleb128 0x12
+ 399 005e 01       		.uleb128 0x1
+ 400 005f 40       		.uleb128 0x40
+ 401 0060 0A       		.uleb128 0xa
+ 402 0061 01       		.uleb128 0x1
+ 403 0062 13       		.uleb128 0x13
+ 404 0063 00       		.byte	0x0
+ 405 0064 00       		.byte	0x0
+ 406 0065 08       		.uleb128 0x8
+ 407 0066 05       		.uleb128 0x5
+ 408 0067 00       		.byte	0x0
+ 409 0068 03       		.uleb128 0x3
+ 410 0069 0E       		.uleb128 0xe
+ 411 006a 3A       		.uleb128 0x3a
+ 412 006b 0B       		.uleb128 0xb
+ 413 006c 3B       		.uleb128 0x3b
+ 414 006d 0B       		.uleb128 0xb
+ 415 006e 49       		.uleb128 0x49
+ 416 006f 13       		.uleb128 0x13
+ 417 0070 02       		.uleb128 0x2
+ 418 0071 06       		.uleb128 0x6
+ 419 0072 00       		.byte	0x0
+ 420 0073 00       		.byte	0x0
+ 421 0074 09       		.uleb128 0x9
+ 422 0075 34       		.uleb128 0x34
+ 423 0076 00       		.byte	0x0
+ 424 0077 03       		.uleb128 0x3
+ 425 0078 0E       		.uleb128 0xe
+ 426 0079 3A       		.uleb128 0x3a
+ 427 007a 0B       		.uleb128 0xb
+ 428 007b 3B       		.uleb128 0x3b
+ 429 007c 0B       		.uleb128 0xb
+ 430 007d 49       		.uleb128 0x49
+ 431 007e 13       		.uleb128 0x13
+ 432 007f 00       		.byte	0x0
+ 433 0080 00       		.byte	0x0
+ 434 0081 0A       		.uleb128 0xa
+ 435 0082 2E       		.uleb128 0x2e
+ 436 0083 01       		.byte	0x1
+ 437 0084 3F       		.uleb128 0x3f
+ 438 0085 0C       		.uleb128 0xc
+ 439 0086 03       		.uleb128 0x3
+ 440 0087 0E       		.uleb128 0xe
+ 441 0088 3A       		.uleb128 0x3a
+ 442 0089 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 11
+
+
+ 443 008a 3B       		.uleb128 0x3b
+ 444 008b 0B       		.uleb128 0xb
+ 445 008c 27       		.uleb128 0x27
+ 446 008d 0C       		.uleb128 0xc
+ 447 008e 11       		.uleb128 0x11
+ 448 008f 01       		.uleb128 0x1
+ 449 0090 12       		.uleb128 0x12
+ 450 0091 01       		.uleb128 0x1
+ 451 0092 40       		.uleb128 0x40
+ 452 0093 06       		.uleb128 0x6
+ 453 0094 01       		.uleb128 0x1
+ 454 0095 13       		.uleb128 0x13
+ 455 0096 00       		.byte	0x0
+ 456 0097 00       		.byte	0x0
+ 457 0098 0B       		.uleb128 0xb
+ 458 0099 34       		.uleb128 0x34
+ 459 009a 00       		.byte	0x0
+ 460 009b 03       		.uleb128 0x3
+ 461 009c 0E       		.uleb128 0xe
+ 462 009d 3A       		.uleb128 0x3a
+ 463 009e 0B       		.uleb128 0xb
+ 464 009f 3B       		.uleb128 0x3b
+ 465 00a0 0B       		.uleb128 0xb
+ 466 00a1 49       		.uleb128 0x49
+ 467 00a2 13       		.uleb128 0x13
+ 468 00a3 02       		.uleb128 0x2
+ 469 00a4 0A       		.uleb128 0xa
+ 470 00a5 00       		.byte	0x0
+ 471 00a6 00       		.byte	0x0
+ 472 00a7 0C       		.uleb128 0xc
+ 473 00a8 35       		.uleb128 0x35
+ 474 00a9 00       		.byte	0x0
+ 475 00aa 49       		.uleb128 0x49
+ 476 00ab 13       		.uleb128 0x13
+ 477 00ac 00       		.byte	0x0
+ 478 00ad 00       		.byte	0x0
+ 479 00ae 00       		.byte	0x0
+ 480              		.section	.debug_pubnames,"",%progbits
+ 481 0000 2F000000 		.4byte	0x2f
+ 482 0004 0200     		.2byte	0x2
+ 483 0006 00000000 		.4byte	.Ldebug_info0
+ 484 000a D7000000 		.4byte	0xd7
+ 485 000e 73000000 		.4byte	0x73
+ 486 0012 67657441 		.ascii	"getAnalogueInput\000"
+ 486      6E616C6F 
+ 486      67756549 
+ 486      6E707574 
+ 486      00
+ 487 0023 A9000000 		.4byte	0xa9
+ 488 0027 696E6974 		.ascii	"initAdc\000"
+ 488      41646300 
+ 489 002f 00000000 		.4byte	0x0
+ 490              		.section	.debug_aranges,"",%progbits
+ 491 0000 1C000000 		.4byte	0x1c
+ 492 0004 0200     		.2byte	0x2
+ 493 0006 00000000 		.4byte	.Ldebug_info0
+ 494 000a 04       		.byte	0x4
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 12
+
+
+ 495 000b 00       		.byte	0x0
+ 496 000c 0000     		.2byte	0x0
+ 497 000e 0000     		.2byte	0x0
+ 498 0010 00000000 		.4byte	.Ltext0
+ 499 0014 90000000 		.4byte	.Letext0-.Ltext0
+ 500 0018 00000000 		.4byte	0x0
+ 501 001c 00000000 		.4byte	0x0
+ 502              		.section	.debug_str,"MS",%progbits,1
+ 503              	.LASF7:
+ 504 0000 474E5520 		.ascii	"GNU C 4.2.2\000"
+ 504      4320342E 
+ 504      322E3200 
+ 505              	.LASF11:
+ 506 000c 6368616E 		.ascii	"channel\000"
+ 506      6E656C00 
+ 507              	.LASF14:
+ 508 0014 696E7465 		.ascii	"integerResult\000"
+ 508      67657252 
+ 508      6573756C 
+ 508      7400
+ 509              	.LASF9:
+ 510 0022 2F637967 		.ascii	"/cygdrive/c/Users/Anders/Fr\345n Gamla Datorn/Mina "
+ 510      64726976 
+ 510      652F632F 
+ 510      55736572 
+ 510      732F416E 
+ 511 0052 646F6B75 		.ascii	"dokument/Embedded Artists/Products/Education boards"
+ 511      6D656E74 
+ 511      2F456D62 
+ 511      65646465 
+ 511      64204172 
+ 512 0085 2F4C5043 		.ascii	"/LPC2138 EDU/testPrograms/productionTest\000"
+ 512      32313338 
+ 512      20454455 
+ 512      2F746573 
+ 512      7450726F 
+ 513              	.LASF8:
+ 514 00ae 6164632E 		.ascii	"adc.c\000"
+ 514      6300
+ 515              	.LASF1:
+ 516 00b4 756E7369 		.ascii	"unsigned char\000"
+ 516      676E6564 
+ 516      20636861 
+ 516      7200
+ 517              	.LASF2:
+ 518 00c2 73686F72 		.ascii	"short unsigned int\000"
+ 518      7420756E 
+ 518      7369676E 
+ 518      65642069 
+ 518      6E7400
+ 519              	.LASF12:
+ 520 00d5 72657475 		.ascii	"returnResult\000"
+ 520      726E5265 
+ 520      73756C74 
+ 520      00
+ 521              	.LASF13:
+ 522 00e2 696E6974 		.ascii	"initAdc\000"
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 13
+
+
+ 522      41646300 
+ 523              	.LASF4:
+ 524 00ea 756E7369 		.ascii	"unsigned int\000"
+ 524      676E6564 
+ 524      20696E74 
+ 524      00
+ 525              	.LASF0:
+ 526 00f7 74553136 		.ascii	"tU16\000"
+ 526      00
+ 527              	.LASF3:
+ 528 00fc 74553332 		.ascii	"tU32\000"
+ 528      00
+ 529              	.LASF6:
+ 530 0101 73686F72 		.ascii	"short int\000"
+ 530      7420696E 
+ 530      7400
+ 531              	.LASF5:
+ 532 010b 7369676E 		.ascii	"signed char\000"
+ 532      65642063 
+ 532      68617200 
+ 533              	.LASF10:
+ 534 0117 67657441 		.ascii	"getAnalogueInput\000"
+ 534      6E616C6F 
+ 534      67756549 
+ 534      6E707574 
+ 534      00
+ 535              		.ident	"GCC: (GNU) 4.2.2"
+ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 adc.c
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s:1      .text:00000000 $t
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s:16     .text:00000000 getAnalogueInput
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s:60     .text:0000002c $d
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s:69     .text:00000034 initAdc
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s:66     .text:00000034 $t
+/cygdrive/c/Users/Anders/AppData/Local/Temp/ccr9CWTs.s:121    .text:00000078 $d
+
+UNDEFINED SYMBOLS
+osSleep
