@@ -18,12 +18,14 @@ endif
 #----------------------------------------------------------------------
 # TOOL DEFINITIONS
 #----------------------------------------------------------------------
-TOOLTARGET      = arm-elf
+#TOOLTARGET      = arm-elf
+TOOLTARGET      = c:/Embedded/Tools/bin/arm-none-eabi
 AR              = $(TOOLTARGET)-ar
 AS              = $(TOOLTARGET)-gcc
 AWK             = gawk
 CC              = $(TOOLTARGET)-gcc
-LD              = $(TOOLTARGET)-gcc
+CPP             = $(TOOLTARGET)-g++
+LD              = $(TOOLTARGET)-g++
 OBJCOPY         = $(TOOLTARGET)-objcopy
 RANLIB          = $(TOOLTARGET)-ranlib
 RM              = rm -f
@@ -75,7 +77,14 @@ endif
 #----------------------------------------------------------------------
 W_OPTS    = -Wall -Wcast-align -Wcast-qual -Wimplicit \
             -Wnested-externs -Wpointer-arith -Wswitch \
-            -Wreturn-type 
+            -Wreturn-type \
+			-Wformat -Wformat-security\
+			-Werror -Wextra -pedantic
+W_OPTSCPP = -Wall -Wcast-align -Wcast-qual \
+            -Wpointer-arith -Wswitch \
+            -Wreturn-type \
+			-Wformat -Wformat-security\
+			-Werror -Wextra  -ansi -pedantic
 # -Wshadow -Wunused
 # -Wmissing-declarations -Wmissing-prototypes -Wredundant-decls -Wstrict-prototypes
 
@@ -83,7 +92,9 @@ CPU       = arm7tdmi
 OPTS      = -mcpu=$(CPU) $(THUMB_IW)
 CA_OPTS   = $(OPTS) $(INC) -DEL -DGCC $(THUMB_IW) $(T_FLAGS) $(EFLAGS) -D$(CPU_VARIANT) $(RAM_EXEC)
 CC_OPTS   = $(CA_OPTS) $(OFLAGS) $(DBFLAGS) $(W_OPTS) -Wa,-ahlms=$(<:.c=.lst)
+CPP_OPTS  = $(CA_OPTS) $(OFLAGS) $(DBFLAGS) $(W_OPTSCPP) -std=c++11 -Wa,-ahlms=$(<:.cpp=.lst)
 CC_OPTS_A = $(CA_OPTS) -x assembler-with-cpp -gstabs -Wa,-alhms=$(<:.S=.lst)
+CC_OPTS_C = $(CA_OPTS) 
 
 #----------------------------------------------------------------------
 # LINKER OPTIONS
@@ -513,15 +524,15 @@ endif
 endif
 
 ifndef LD_SCRIPT_PATH
-LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref
+LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref  -specs=nano.specs -specs=nosys.specs
 else
-LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT_PATH)/$(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref
+LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT_PATH)/$(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref  -specs=nano.specs -specs=nosys.specs
 endif
 
 #----------------------------------------------------------------------
 # LIST ALL OBJECT FILES
 #----------------------------------------------------------------------
-OBJS ?= $(CSRCS:.c=.o) $(ASRCS:.S=.o)
+OBJS ?= $(CSRCS:.c=.o) $(CPPSRCS:.cpp=.o) $(ASRCS:.S=.o)
 
 #----------------------------------------------------------------------
 # BUILD RULES
@@ -540,10 +551,10 @@ endif
 depend:
 	$(RM) .depend 
 	@for f in $(CSRCS) ; do \
-		$(CC) -MM $(CC_OPTS) $$f >> .depend ; \
+		$(CC) -MM $(CC_OPTS_C) $$f >> .depend ; \
 	done
 	@for f in $(ASRCS) ; do \
-		$(AS) -MM $(CC_OPTS) $$f >> .depend ; \
+		$(AS) -MM $(CC_OPTS_A) $$f >> .depend ; \
 	done
 
 ifneq (clean, $(MAKECMDGOALS))
@@ -551,7 +562,9 @@ ifneq (clean, $(MAKECMDGOALS))
 endif
 
 %.o: %.c
-	$(CC) -c $(CC_OPTS) -o $@ $<
+	$(CC) -c $(CC_OPTS_C) -o $@ $<
+%.o: %.cpp
+	$(CPP) -c $(CPP_OPTS) -o $@ $<
 %.o: %.S
 	$(AS) -c $(CC_OPTS_A) -o $@ $<
 

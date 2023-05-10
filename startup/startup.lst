@@ -1,9 +1,9 @@
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 1
 
 
    1              	# 1 "startup.S"
    1              	#
-   1              	...
+   0              	
    0              	
    0              	
    2              	# *** Startup Code (executed after Reset) ***
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
   50              	        stmfd sp!, {r0}         ;\
   51              	        ldr   r0, =HandleLabel  ;\
   52              	        ldr   r0, [r0]          ;\
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 2
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 2
 
 
   53              	        str   r0, [sp,#4]       ;\
@@ -92,9 +92,9 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
   81:startup.S     ****                 B HandlerDabort             /* handlerDAbort                   */
   82:startup.S     ****                 NOP                         /* Reserved Vector                 */
   83              	#if (IRQ_HANDLER == 0)
-  84:startup.S     ****                 B HandlerIRQ                /* handlerIRQ                      */
+  84              	                B HandlerIRQ                /* handlerIRQ                      */
   85              	#else
-  86              	                LDR PC,[PC,#-0xFF0]         /* jump to address supplied by VIC */
+  86:startup.S     ****                 LDR PC,[PC,#-0xFF0]         /* jump to address supplied by VIC */
   87              	#endif
   88:startup.S     ****                 B HandlerFIQ                /* handlerFIQ                      */
   89              	
@@ -104,7 +104,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
   93:startup.S     **** HANDLER(HandlerPabort, HandlePabort)
   94:startup.S     **** HANDLER(HandlerDabort, HandleDabort)
   95              	#if (IRQ_HANDLER == 0)
-  96:startup.S     **** HANDLER(HandlerIRQ,    HandleIRQ)
+  96              	HANDLER(HandlerIRQ,    HandleIRQ)
   97              	#endif
   98:startup.S     **** HANDLER(HandlerFIQ,    HandleFIQ)
   99              	
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
  107              	                NOP                                         /* Reserved Vector                   */
  108              	#if (IRQ_HANDLER == 0)
  109              	                LDR PC,[PC,#irqHandlerAddress - . - 8]      /* jump to common irq handler        */
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 3
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 3
 
 
  110              	#else
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
  164:startup.S     ****                 BEQ     PLL_Loop
  165              	
  166              	# Switch to PLL Clock
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 4
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 4
 
 
  167:startup.S     ****                 MOV     R3, #(PLLCON_PLLE | PLLCON_PLLC)
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
  221              	#  Call low-level initialization
  222:startup.S     ****                 BL      lowLevelInit
  223              	
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 5
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 5
 
 
  224              	# Relocate .data section (Copy from ROM to RAM)
@@ -279,16 +279,15 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 1
  259              	#
  260              	# Reserve memory for exception handlers
  261              	#
- 262 01a0 24000040 	        .struct SRAM_SADDR + 0x20
+ 262 0188 24000040 	        .struct SRAM_SADDR + 0x20
  262      28000040 
  262      2C000040 
  262      30000040 
- 262      34000040 
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 6
+ 262      38000040 
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 6
 
 
 DEFINED SYMBOLS
-                            .stab:00000014 $d
            startup.S:9      *ABS*:00000010 Mode_USR
            startup.S:10     *ABS*:00000011 Mode_FIQ
            startup.S:11     *ABS*:00000012 Mode_IRQ
@@ -309,201 +308,45 @@ DEFINED SYMBOLS
            startup.S:43     *ABS*:00000001 PLLCON_PLLE
            startup.S:44     *ABS*:00000002 PLLCON_PLLC
            startup.S:45     *ABS*:00000400 PLLSTAT_PLOCK
-           startup.S:59     .text:00000000 $a
            startup.S:68     .text:00000000 _startup
-                            .stab:00000020 $d
            startup.S:73     .text:00000000 Vectors
            startup.S:74     .text:00000000 _vectors
+           startup.S:139    .text:00000098 handleReset
            startup.S:77     .text:00000000 $a
-           startup.S:139    .text:000000b0 handleReset
-                            .stab:00000050 $d
-           startup.S:78     .text:00000004 $a
            startup.S:91     .text:00000020 HandlerUndef
-                            .stab:0000005c $d
-           startup.S:79     .text:00000008 $a
            startup.S:92     .text:00000038 HandlerSWI
-                            .stab:00000068 $d
-           startup.S:80     .text:0000000c $a
            startup.S:93     .text:00000050 HandlerPabort
-                            .stab:00000074 $d
-           startup.S:81     .text:00000010 $a
            startup.S:94     .text:00000068 HandlerDabort
-                            .stab:00000080 $d
-           startup.S:82     .text:00000014 $a
-                            .stab:0000008c $d
-           startup.S:84     .text:00000018 $a
-           startup.S:96     .text:00000080 HandlerIRQ
-                            .stab:00000098 $d
-           startup.S:88     .text:0000001c $a
-           startup.S:98     .text:00000098 HandlerFIQ
-                            .stab:000000a4 $d
-           startup.S:91     .text:00000020 $a
+           startup.S:98     .text:00000080 HandlerFIQ
                             *ABS*:40000024 HandleUndef
-                            .stab:000000b0 $d
-           startup.S:92     .text:00000038 $a
                             *ABS*:40000028 HandleSWI
-                            .stab:000000bc $d
-           startup.S:93     .text:00000050 $a
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 7
-
-
                             *ABS*:4000002c HandlePabort
-                            .stab:000000c8 $d
-           startup.S:94     .text:00000068 $a
                             *ABS*:40000030 HandleDabort
-                            .stab:000000d4 $d
-           startup.S:96     .text:00000080 $a
-                            *ABS*:40000034 HandleIRQ
-                            .stab:000000e0 $d
-           startup.S:98     .text:00000098 $a
                             *ABS*:40000038 HandleFIQ
-                            .stab:000000ec $d
-           startup.S:142    .text:000000b0 $a
-                            .stab:000000f8 $d
-           startup.S:143    .text:000000b4 $a
-                            .stab:00000104 $d
-           startup.S:144    .text:000000b8 $a
-                            .stab:00000110 $d
-           startup.S:147    .text:000000bc $a
-                            .stab:0000011c $d
-           startup.S:148    .text:000000c0 $a
-                            .stab:00000128 $d
-           startup.S:149    .text:000000c4 $a
-                            .stab:00000134 $d
-           startup.S:150    .text:000000c8 $a
-                            .stab:00000140 $d
-           startup.S:154    .text:000000cc $a
-                            .stab:0000014c $d
-           startup.S:155    .text:000000d0 $a
-                            .stab:00000158 $d
-           startup.S:156    .text:000000d4 $a
-                            .stab:00000164 $d
-           startup.S:157    .text:000000d8 $a
-                            .stab:00000170 $d
-           startup.S:158    .text:000000dc $a
-                            .stab:0000017c $d
-           startup.S:159    .text:000000e0 $a
-           startup.S:162    .text:000000e4 PLL_Loop
-                            .stab:00000188 $d
-           startup.S:162    .text:000000e4 $a
-                            .stab:00000194 $d
-           startup.S:163    .text:000000e8 $a
-                            .stab:000001a0 $d
-           startup.S:164    .text:000000ec $a
-                            .stab:000001ac $d
-           startup.S:167    .text:000000f0 $a
-                            .stab:000001b8 $d
-           startup.S:168    .text:000000f4 $a
-                            .stab:000001c4 $d
-           startup.S:169    .text:000000f8 $a
-                            .stab:000001d0 $d
-           startup.S:170    .text:000000fc $a
-                            .stab:000001dc $d
-           startup.S:175    .text:00000100 $a
-                            .stab:000001e8 $d
-           startup.S:178    .text:00000104 $a
-                            .stab:000001f4 $d
-           startup.S:179    .text:00000108 $a
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 8
-
-
-                            .stab:00000200 $d
-           startup.S:180    .text:0000010c $a
-                            .stab:0000020c $d
-           startup.S:183    .text:00000110 $a
-                            .stab:00000218 $d
-           startup.S:184    .text:00000114 $a
-                            .stab:00000224 $d
-           startup.S:185    .text:00000118 $a
-                            .stab:00000230 $d
-           startup.S:188    .text:0000011c $a
-                            .stab:0000023c $d
-           startup.S:189    .text:00000120 $a
-                            .stab:00000248 $d
-           startup.S:190    .text:00000124 $a
-                            .stab:00000254 $d
-           startup.S:193    .text:00000128 $a
-                            .stab:00000260 $d
-           startup.S:194    .text:0000012c $a
-                            .stab:0000026c $d
-           startup.S:195    .text:00000130 $a
-                            .stab:00000278 $d
-           startup.S:198    .text:00000134 $a
-                            .stab:00000284 $d
-           startup.S:199    .text:00000138 $a
-                            .stab:00000290 $d
-           startup.S:200    .text:0000013c $a
-                            .stab:0000029c $d
-           startup.S:203    .text:00000140 $a
-                            .stab:000002a8 $d
-           startup.S:204    .text:00000144 $a
-                            .stab:000002b4 $d
-           startup.S:207    .text:00000148 $a
-                            .stab:000002c0 $d
-           startup.S:222    .text:0000014c $a
-                            .stab:000002cc $d
-           startup.S:225    .text:00000150 $a
-                            .stab:000002d8 $d
-           startup.S:226    .text:00000154 $a
-                            .stab:000002e4 $d
-           startup.S:227    .text:00000158 $a
-           startup.S:228    .text:0000015c LoopRel
-                            .stab:000002f0 $d
-           startup.S:228    .text:0000015c $a
-                            .stab:000002fc $d
-           startup.S:229    .text:00000160 $a
-                            .stab:00000308 $d
-           startup.S:230    .text:00000164 $a
-                            .stab:00000314 $d
-           startup.S:231    .text:00000168 $a
-                            .stab:00000320 $d
-           startup.S:234    .text:0000016c $a
-                            .stab:0000032c $d
-           startup.S:235    .text:00000170 $a
-                            .stab:00000338 $d
-           startup.S:236    .text:00000174 $a
-           startup.S:237    .text:00000178 LoopZI
-                            .stab:00000344 $d
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccGEOi3D.s 			page 9
-
-
-           startup.S:237    .text:00000178 $a
-                            .stab:00000350 $d
-           startup.S:238    .text:0000017c $a
-                            .stab:0000035c $d
-           startup.S:239    .text:00000180 $a
-                            .stab:00000368 $d
-           startup.S:242    .text:00000184 $a
-           startup.S:245    .text:00000188 Jump_To_Main
-                            .stab:00000374 $d
-           startup.S:246    .text:00000188 $a
-           startup.S:252    .text:0000019c __Return_from_Main
-                            .stab:00000380 $d
-           startup.S:247    .text:0000018c $a
-                            .stab:0000038c $d
-           startup.S:248    .text:00000190 $a
-                            .stab:00000398 $d
-           startup.S:249    .text:00000194 $a
-                            .stab:000003a4 $d
-           startup.S:250    .text:00000198 $a
-                            .stab:000003b0 $d
-           startup.S:253    .text:0000019c $a
-                            .stab:000003bc $d
+           startup.S:162    .text:000000cc PLL_Loop
+           startup.S:228    .text:00000144 LoopRel
+           startup.S:237    .text:00000160 LoopZI
+           startup.S:245    .text:00000170 Jump_To_Main
+           startup.S:252    .text:00000184 __Return_from_Main
                             *ABS*:40000020 HandleReset
-                            *ABS*:400078a8 UserStack
-                            *ABS*:40007b00 SYSStack
-                            *ABS*:40007b40 SVCStack
-                            *ABS*:40007b80 UndefStack
-                            *ABS*:40007bc0 AbortStack
+                            *ABS*:40000034 HandleIRQ
+                            *ABS*:400074a8 UserStack
+                            *ABS*:40007700 SYSStack
+                            *ABS*:40007740 SVCStack
+                            *ABS*:40007780 UndefStack
+                            *ABS*:400077c0 AbortStack
                             *ABS*:40007fc0 IRQStack
                             *ABS*:40008000 FIQStack
-           startup.S:262    .text:000001a0 $d
+           startup.S:262    .text:00000188 $d
 
 UNDEFINED SYMBOLS
 lowLevelInit
 _etext
 _data
 _edata
+ARM GAS  C:\DOCUME~1\mkwapisz\LOCALS~1\Temp\ccBWPWiP.s 			page 7
+
+
 __bss_start__
 __bss_end__
 exceptionHandlerInit

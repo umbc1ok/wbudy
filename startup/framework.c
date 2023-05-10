@@ -87,7 +87,9 @@ exceptionHandlerSwi(void)
   consolSendString("SWI exception !!!\nAddress: 0x");
   consolSendNumber(16, 8, 0, '0', value); 
   while(1)
-    ;
+  {
+	  // infinity
+  }
 }
 
 /*****************************************************************************
@@ -198,7 +200,7 @@ exceptionHandlerInit(void)
 #endif
 
   //set heap limits
-  pHeapStart = &end;
+  pHeapStart = (unsigned char*)&end;
   pHeapEnd   = (unsigned char*)((STK_SADDR - 1) & 0xfffffffc);
 }
 
@@ -266,7 +268,7 @@ lowLevelInit(void)
  *
  ****************************************************************************/
 void
-eaInit(void)
+printf_init(void)
 {
   //initialize the consol
   consolInit();

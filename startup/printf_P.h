@@ -8,7 +8,7 @@
 
 #elif (CONSOLE_API_PRINTF == 1) //OWN_PRINTF
 #include "consol.h"
-#define printf(format, args...)   simplePrintf(format, ## args)
+//#define printf(format, args...)   simplePrintf(format, ## args)
 
 #elif (CONSOLE_API_PRINTF == 0)  //SIMPLE
 #include "consol.h"

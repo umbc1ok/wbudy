@@ -6,6 +6,8 @@
  * Description:
  *    Framework for ARM7 processor
  *
+ * Change log:
+ *	  1.12.2016: MM: Modified for C++ support
  *****************************************************************************/
 
 
@@ -90,10 +92,16 @@
 extern unsigned char *pHeapStart;
 extern unsigned char *pHeapEnd;
 
+#ifdef __cplusplus  
+extern "C" {
+#endif
 /******************************************************************************
  * Public functions
  *****************************************************************************/
 void lowLevelInit(void);
 void eaInit(void);
+#ifdef __cplusplus  
+}
+#endif
 
 #endif
