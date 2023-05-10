@@ -43,7 +43,7 @@
 #include "irq/irq_handler.h"
 #include "timer.h"
 #include "VIC.h"
-
+#include "stdbool.h" //TO MOZE NIE DZIALAC ??
 #include "Common_Def.h"
 #include <stdio.h>
 
@@ -99,6 +99,53 @@ static void init_irq (tU32 period, tU8 duty_cycle)
     T1TCR = TIMER_RUN;                      //Uruchom timer
 }
 
+void showTime(unsigned long sec,unsigned long min,unsigned long hour){
+    
+    char tabS[3];
+    sprintf(tabS, "%d", RTC_SEC);
+    char tabMin[3];
+    sprintf(tabMin, "%d", RTC_MIN);
+    char tabHr[3];
+    sprintf(tabHr, "%d", RTC_HOUR);
+
+    tabS[2] = '\0';
+    tabMin[2] = '\0';
+    tabHr[2] = '\0';
+    
+    if (RTC_SEC < 10) {
+        char temp1 = tabS[0];
+        tabS[1] = temp1;
+        tabS[0] = '0';
+    }
+    if (RTC_MIN < 10) {
+        char temp2 = tabMin[0];
+        tabMin[1] = temp2;
+        tabMin[0] = '0';
+    }
+    if (RTC_HOUR < 10) {
+        char temp3 = tabHr[0];
+        tabHr[1] = temp3;
+        tabHr[0] = '0';
+    }
+
+    lcdGotoxy(10, 50);
+    lcdPuts(tabHr);
+
+    lcdGotoxy(30, 50);
+    lcdPuts(":");
+
+    lcdGotoxy(50, 50);
+    lcdPuts(tabMin);
+
+    lcdGotoxy(70, 50);
+    lcdPuts(":");
+
+    lcdGotoxy(90, 50);
+    lcdPuts(tabS);
+}
+
+
+
 void main(void)
 {
 	//uruchomienie 'simple printf'
@@ -110,7 +157,7 @@ void main(void)
     printf("\n*");
     printf("\n* Systemy Wbudowane");
     printf("\n* Wydzial FTIMS");
-    printf("\n* Moj pierwszy program");
+    printf("\n* Moj (nasz) pierwszy program");
     printf("\n*");
     printf("\n*********************************************************");
 
@@ -128,102 +175,98 @@ void main(void)
 
     
 
-    // to sie przy I2C przyda
-    pca9532Present = pca9532Init();
     
 
-    if (TRUE == pca9532Present) { //ten if moze nie powinien byc tutaj ale whatever, pozniej trzeba zmienic
-		lcdInit();
-		lcdColor(0xff, 0x00);
-		lcdClrscr();
+    lcdInit();
+    lcdColor(0xff, 0x00);
+    lcdClrscr();
 
-		osSleep(100);
+    //osSleep(100);
 
+    RTC_CCR = 0x00000012;
+    RTC_CCR = 0x00000010;
+    RTC_ILR = 0x00000000;
+    RTC_CIIR = 0x00000000;
+    RTC_AMR = 0x00000000;
 
+    RTC_SEC = 50;
+    RTC_MIN = 59;
+    RTC_HOUR = 23;
 
-		RTC_CCR = 0x00000012;
-		RTC_CCR = 0x00000010;
-		RTC_ILR = 0x00000000;
-		RTC_CIIR = 0x00000000;
-		RTC_AMR = 0x00000000;
-
-		RTC_SEC = 50;
-		RTC_MIN = 59;
-		RTC_HOUR = 23;
-
-		RTC_CCR = 0x00000011; // ?? wtf is that
-
-
-		// RTC Controller
-		while (RTC_HOUR < 24) {
-			char tabS[3];
-			sprintf(tabS, "%d", RTC_SEC);
-			char tabMin[3];
-			sprintf(tabMin, "%d", RTC_MIN);
-			char tabHr[3];
-			sprintf(tabHr, "%d", RTC_HOUR);
-
-			tabS[2] = '\0';
-			tabMin[2] = '\0';
-			tabHr[2] = '\0';
-
-			if (RTC_SEC < 10) {
-				char temp1 = tabS[0];
-				tabS[1] = temp1;
-				tabS[0] = '0';
-			}
-			if (RTC_MIN < 10) {
-				char temp2 = tabMin[0];
-				tabMin[1] = temp2;
-				tabMin[0] = '0';
-			}
-			if (RTC_HOUR < 10) {
-				char temp3 = tabHr[0];
-				tabHr[1] = temp3;
-				tabHr[0] = '0';
-			}
-
-			lcdGotoxy(10, 50);
-			lcdPuts(tabHr);
-
-			lcdGotoxy(30, 50);
-			lcdPuts(":");
-
-			lcdGotoxy(50, 50);
-			lcdPuts(tabMin);
-
-			lcdGotoxy(70, 50);
-			lcdPuts(":");
-
-			lcdGotoxy(90, 50);
-			lcdPuts(tabS);
-		}
-	}
+    unsigned long temp_SEC = RTC_SEC;
+    unsigned long temp_MIN = RTC_MIN;
+    unsigned long temp_HOUR = RTC_HOUR;
 
 
-    /**********************************************************************
-     * Ta część jest nieskończoną pętlą realizującą działania programu
-     * Należy jednak pamiętać, że część jego funkcjonalności realizowana
-     * jest za pomocą przerwań
-     **********************************************************************/
-    // Aktywne "mruganie" diodą
+    RTC_CCR = 0x00000011; // ?? wtf is that
 
-    tBool dioda_swieci = FALSE;
-    while (TRUE)
-    {
-    	if (dioda_swieci)
+    // byc moze to bedzie problematyczne, bo bool jest z zewnetrznej biblioteki
+    bool isTimeBeingSet = false;
+    tU16 currentType = 0;
+
+    while (true) {
+        //check if P0.8 center-key is pressed
+        if ((IOPIN & 0x00000100) == 0)
         {
-    		IOSET1 = DIODA_LEWA; // (1 << 16);
-            printf("Nie swieci\n");
+            isTimeBeingSet = true;
         }
-        else
-        {
-        	IOCLR1 = DIODA_LEWA; //(1 << 16);
-            printf("Swieci\n");
+        if(isTimeBeingSet){
+            //check if P0.8 center-key is pressed
+            if ((IOPIN & 0x00000100) == 0)
+            {
+                currentType++;
+                if(currentType<0 && currentType > 2){
+                    isTimeBeingSet = false;
+                }
+            }
+            //check if P0.10 up-key is pressed
+            else if((IOPIN & 0x0000400) == 0){
+                switch(currentType){
+                    case 0:
+                        temp_HOUR++;
+                        break;
+                    case 1:
+                        temp_MIN++;
+                        break;
+                    case 2:
+                        temp_SEC++;
+                        break;
+                }
+            }
+            //check if P0.12 down-key is pressed
+            else if((IOPIN & 0x00001000) == 0){
+                switch(currentType){
+                    case 0:
+                        temp_HOUR--;
+                        break;
+                    case 1:
+                        temp_MIN--;
+                        break;
+                    case 2:
+                        temp_SEC--;
+                        break;
+                }
+            }
+            showTime(temp_SEC,temp_MIN,temp_HOUR);
         }
-    	dioda_swieci = !dioda_swieci;
-        sdelay(1);  // czekaj 1 s
+        else{
+            if(RTC_HOUR == temp_HOUR && RTC_MIN == temp_MIN && RTC_SEC == temp_SEC){
+                showTime(RTC_SEC,RTC_MIN,RTC_HOUR);
+            }
+            else{
+                showTime(RTC_SEC,RTC_MIN,RTC_HOUR);
+                unsigned long temp_SEC = RTC_SEC;
+                unsigned long temp_MIN = RTC_MIN;
+                unsigned long temp_HOUR = RTC_HOUR;
+                lcdGotoxy(10, 80);
+                lcdPuts("Wake up!\0");
+            }
+            
+        }
+        //odswiezaj co sekunde
+        sdelay(1);
     }
+
 } 
 
 
