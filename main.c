@@ -46,6 +46,8 @@
 #include "stdbool.h" //TO MOZE NIE DZIALAC ??
 #include "Common_Def.h"
 #include <stdio.h>
+#include "pff2/src/pff.h" 
+#include "lcd.h"
 
 
 
@@ -144,7 +146,9 @@ void showTime(unsigned long sec,unsigned long min,unsigned long hour){
     lcdPuts(tabS);
 }
 
-
+void soundRecordint(){
+    initAdc();
+}
 
 void main(void)
 {
@@ -173,10 +177,6 @@ void main(void)
     // Uruchomienie przerwań co 1/2 s.
     init_irq(500, 20);
 
-    
-
-    
-
     lcdInit();
     lcdColor(0xff, 0x00);
     lcdClrscr();
@@ -203,6 +203,7 @@ void main(void)
     // byc moze to bedzie problematyczne, bo bool jest z zewnetrznej biblioteki
     bool isTimeBeingSet = false;
     tU16 currentType = 0;
+
 
     while (true) {
         //check if P0.8 center-key is pressed
