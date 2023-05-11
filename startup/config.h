@@ -15,7 +15,7 @@
  * Defines, macros, and typedefs
  *****************************************************************************/
 
-#define FOSC 14745600UL               /* External clock input frequency (must be between 10 MHz and 25 MHz) */
+#define FOSC 14745000                 /* External clock input frequency (must be between 10 MHz and 25 MHz) */
 
 #define USE_PLL 1                     /* 0 = do not use on-chip PLL,
                                          1 = use on-chip PLL) */
@@ -30,8 +30,6 @@
 #define CORE_FREQ (FOSC)
 #endif
 
-#define PERIPHERAL_CLOCK (CORE_FREQ/PBSD)
-
 #if CORE_FREQ < 20000000
 #define MAM_TIMING   1                /* number of CCLK to read from the FLASH */
 #elif CORE_FREQ < 40000000
@@ -44,7 +42,7 @@
                                          1=partly enabled (enabled for code prefetch, but not for data),
                                          2=fully enabled */
 
-#define IRQ_HANDLER  1                /* 0 = Jump to common IRQ handler
+#define IRQ_HANDLER  0                /* 0 = Jump to common IRQ handler
                                          1 = Load vector directly from VIC, i.e., LDR PC,[PC,#-0xFF0] */
 
 /* initialize the exception vector mapping */
@@ -60,12 +58,12 @@
 #define stackSize_SVC     64
 #define stackSize_UND     64
 #define stackSize_ABT     64
-#define stackSize_IRQ   2048
+#define stackSize_IRQ   1024
 #define stackSize_FIQ     64
 
 /* define consol settings */
 #define CONSOL_UART              0
-#define CONSOL_BITRATE       115200UL
+#define CONSOL_BITRATE      115200
 /*#define USE_UART_FIFO             FALSE  */      /* Will be added in a future release */
 /*#define UART_API_NONBLOCKING      FALSE  */      /* Will be added in a future release */
 /*#define UART_API_NONBLOCKING_SIZE   512  */      /* Will be added in a future release */
@@ -146,7 +144,7 @@
 #define SRAM_SIZE  (16 * 1024)   /* LPC2294 */
 
 #else
-#error CPU_VARIANT not defined in the makefile, or illegal value 
+#error CPU_VARIANT not defined in the makefile, or illegal value
 #endif
 
 #define SRAM_SADDR   0x40000000               /* SRAM starting address */

@@ -1,0 +1,292 @@
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s 			page 1
+
+
+   1              		.file	"irq_handler.c"
+   2              		.section	.debug_abbrev,"",%progbits
+   3              	.Ldebug_abbrev0:
+   4              		.section	.debug_info,"",%progbits
+   5              	.Ldebug_info0:
+   6              		.section	.debug_line,"",%progbits
+   7              	.Ldebug_line0:
+   8 0000 41000000 		.text
+   8      02002400 
+   8      00000201 
+   8      FB0E0D00 
+   8      01010101 
+   9              	.Ltext0:
+  10              		.align	2
+  11              		.global	IRQ_Test
+  12              		.type	IRQ_Test, %function
+  13              	IRQ_Test:
+  14              	.LFB2:
+  15              		.file 1 "irq_handler.c"
+   1:irq_handler.c **** /*************************************************************************************
+   2:irq_handler.c ****  *
+   3:irq_handler.c ****  * @Description:
+   4:irq_handler.c ****  * Przykładowa procedura obsługi przerwania dostosowania do 
+   5:irq_handler.c ****  * obsługi przerwań wektoryzowanych.
+   6:irq_handler.c ****  * Procedura ta przełącza stan diody P0.9.
+   7:irq_handler.c ****  * 
+   8:irq_handler.c ****  * 
+   9:irq_handler.c ****  * @Authors: Michał Morawski, 
+  10:irq_handler.c ****  *           Daniel Arendt, 
+  11:irq_handler.c ****  *           Przemysław Ignaciuk,
+  12:irq_handler.c ****  *           Marcin Kwapisz
+  13:irq_handler.c ****  *
+  14:irq_handler.c ****  * @Change log:
+  15:irq_handler.c ****  *           2016.12.01: Wersja oryginalna.
+  16:irq_handler.c ****  *
+  17:irq_handler.c ****  ******************************************************************************/
+  18:irq_handler.c **** 
+  19:irq_handler.c **** #include "../general.h"
+  20:irq_handler.c **** #include <lpc2xxx.h>
+  21:irq_handler.c **** #include "irq_handler.h"
+  22:irq_handler.c **** #include "../timer.h"
+  23:irq_handler.c **** 
+  24:irq_handler.c **** #include "../Common_Def.h"
+  25:irq_handler.c **** 
+  26:irq_handler.c **** void IRQ_Test(void)
+  27:irq_handler.c **** {
+  16              		.loc 1 27 0
+  17              		@ Interrupt Service Routine.
+  18              		@ args = 0, pretend = 0, frame = 0
+  19              		@ frame_needed = 0, uses_anonymous_args = 0
+  20              		@ link register save eliminated.
+  21 0000 0E002DE9 		stmfd	sp!, {r1, r2, r3}
+  22              	.LCFI0:
+  28:irq_handler.c **** 	if (TIMER_MR0_INT & T1IR)
+  23              		.loc 1 28 0
+  24 0004 4C109FE5 		ldr	r1, .L8
+  25 0008 003091E5 		ldr	r3, [r1, #0]
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s 			page 2
+
+
+  26 000c 010013E3 		tst	r3, #1
+  27              		.loc 1 27 0
+  28              		@ lr needed for prologue
+  29              		.loc 1 28 0
+  29:irq_handler.c ****     {
+  30:irq_handler.c **** 		IOCLR1 = DIODA_PRAWA;         // (1 << 17)
+  30              		.loc 1 30 0
+  31 0010 44209F15 		ldrne	r2, .L8+4
+  32 0014 0238A013 		movne	r3, #131072
+  33 0018 1C308215 		strne	r3, [r2, #28]
+  31:irq_handler.c ****         T1IR   = TIMER_MR0_INT;       // Informacja dla Timera #1,
+  34              		.loc 1 31 0
+  35 001c 0130A013 		movne	r3, #1
+  36 0020 0600001A 		bne	.L7
+  37              	.L2:
+  32:irq_handler.c **** 	                                  // że jego przerwanie zostało obsłużone.
+  33:irq_handler.c ****     }
+  34:irq_handler.c ****     else if (TIMER_MR1_INT & T1IR)
+  38              		.loc 1 34 0
+  39 0024 003091E5 		ldr	r3, [r1, #0]
+  40 0028 020013E3 		tst	r3, #2
+  41 002c 0400000A 		beq	.L4
+  35:irq_handler.c ****     {
+  36:irq_handler.c ****         IOSET1 = DIODA_PRAWA;         // (1 << 17)
+  42              		.loc 1 36 0
+  43 0030 24209FE5 		ldr	r2, .L8+4
+  44 0034 0238A0E3 		mov	r3, #131072
+  45 0038 143082E5 		str	r3, [r2, #20]
+  37:irq_handler.c ****         T1IR   = TIMER_MR1_INT;       // Informacja dla Timera #1,
+  46              		.loc 1 37 0
+  47 003c 0230A0E3 		mov	r3, #2
+  48              	.L7:
+  49 0040 003081E5 		str	r3, [r1, #0]
+  50              	.L4:
+  38:irq_handler.c **** 	                                  // że jego przerwanie zostało obsłużone.
+  39:irq_handler.c ****     }
+  40:irq_handler.c ****     VICVectAddr = 0;                  // End of Interrupt -> informacja dla
+  51              		.loc 1 40 0
+  52 0044 0020A0E3 		mov	r2, #0
+  53 0048 0030E0E3 		mvn	r3, #0
+  54 004c CF2F03E5 		str	r2, [r3, #-4047]
+  41:irq_handler.c ****                                       // kontrolera przerwań
+  42:irq_handler.c **** }
+  55              		.loc 1 42 0
+  56 0050 0E00BDE8 		ldmfd	sp!, {r1, r2, r3}
+  57 0054 04F05EE2 		subs	pc, lr, #4
+  58              	.L9:
+  59              		.align	2
+  60              	.L8:
+  61 0058 008000E0 		.word	-536838144
+  62 005c 008002E0 		.word	-536707072
+  63              	.LFE2:
+  64              		.size	IRQ_Test, .-IRQ_Test
+  65              		.section	.debug_frame,"",%progbits
+  66              	.Lframe0:
+  67 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+  68              	.LSCIE0:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s 			page 3
+
+
+  69 0004 FFFFFFFF 		.4byte	0xffffffff
+  70 0008 01       		.byte	0x1
+  71 0009 00       		.ascii	"\000"
+  72 000a 01       		.uleb128 0x1
+  73 000b 7C       		.sleb128 -4
+  74 000c 0E       		.byte	0xe
+  75 000d 0C       		.byte	0xc
+  76 000e 0D       		.uleb128 0xd
+  77 000f 00       		.uleb128 0x0
+  78              		.align	2
+  79              	.LECIE0:
+  80              	.LSFDE0:
+  81 0010 18000000 		.4byte	.LEFDE0-.LASFDE0
+  82              	.LASFDE0:
+  83 0014 00000000 		.4byte	.Lframe0
+  84 0018 00000000 		.4byte	.LFB2
+  85 001c 60000000 		.4byte	.LFE2-.LFB2
+  86 0020 44       		.byte	0x4
+  87              		.4byte	.LCFI0-.LFB2
+  88 0021 0E       		.byte	0xe
+  89 0022 0C       		.uleb128 0xc
+  90 0023 83       		.byte	0x83
+  91 0024 01       		.uleb128 0x1
+  92 0025 82       		.byte	0x82
+  93 0026 02       		.uleb128 0x2
+  94 0027 81       		.byte	0x81
+  95 0028 03       		.uleb128 0x3
+  96 0029 000000   		.align	2
+  97              	.LEFDE0:
+  98              		.text
+  99              	.Letext0:
+ 100              		.section	.debug_loc,"",%progbits
+ 101              	.Ldebug_loc0:
+ 102              	.LLST0:
+ 103 0000 00000000 		.4byte	.LFB2-.Ltext0
+ 104 0004 04000000 		.4byte	.LCFI0-.Ltext0
+ 105 0008 0100     		.2byte	0x1
+ 106 000a 5D       		.byte	0x5d
+ 107 000b 04000000 		.4byte	.LCFI0-.Ltext0
+ 108 000f 60000000 		.4byte	.LFE2-.Ltext0
+ 109 0013 0200     		.2byte	0x2
+ 110 0015 7D       		.byte	0x7d
+ 111 0016 0C       		.sleb128 12
+ 112 0017 00000000 		.4byte	0x0
+ 113 001b 00000000 		.4byte	0x0
+ 114              		.section	.debug_info
+ 115 0000 37000000 		.4byte	0x37
+ 116 0004 0200     		.2byte	0x2
+ 117 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 118 000a 04       		.byte	0x4
+ 119 000b 01       		.uleb128 0x1
+ 120 000c 00000000 		.4byte	.Ldebug_line0
+ 121 0010 60000000 		.4byte	.Letext0
+ 122 0014 00000000 		.4byte	.Ltext0
+ 123 0018 2B000000 		.4byte	.LASF0
+ 124 001c 01       		.byte	0x1
+ 125 001d 37000000 		.4byte	.LASF1
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s 			page 4
+
+
+ 126 0021 00000000 		.4byte	.LASF2
+ 127 0025 02       		.uleb128 0x2
+ 128 0026 01       		.byte	0x1
+ 129 0027 45000000 		.4byte	.LASF3
+ 130 002b 01       		.byte	0x1
+ 131 002c 1B       		.byte	0x1b
+ 132 002d 01       		.byte	0x1
+ 133 002e 00000000 		.4byte	.LFB2
+ 134 0032 60000000 		.4byte	.LFE2
+ 135 0036 00000000 		.4byte	.LLST0
+ 136 003a 00       		.byte	0x0
+ 137              		.section	.debug_abbrev
+ 138 0000 01       		.uleb128 0x1
+ 139 0001 11       		.uleb128 0x11
+ 140 0002 01       		.byte	0x1
+ 141 0003 10       		.uleb128 0x10
+ 142 0004 06       		.uleb128 0x6
+ 143 0005 12       		.uleb128 0x12
+ 144 0006 01       		.uleb128 0x1
+ 145 0007 11       		.uleb128 0x11
+ 146 0008 01       		.uleb128 0x1
+ 147 0009 25       		.uleb128 0x25
+ 148 000a 0E       		.uleb128 0xe
+ 149 000b 13       		.uleb128 0x13
+ 150 000c 0B       		.uleb128 0xb
+ 151 000d 03       		.uleb128 0x3
+ 152 000e 0E       		.uleb128 0xe
+ 153 000f 1B       		.uleb128 0x1b
+ 154 0010 0E       		.uleb128 0xe
+ 155 0011 00       		.byte	0x0
+ 156 0012 00       		.byte	0x0
+ 157 0013 02       		.uleb128 0x2
+ 158 0014 2E       		.uleb128 0x2e
+ 159 0015 00       		.byte	0x0
+ 160 0016 3F       		.uleb128 0x3f
+ 161 0017 0C       		.uleb128 0xc
+ 162 0018 03       		.uleb128 0x3
+ 163 0019 0E       		.uleb128 0xe
+ 164 001a 3A       		.uleb128 0x3a
+ 165 001b 0B       		.uleb128 0xb
+ 166 001c 3B       		.uleb128 0x3b
+ 167 001d 0B       		.uleb128 0xb
+ 168 001e 27       		.uleb128 0x27
+ 169 001f 0C       		.uleb128 0xc
+ 170 0020 11       		.uleb128 0x11
+ 171 0021 01       		.uleb128 0x1
+ 172 0022 12       		.uleb128 0x12
+ 173 0023 01       		.uleb128 0x1
+ 174 0024 40       		.uleb128 0x40
+ 175 0025 06       		.uleb128 0x6
+ 176 0026 00       		.byte	0x0
+ 177 0027 00       		.byte	0x0
+ 178 0028 00       		.byte	0x0
+ 179              		.section	.debug_pubnames,"",%progbits
+ 180 0000 1B000000 		.4byte	0x1b
+ 181 0004 0200     		.2byte	0x2
+ 182 0006 00000000 		.4byte	.Ldebug_info0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s 			page 5
+
+
+ 183 000a 3B000000 		.4byte	0x3b
+ 184 000e 25000000 		.4byte	0x25
+ 185 0012 4952515F 		.ascii	"IRQ_Test\000"
+ 185      54657374 
+ 185      00
+ 186 001b 00000000 		.4byte	0x0
+ 187              		.section	.debug_aranges,"",%progbits
+ 188 0000 1C000000 		.4byte	0x1c
+ 189 0004 0200     		.2byte	0x2
+ 190 0006 00000000 		.4byte	.Ldebug_info0
+ 191 000a 04       		.byte	0x4
+ 192 000b 00       		.byte	0x0
+ 193 000c 0000     		.2byte	0x0
+ 194 000e 0000     		.2byte	0x0
+ 195 0010 00000000 		.4byte	.Ltext0
+ 196 0014 60000000 		.4byte	.Letext0-.Ltext0
+ 197 0018 00000000 		.4byte	0x0
+ 198 001c 00000000 		.4byte	0x0
+ 199              		.section	.debug_str,"MS",%progbits,1
+ 200              	.LASF2:
+ 201 0000 2F637967 		.ascii	"/cygdrive/c/Embedded/eclipse/Demo/2138/irq\000"
+ 201      64726976 
+ 201      652F632F 
+ 201      456D6265 
+ 201      64646564 
+ 202              	.LASF0:
+ 203 002b 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 203      4320342E 
+ 203      312E3100 
+ 204              	.LASF1:
+ 205 0037 6972715F 		.ascii	"irq_handler.c\000"
+ 205      68616E64 
+ 205      6C65722E 
+ 205      6300
+ 206              	.LASF3:
+ 207 0045 4952515F 		.ascii	"IRQ_Test\000"
+ 207      54657374 
+ 207      00
+ 208              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 irq_handler.c
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s:13     .text:00000000 IRQ_Test
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s:21     .text:00000000 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccJtVjQi.s:61     .text:00000058 $d
+
+NO UNDEFINED SYMBOLS

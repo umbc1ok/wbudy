@@ -9,8 +9,8 @@
  *****************************************************************************/
 
 #define EEPROM_SIZE       0x2000  //64kbit = 8KByte
-#define LOCAL_EEPROM_ADDR 0x0 
-#define EEPROM_ADDR       0xA0  
+#define LOCAL_EEPROM_ADDR 0x0
+#define EEPROM_ADDR       0xA0
 
 #define I2C_EEPROM_ADDR   (EEPROM_ADDR + (LOCAL_EEPROM_ADDR << 1))
 #define I2C_EEPROM_RCV    (EEPROM_ADDR + (LOCAL_EEPROM_ADDR << 1) + 0x01)

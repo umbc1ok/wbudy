@@ -7,7 +7,7 @@
 ##########################################################
 
 # Name of target (executable program or library) 
-NAME      = MiniDemo2138
+NAME      = lpc2138_edu_board
 
 # Link program to RAM or ROM (possible values for LD_RAMROM is RAM or ROM,
 # if not specified = ROM)
@@ -25,12 +25,12 @@ NAME      = MiniDemo2138
 #                 LPC2290, LPC2292, LPC2294
 # If you have a new version not specified above, just select one of the old
 # versions with the same memory map.
-CPU_VARIANT = LPC2148
+CPU_VARIANT = LPC2138
 
 # It is possible to override the automatic linker file selection with the variable below.
 # No not use this opion unless you have very specific needs.
 #LD_SCRIPT = build_files/myOwnLinkScript_rom.ld
-LD_SCRIPT_PATH = .
+LD_SCRIPT_PATH = 
 
 # ELF-file contains debug information, or not
 # (possible values for DEBUG are 0 or 1)
@@ -51,24 +51,27 @@ EFLAGS  = -mthumb-interwork
 CODE    = THUMB
 
 # List C source files here.
-CSRCS   = main.c
- 
-# List C source files here.
-CPPSRCS   = 
- 
+CSRCS   = main.c          \
+          eepromTest.c    \
+          eeprom.c        \
+          i2c.c           \
+          adc.c           \
+          pca9532.c       \
+          lcd.c           \
+          lcd_hw.c        
+
 # List assembler source files here
 ASRCS   = 
 
 # List subdirectories to recursively invoke make in 
-SUBDIRS = startup \
-		  irq
+SUBDIRS = startup irq
 
 # List additional libraries to link with
 LIBS    = startup/libea_startup_thumb.a \
-		  irq/irq_handler.a
+          pre_emptive_os/pre_emptive_os.a
 
 # Add include search paths
-INC     = -I ./startup
+INC     = -I ./startup 
 
 # Select if an executable program or a library shall be created
 PROGRAM_MK  = true
@@ -83,10 +86,10 @@ HEX_FORMAT  = ihex
 DOWNLOAD    = lpc21isp.exe
 
 # Configurations for download program
-DL_COMPORT  = com5
-DL_BAUDRATE = 38400
-DL_CRYSTAL  = 12000
+DL_COMPORT  = com10
+DL_BAUDRATE = 115200
+DL_CRYSTAL  = 14745
 
 #######################################################################
-include ./build_files/general.mk
+include build_files/general.mk
 #######################################################################

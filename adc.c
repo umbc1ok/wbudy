@@ -34,7 +34,7 @@
  *
  * Return:
  *    10-bit conversion result
- *    
+ *
  ****************************************************************************/
 tU16
 getAnalogueInput(tU8 channel)

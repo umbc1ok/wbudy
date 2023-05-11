@@ -65,8 +65,8 @@
 #define NULL (0)
 #endif
 
-//#define FALSE 0
-//#define TRUE  1
+#define FALSE 0
+#define TRUE  1
 
 typedef unsigned char tU8;
 typedef unsigned short tU16;
@@ -74,7 +74,7 @@ typedef unsigned int tU32;
 typedef signed char tS8;
 typedef signed short tS16;
 typedef signed int tS32;
-//typedef unsigned char tBool;
+typedef unsigned char tBool;
 
 #endif
 

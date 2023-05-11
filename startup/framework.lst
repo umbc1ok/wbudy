@@ -1,0 +1,1790 @@
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 1
+
+
+   1              		.file	"framework.c"
+   2              		.section	.debug_abbrev,"",%progbits
+   3              	.Ldebug_abbrev0:
+   4              		.section	.debug_info,"",%progbits
+   5              	.Ldebug_info0:
+   6              		.section	.debug_line,"",%progbits
+   7              	.Ldebug_line0:
+   8 0000 B6000000 		.text
+   8      02002200 
+   8      00000201 
+   8      FB0E0D00 
+   8      01010101 
+   9              	.Ltext0:
+  10              		.align	2
+  11              		.global	exceptionHandlerInit
+  12              		.type	exceptionHandlerInit, %function
+  13              	exceptionHandlerInit:
+  14              	.LFB8:
+  15              		.file 1 "framework.c"
+   1:framework.c   **** /******************************************************************************
+   2:framework.c   ****  *
+   3:framework.c   ****  * Copyright:
+   4:framework.c   ****  *    (C) 2000 - 2005 Embedded Artists AB
+   5:framework.c   ****  *
+   6:framework.c   ****  * Description:
+   7:framework.c   ****  *    Framework for ARM7 processor
+   8:framework.c   ****  *
+   9:framework.c   ****  *****************************************************************************/
+  10:framework.c   **** 
+  11:framework.c   **** /******************************************************************************
+  12:framework.c   ****  * Includes
+  13:framework.c   ****  *****************************************************************************/
+  14:framework.c   **** #include "lpc2xxx.h"                            /* LPC2xxx definitions */
+  15:framework.c   **** #include "config.h"
+  16:framework.c   **** #include "framework.h"
+  17:framework.c   **** #include "consol.h"
+  18:framework.c   **** 
+  19:framework.c   **** /******************************************************************************
+  20:framework.c   ****  * Defines, macros, and typedefs
+  21:framework.c   ****  *****************************************************************************/
+  22:framework.c   **** 
+  23:framework.c   **** 
+  24:framework.c   **** /******************************************************************************
+  25:framework.c   ****  * External variables
+  26:framework.c   ****  *****************************************************************************/
+  27:framework.c   **** extern char end asm ("end");  //the symbol "end" is defined by the linker script
+  28:framework.c   **** 
+  29:framework.c   **** 
+  30:framework.c   **** /******************************************************************************
+  31:framework.c   ****  * Public variables
+  32:framework.c   ****  *****************************************************************************/
+  33:framework.c   **** unsigned char *pHeapStart;
+  34:framework.c   **** unsigned char *pHeapEnd;
+  35:framework.c   **** 
+  36:framework.c   **** 
+  37:framework.c   **** /******************************************************************************
+  38:framework.c   ****  * External functions
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 2
+
+
+  39:framework.c   ****  *****************************************************************************/
+  40:framework.c   **** 
+  41:framework.c   **** 
+  42:framework.c   **** /******************************************************************************
+  43:framework.c   ****  * Public functions
+  44:framework.c   ****  *****************************************************************************/
+  45:framework.c   **** void lowLevelInit(void);
+  46:framework.c   **** void eaInit(void);
+  47:framework.c   **** void exceptionHandlerInit(void);
+  48:framework.c   **** 
+  49:framework.c   **** /******************************************************************************
+  50:framework.c   ****  * Implementation of local functions
+  51:framework.c   ****  *****************************************************************************/
+  52:framework.c   **** 
+  53:framework.c   **** /*****************************************************************************
+  54:framework.c   ****  *
+  55:framework.c   ****  * Description:
+  56:framework.c   ****  *    Default exception handler for undefined instruction.
+  57:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
+  58:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
+  59:framework.c   ****  *
+  60:framework.c   ****  ****************************************************************************/
+  61:framework.c   **** static void
+  62:framework.c   **** exceptionHandlerUndef(void)
+  63:framework.c   **** {
+  64:framework.c   ****   register unsigned int programCounter asm ("lr");
+  65:framework.c   ****   unsigned int          value = programCounter - (unsigned int)0x04;
+  66:framework.c   **** 
+  67:framework.c   ****   consolSendString("Undefined instruction exception !!!\nAddress: 0x");
+  68:framework.c   ****   consolSendNumber(16, 8, 0, '0', value); 
+  69:framework.c   ****   while(1)
+  70:framework.c   ****     ;
+  71:framework.c   **** }
+  72:framework.c   **** 
+  73:framework.c   **** /*****************************************************************************
+  74:framework.c   ****  *
+  75:framework.c   ****  * Description:
+  76:framework.c   ****  *    Default exception handler for software interrupt.
+  77:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
+  78:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
+  79:framework.c   ****  *
+  80:framework.c   ****  ****************************************************************************/
+  81:framework.c   **** static void
+  82:framework.c   **** exceptionHandlerSwi(void)
+  83:framework.c   **** {
+  84:framework.c   ****   register unsigned int programCounter asm ("lr");
+  85:framework.c   ****   unsigned int          value = programCounter - (unsigned int)0x04;
+  86:framework.c   **** 
+  87:framework.c   ****   consolSendString("SWI exception !!!\nAddress: 0x");
+  88:framework.c   ****   consolSendNumber(16, 8, 0, '0', value); 
+  89:framework.c   ****   while(1)
+  90:framework.c   ****     ;
+  91:framework.c   **** }
+  92:framework.c   **** 
+  93:framework.c   **** /*****************************************************************************
+  94:framework.c   ****  *
+  95:framework.c   ****  * Description:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 3
+
+
+  96:framework.c   ****  *    Default exception handler for invalid program fetch.
+  97:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
+  98:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
+  99:framework.c   ****  *
+ 100:framework.c   ****  ****************************************************************************/
+ 101:framework.c   **** static void
+ 102:framework.c   **** exceptionHandlerPabort()
+ 103:framework.c   **** {
+ 104:framework.c   ****   register unsigned int programCounter asm ("lr");
+ 105:framework.c   ****   unsigned int          value = programCounter - (unsigned int)0x04;
+ 106:framework.c   **** 
+ 107:framework.c   ****   consolSendString("Pabort exception !!!\nAddress: 0x");
+ 108:framework.c   ****   consolSendNumber(16, 8, 0, '0', value); 
+ 109:framework.c   ****   while(1)
+ 110:framework.c   ****     ;
+ 111:framework.c   **** }
+ 112:framework.c   **** 
+ 113:framework.c   **** /*****************************************************************************
+ 114:framework.c   ****  *
+ 115:framework.c   ****  * Description:
+ 116:framework.c   ****  *    Default exception handler for invalid data access.
+ 117:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
+ 118:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
+ 119:framework.c   ****  *
+ 120:framework.c   ****  ****************************************************************************/
+ 121:framework.c   **** static void
+ 122:framework.c   **** exceptionHandlerDabort(void)
+ 123:framework.c   **** {
+ 124:framework.c   ****   register unsigned int programCounter asm ("lr");
+ 125:framework.c   ****   unsigned int          value = programCounter - (unsigned int)0x08;
+ 126:framework.c   **** 
+ 127:framework.c   ****   consolSendString("Dabort exception !!!\nAddress: 0x");
+ 128:framework.c   ****   consolSendNumber(16, 8, 0, '0', value); 
+ 129:framework.c   ****   while(1)
+ 130:framework.c   ****     ;
+ 131:framework.c   **** }
+ 132:framework.c   **** 
+ 133:framework.c   **** /*****************************************************************************
+ 134:framework.c   ****  *
+ 135:framework.c   ****  * Description:
+ 136:framework.c   ****  *    Default exception handler for fast interrupts.
+ 137:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
+ 138:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
+ 139:framework.c   ****  *
+ 140:framework.c   ****  ****************************************************************************/
+ 141:framework.c   **** static void
+ 142:framework.c   **** exceptionHandlerFiq(void)
+ 143:framework.c   **** {
+ 144:framework.c   ****   register unsigned int programCounter asm ("lr");
+ 145:framework.c   ****   unsigned int          value = programCounter - (unsigned int)0x04;
+ 146:framework.c   **** 
+ 147:framework.c   ****   consolSendString("FIQ exception !!!\nAddress: 0x");
+ 148:framework.c   ****   consolSendNumber(16, 8, 0, '0', value); 
+ 149:framework.c   ****   while(1)
+ 150:framework.c   ****     ;
+ 151:framework.c   **** }
+ 152:framework.c   **** 
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 4
+
+
+ 153:framework.c   **** #if (IRQ_HANDLER == 0)
+ 154:framework.c   **** /*****************************************************************************
+ 155:framework.c   ****  *
+ 156:framework.c   ****  * Description:
+ 157:framework.c   ****  *    Default exception handler for normal interrupts. This handler should
+ 158:framework.c   ****  *    normally never be used.
+ 159:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
+ 160:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
+ 161:framework.c   ****  *
+ 162:framework.c   ****  ****************************************************************************/
+ 163:framework.c   **** static void
+ 164:framework.c   **** exceptionHandlerIrq(void)
+ 165:framework.c   **** {
+ 166:framework.c   ****   register unsigned int programCounter asm ("lr");
+ 167:framework.c   ****   unsigned int          value = programCounter - (unsigned int)0x04;
+ 168:framework.c   **** 
+ 169:framework.c   ****   consolSendString("IRQ exception !!!\nAddress: 0x");
+ 170:framework.c   ****   consolSendNumber(16, 8, 0, '0', value); 
+ 171:framework.c   ****   while(1)
+ 172:framework.c   ****     ;
+ 173:framework.c   **** }
+ 174:framework.c   **** #endif
+ 175:framework.c   **** 
+ 176:framework.c   **** /******************************************************************************
+ 177:framework.c   ****  * Implementation of public functions
+ 178:framework.c   ****  *****************************************************************************/
+ 179:framework.c   **** 
+ 180:framework.c   **** /*****************************************************************************
+ 181:framework.c   ****  *
+ 182:framework.c   ****  * Description:
+ 183:framework.c   ****  *    Connect all default exception handlers.
+ 184:framework.c   ****  *    The application can overwrite these handlers with new ones.
+ 185:framework.c   ****  *
+ 186:framework.c   ****  ****************************************************************************/
+ 187:framework.c   **** void
+ 188:framework.c   **** exceptionHandlerInit(void)
+ 189:framework.c   **** {
+  16              		.loc 1 189 0
+  17              		@ Function supports interworking.
+  18              		@ args = 0, pretend = 0, frame = 0
+  19              		@ frame_needed = 0, uses_anonymous_args = 0
+  20              		@ link register save eliminated.
+ 190:framework.c   ****   pISR_UNDEF  = (unsigned int)exceptionHandlerUndef;
+ 191:framework.c   ****   pISR_SWI    = (unsigned int)exceptionHandlerSwi;
+ 192:framework.c   ****   pISR_PABORT = (unsigned int)exceptionHandlerPabort;
+ 193:framework.c   ****   pISR_DABORT = (unsigned int)exceptionHandlerDabort;
+ 194:framework.c   ****   pISR_FIQ    = (unsigned int)exceptionHandlerFiq;
+ 195:framework.c   **** 
+ 196:framework.c   **** #if (IRQ_HANDLER == 0)
+ 197:framework.c   ****   pISR_IRQ    = (unsigned int)exceptionHandlerIrq;
+  21              		.loc 1 197 0
+  22 0000 48309FE5 		ldr	r3, .L3
+  23              		.loc 1 190 0
+  24 0004 0111A0E3 		mov	r1, #1073741824
+ 198:framework.c   **** #endif
+ 199:framework.c   **** 
+ 200:framework.c   ****   //set heap limits
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 5
+
+
+ 201:framework.c   ****   pHeapStart = &end;
+  25              		.loc 1 201 0
+  26 0008 44209FE5 		ldr	r2, .L3+4
+  27              		.loc 1 197 0
+  28 000c 343081E5 		str	r3, [r1, #52]
+  29              		.loc 1 201 0
+  30 0010 40309FE5 		ldr	r3, .L3+8
+  31 0014 002083E5 		str	r2, [r3, #0]
+ 202:framework.c   ****   pHeapEnd   = (unsigned char*)((STK_SADDR - 1) & 0xfffffffc);
+  32              		.loc 1 202 0
+  33 0018 3C309FE5 		ldr	r3, .L3+12
+  34 001c 3C209FE5 		ldr	r2, .L3+16
+  35 0020 002083E5 		str	r2, [r3, #0]
+  36              		.loc 1 190 0
+  37 0024 38309FE5 		ldr	r3, .L3+20
+  38 0028 243081E5 		str	r3, [r1, #36]
+  39              		.loc 1 191 0
+  40 002c 34309FE5 		ldr	r3, .L3+24
+  41 0030 283081E5 		str	r3, [r1, #40]
+  42              		.loc 1 192 0
+  43 0034 30309FE5 		ldr	r3, .L3+28
+  44 0038 2C3081E5 		str	r3, [r1, #44]
+  45              		.loc 1 193 0
+  46 003c 2C309FE5 		ldr	r3, .L3+32
+  47 0040 303081E5 		str	r3, [r1, #48]
+  48              		.loc 1 194 0
+  49 0044 28309FE5 		ldr	r3, .L3+36
+  50              		.loc 1 189 0
+  51              		@ lr needed for prologue
+  52              		.loc 1 194 0
+  53 0048 383081E5 		str	r3, [r1, #56]
+ 203:framework.c   **** }
+  54              		.loc 1 203 0
+  55 004c 1EFF2FE1 		bx	lr
+  56              	.L4:
+  57              		.align	2
+  58              	.L3:
+  59 0050 88010000 		.word	exceptionHandlerIrq
+  60 0054 00000000 		.word	end
+  61 0058 00000000 		.word	pHeapStart
+  62 005c 00000000 		.word	pHeapEnd
+  63 0060 A4780040 		.word	1073772708
+  64 0064 8C020000 		.word	exceptionHandlerUndef
+  65 0068 58020000 		.word	exceptionHandlerSwi
+  66 006c 24020000 		.word	exceptionHandlerPabort
+  67 0070 F0010000 		.word	exceptionHandlerDabort
+  68 0074 BC010000 		.word	exceptionHandlerFiq
+  69              	.LFE8:
+  70              		.size	exceptionHandlerInit, .-exceptionHandlerInit
+  71              		.align	2
+  72              		.global	lowLevelInit
+  73              		.type	lowLevelInit, %function
+  74              	lowLevelInit:
+  75              	.LFB9:
+ 204:framework.c   **** 
+ 205:framework.c   **** /*****************************************************************************
+ 206:framework.c   ****  *
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 6
+
+
+ 207:framework.c   ****  * Description:
+ 208:framework.c   ****  *    Initialize system functions and GPIO
+ 209:framework.c   ****  *
+ 210:framework.c   ****  ****************************************************************************/
+ 211:framework.c   **** void
+ 212:framework.c   **** lowLevelInit(void)
+ 213:framework.c   **** {
+  76              		.loc 1 213 0
+  77              		@ Function supports interworking.
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+ 214:framework.c   ****   PINSEL0 = 0x00000000;  
+ 215:framework.c   ****   PINSEL1 = 0x00000000;  
+ 216:framework.c   **** 
+ 217:framework.c   ****   IOSET = 0x00000000;       //Initialize pins to high level
+  80              		.loc 1 217 0
+  81 0078 A0109FE5 		ldr	r1, .L7
+  82              		.loc 1 214 0
+  83 007c A0C09FE5 		ldr	ip, .L7+4
+  84 0080 0030A0E3 		mov	r3, #0
+ 218:framework.c   ****   IOCLR = 0xffffffff;       //Initialize pins to low level
+  85              		.loc 1 218 0
+  86 0084 0020E0E3 		mvn	r2, #0
+ 219:framework.c   ****   IODIR = 0x00000000;       //Set pin direction
+ 220:framework.c   **** 
+ 221:framework.c   ****   //initialize the MAM (Memory Accelerator Module)
+ 222:framework.c   ****   MAMTIM = MAM_TIMING;       //number of CCLK to read from the FLASH
+  87              		.loc 1 222 0
+  88 0088 98009FE5 		ldr	r0, .L7+8
+  89              		.loc 1 214 0
+  90 008c 00308CE5 		str	r3, [ip, #0]
+  91              		.loc 1 215 0
+  92 0090 04308CE5 		str	r3, [ip, #4]
+  93              		.loc 1 217 0
+  94 0094 043081E5 		str	r3, [r1, #4]
+  95              		.loc 1 218 0
+  96 0098 0C2081E5 		str	r2, [r1, #12]
+  97              		.loc 1 219 0
+  98 009c 083081E5 		str	r3, [r1, #8]
+  99              		.loc 1 222 0
+ 100 00a0 0310A0E3 		mov	r1, #3
+ 101 00a4 041080E5 		str	r1, [r0, #4]
+ 102              		.loc 1 213 0
+ 103 00a8 04E02DE5 		str	lr, [sp, #-4]!
+ 104              	.LCFI0:
+ 223:framework.c   ****   MAMCR  = MAM_SETTING;      //0=disabled, 1=partly enabled (enabled for code prefetch, but not for
+ 105              		.loc 1 223 0
+ 106 00ac 0210A0E3 		mov	r1, #2
+ 224:framework.c   **** 
+ 225:framework.c   ****   //initialize the exception vector mapping
+ 226:framework.c   ****   MAMMAP = MAM_MAP;
+ 107              		.loc 1 226 0
+ 108 00b0 01E0A0E3 		mov	lr, #1
+ 109              		.loc 1 223 0
+ 110 00b4 001080E5 		str	r1, [r0, #0]
+ 111              		.loc 1 226 0
+ 112 00b8 40E080E5 		str	lr, [r0, #64]
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 7
+
+
+ 227:framework.c   **** 
+ 228:framework.c   ****   //set the peripheral bus speed, PCLK = CCLK / PBSD
+ 229:framework.c   **** 	VPBDIV = PBSD;
+ 113              		.loc 1 229 0
+ 114 00bc 00E180E5 		str	lr, [r0, #256]
+ 230:framework.c   **** 	
+ 231:framework.c   **** 	//initialize VIC
+ 232:framework.c   ****   VICIntEnClr    = 0xFFFFFFFF;           /* Disable ALL interrupts                             */
+ 115              		.loc 1 232 0
+ 116 00c0 EB2F02E5 		str	r2, [r2, #-4075]
+ 233:framework.c   ****   VICProtection  = 0;                    /* Setup interrupt controller                         */
+ 117              		.loc 1 233 0
+ 118 00c4 DF3F02E5 		str	r3, [r2, #-4063]
+ 234:framework.c   ****   VICDefVectAddr = (unsigned int)0;      /* Direct unvectored IRQs to reset, i.e., address 0x0 */
+ 119              		.loc 1 234 0
+ 120 00c8 CB3F02E5 		str	r3, [r2, #-4043]
+ 235:framework.c   **** 
+ 236:framework.c   ****   VICVectAddr0   = (unsigned int)0;      /* Set the vector address                             */
+ 121              		.loc 1 236 0
+ 122 00cc FF3E02E5 		str	r3, [r2, #-3839]
+ 237:framework.c   ****   VICVectAddr1   = (unsigned int)0;      /* Set the vector address                             */
+ 123              		.loc 1 237 0
+ 124 00d0 FB3E02E5 		str	r3, [r2, #-3835]
+ 238:framework.c   ****   VICVectAddr2   = (unsigned int)0;      /* Set the vector address                             */
+ 125              		.loc 1 238 0
+ 126 00d4 F73E02E5 		str	r3, [r2, #-3831]
+ 239:framework.c   ****   VICVectAddr3   = (unsigned int)0;      /* Set the vector address                             */
+ 127              		.loc 1 239 0
+ 128 00d8 F33E02E5 		str	r3, [r2, #-3827]
+ 240:framework.c   ****   VICVectAddr4   = (unsigned int)0;      /* Set the vector address                             */
+ 129              		.loc 1 240 0
+ 130 00dc EF3E02E5 		str	r3, [r2, #-3823]
+ 241:framework.c   ****   VICVectAddr5   = (unsigned int)0;      /* Set the vector address                             */
+ 131              		.loc 1 241 0
+ 132 00e0 EB3E02E5 		str	r3, [r2, #-3819]
+ 242:framework.c   ****   VICVectAddr6   = (unsigned int)0;      /* Set the vector address                             */
+ 133              		.loc 1 242 0
+ 134 00e4 E73E02E5 		str	r3, [r2, #-3815]
+ 243:framework.c   ****   VICVectAddr7   = (unsigned int)0;      /* Set the vector address                             */
+ 135              		.loc 1 243 0
+ 136 00e8 E33E02E5 		str	r3, [r2, #-3811]
+ 244:framework.c   ****   VICVectAddr8   = (unsigned int)0;      /* Set the vector address                             */
+ 137              		.loc 1 244 0
+ 138 00ec DF3E02E5 		str	r3, [r2, #-3807]
+ 245:framework.c   ****   VICVectAddr9   = (unsigned int)0;      /* Set the vector address                             */
+ 139              		.loc 1 245 0
+ 140 00f0 DB3E02E5 		str	r3, [r2, #-3803]
+ 246:framework.c   ****   VICVectAddr10  = (unsigned int)0;      /* Set the vector address                             */
+ 141              		.loc 1 246 0
+ 142 00f4 D73E02E5 		str	r3, [r2, #-3799]
+ 247:framework.c   ****   VICVectAddr11  = (unsigned int)0;      /* Set the vector address                             */
+ 143              		.loc 1 247 0
+ 144 00f8 D33E02E5 		str	r3, [r2, #-3795]
+ 248:framework.c   ****   VICVectAddr12  = (unsigned int)0;      /* Set the vector address                             */
+ 145              		.loc 1 248 0
+ 146 00fc CF3E02E5 		str	r3, [r2, #-3791]
+ 249:framework.c   ****   VICVectAddr13  = (unsigned int)0;      /* Set the vector address                             */
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 8
+
+
+ 147              		.loc 1 249 0
+ 148 0100 CB3E02E5 		str	r3, [r2, #-3787]
+ 250:framework.c   ****   VICVectAddr14  = (unsigned int)0;      /* Set the vector address                             */
+ 149              		.loc 1 250 0
+ 150 0104 C73E02E5 		str	r3, [r2, #-3783]
+ 251:framework.c   ****   VICVectAddr15  = (unsigned int)0;      /* Set the vector address                             */
+ 151              		.loc 1 251 0
+ 152 0108 C33E02E5 		str	r3, [r2, #-3779]
+ 252:framework.c   **** 	
+ 253:framework.c   ****   //enable interrupts (both IRQ and FIQ) 
+ 254:framework.c   ****   asm volatile ("mrs r3, cpsr       \n\t"                          
+ 153              		.loc 1 254 0
+ 154 010c 00300FE1 		mrs r3, cpsr       
+ 155 0110 C030C3E3 		bic r3, r3, #0xC0  
+ 156 0114 03F029E1 		msr cpsr, r3       
+ 157              		
+ 255:framework.c   ****                 "bic r3, r3, #0xC0  \n\t"                      
+ 256:framework.c   ****                 "msr cpsr, r3       \n\t"                          
+ 257:framework.c   ****                 :                                       
+ 258:framework.c   ****                 :                                       
+ 259:framework.c   ****                 : "r3" );
+ 260:framework.c   **** }
+ 158              		.loc 1 260 0
+ 159 0118 04E09DE4 		ldr	lr, [sp], #4
+ 160 011c 1EFF2FE1 		bx	lr
+ 161              	.L8:
+ 162              		.align	2
+ 163              	.L7:
+ 164 0120 008002E0 		.word	-536707072
+ 165 0124 00C002E0 		.word	-536690688
+ 166 0128 00C01FE0 		.word	-534790144
+ 167              	.LFE9:
+ 168              		.size	lowLevelInit, .-lowLevelInit
+ 169              		.align	2
+ 170              		.global	eaInit
+ 171              		.type	eaInit, %function
+ 172              	eaInit:
+ 173              	.LFB10:
+ 261:framework.c   **** 
+ 262:framework.c   **** /*****************************************************************************
+ 263:framework.c   ****  *
+ 264:framework.c   ****  * Description:
+ 265:framework.c   ****  *    Initialize the consol
+ 266:framework.c   ****  *
+ 267:framework.c   ****  ****************************************************************************/
+ 268:framework.c   **** void
+ 269:framework.c   **** eaInit(void)
+ 270:framework.c   **** {
+ 174              		.loc 1 270 0
+ 175              		@ Function supports interworking.
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178 012c 04E02DE5 		str	lr, [sp, #-4]!
+ 179              	.LCFI1:
+ 271:framework.c   ****   //initialize the consol
+ 272:framework.c   ****   consolInit();
+ 180              		.loc 1 272 0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 9
+
+
+ 181 0130 FEFFFFEB 		bl	consolInit
+ 273:framework.c   ****   
+ 274:framework.c   **** #ifdef CONSOL_STARTUP_DELAY
+ 275:framework.c   ****   /*
+ 276:framework.c   ****    * setup timer #1 for a short delay
+ 277:framework.c   ****    */
+ 278:framework.c   ****   TIMER1_TCR = 0x02;          //stop and reset timer
+ 182              		.loc 1 278 0
+ 183 0134 44209FE5 		ldr	r2, .L15
+ 184 0138 0230A0E3 		mov	r3, #2
+ 185 013c 043082E5 		str	r3, [r2, #4]
+ 279:framework.c   ****   TIMER1_PR  = 0x00;          //set prescaler to zero
+ 186              		.loc 1 279 0
+ 187 0140 0030A0E3 		mov	r3, #0
+ 188 0144 0C3082E5 		str	r3, [r2, #12]
+ 280:framework.c   ****   TIMER1_MR0 = CONSOL_STARTUP_DELAY_LENGTH * ((FOSC * PLL_MUL)/ (1000000 * PBSD));
+ 189              		.loc 1 280 0
+ 190 0148 34309FE5 		ldr	r3, .L15+4
+ 191 014c 183082E5 		str	r3, [r2, #24]
+ 281:framework.c   ****   TIMER1_IR  = 0xff;          //reset all interrrupt flags
+ 192              		.loc 1 281 0
+ 193 0150 FF30A0E3 		mov	r3, #255
+ 194 0154 003082E5 		str	r3, [r2, #0]
+ 282:framework.c   ****   TIMER1_MCR = 0x04;          //stop timer on match
+ 195              		.loc 1 282 0
+ 196 0158 0430A0E3 		mov	r3, #4
+ 197 015c 143082E5 		str	r3, [r2, #20]
+ 283:framework.c   ****   TIMER1_TCR = 0x01;          //start timer
+ 198              		.loc 1 283 0
+ 199 0160 0130A0E3 		mov	r3, #1
+ 200 0164 043082E5 		str	r3, [r2, #4]
+ 201              	.L10:
+ 284:framework.c   ****   
+ 285:framework.c   ****   //wait until delay time has elapsed
+ 286:framework.c   ****   while (TIMER1_TCR & 0x01)
+ 202              		.loc 1 286 0
+ 203 0168 10309FE5 		ldr	r3, .L15
+ 204 016c 043093E5 		ldr	r3, [r3, #4]
+ 205 0170 010013E3 		tst	r3, #1
+ 206 0174 FBFFFF1A 		bne	.L10
+ 287:framework.c   ****     ;
+ 288:framework.c   **** #endif
+ 289:framework.c   **** }
+ 207              		.loc 1 289 0
+ 208 0178 04E09DE4 		ldr	lr, [sp], #4
+ 209 017c 1EFF2FE1 		bx	lr
+ 210              	.L16:
+ 211              		.align	2
+ 212              	.L15:
+ 213 0180 008000E0 		.word	-536838144
+ 214 0184 A8160000 		.word	5800
+ 215              	.LFE10:
+ 216              		.size	eaInit, .-eaInit
+ 217              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 218              		.align	2
+ 219              	.LC0:
+ 220 0000 49525120 		.ascii	"IRQ exception !!!\012Address: 0x\000"
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 10
+
+
+ 220      65786365 
+ 220      7074696F 
+ 220      6E202121 
+ 220      210A4164 
+ 221              		.text
+ 222              		.align	2
+ 223              		.type	exceptionHandlerIrq, %function
+ 224              	exceptionHandlerIrq:
+ 225              	.LFB7:
+ 226              		.loc 1 165 0
+ 227              		@ Function supports interworking.
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 230 0188 04E02DE5 		str	lr, [sp, #-4]!
+ 231              	.LCFI2:
+ 232              		.loc 1 169 0
+ 233 018c 24009FE5 		ldr	r0, .L20
+ 234              		.loc 1 165 0
+ 235 0190 04D04DE2 		sub	sp, sp, #4
+ 236              	.LCFI3:
+ 237              		.loc 1 169 0
+ 238 0194 FEFFFFEB 		bl	consolSendString
+ 239              		.loc 1 170 0
+ 240 0198 1000A0E3 		mov	r0, #16
+ 241              	.LVL0:
+ 242 019c 04E04EE2 		sub	lr, lr, #4
+ 243              	.LVL1:
+ 244 01a0 0810A0E3 		mov	r1, #8
+ 245 01a4 0020A0E3 		mov	r2, #0
+ 246 01a8 3030A0E3 		mov	r3, #48
+ 247 01ac 00E08DE5 		str	lr, [sp, #0]
+ 248 01b0 FEFFFFEB 		bl	consolSendNumber
+ 249              	.L18:
+ 250 01b4 FEFFFFEA 		b	.L18
+ 251              	.L21:
+ 252              		.align	2
+ 253              	.L20:
+ 254 01b8 00000000 		.word	.LC0
+ 255              	.LFE7:
+ 256              		.size	exceptionHandlerIrq, .-exceptionHandlerIrq
+ 257              		.section	.rodata.str1.4
+ 258 001e 0000     		.align	2
+ 259              	.LC1:
+ 260 0020 46495120 		.ascii	"FIQ exception !!!\012Address: 0x\000"
+ 260      65786365 
+ 260      7074696F 
+ 260      6E202121 
+ 260      210A4164 
+ 261              		.text
+ 262              		.align	2
+ 263              		.type	exceptionHandlerFiq, %function
+ 264              	exceptionHandlerFiq:
+ 265              	.LFB6:
+ 266              		.loc 1 143 0
+ 267              		@ Function supports interworking.
+ 268              		@ args = 0, pretend = 0, frame = 0
+ 269              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 11
+
+
+ 270 01bc 04E02DE5 		str	lr, [sp, #-4]!
+ 271              	.LCFI4:
+ 272              		.loc 1 147 0
+ 273 01c0 24009FE5 		ldr	r0, .L25
+ 274              		.loc 1 143 0
+ 275 01c4 04D04DE2 		sub	sp, sp, #4
+ 276              	.LCFI5:
+ 277              		.loc 1 147 0
+ 278 01c8 FEFFFFEB 		bl	consolSendString
+ 279              		.loc 1 148 0
+ 280 01cc 1000A0E3 		mov	r0, #16
+ 281              	.LVL2:
+ 282 01d0 04E04EE2 		sub	lr, lr, #4
+ 283              	.LVL3:
+ 284 01d4 0810A0E3 		mov	r1, #8
+ 285 01d8 0020A0E3 		mov	r2, #0
+ 286 01dc 3030A0E3 		mov	r3, #48
+ 287 01e0 00E08DE5 		str	lr, [sp, #0]
+ 288 01e4 FEFFFFEB 		bl	consolSendNumber
+ 289              	.L23:
+ 290 01e8 FEFFFFEA 		b	.L23
+ 291              	.L26:
+ 292              		.align	2
+ 293              	.L25:
+ 294 01ec 20000000 		.word	.LC1
+ 295              	.LFE6:
+ 296              		.size	exceptionHandlerFiq, .-exceptionHandlerFiq
+ 297              		.section	.rodata.str1.4
+ 298 003e 0000     		.align	2
+ 299              	.LC2:
+ 300 0040 4461626F 		.ascii	"Dabort exception !!!\012Address: 0x\000"
+ 300      72742065 
+ 300      78636570 
+ 300      74696F6E 
+ 300      20212121 
+ 301              		.text
+ 302              		.align	2
+ 303              		.type	exceptionHandlerDabort, %function
+ 304              	exceptionHandlerDabort:
+ 305              	.LFB5:
+ 306              		.loc 1 123 0
+ 307              		@ Function supports interworking.
+ 308              		@ args = 0, pretend = 0, frame = 0
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310 01f0 04E02DE5 		str	lr, [sp, #-4]!
+ 311              	.LCFI6:
+ 312              		.loc 1 127 0
+ 313 01f4 24009FE5 		ldr	r0, .L30
+ 314              		.loc 1 123 0
+ 315 01f8 04D04DE2 		sub	sp, sp, #4
+ 316              	.LCFI7:
+ 317              		.loc 1 127 0
+ 318 01fc FEFFFFEB 		bl	consolSendString
+ 319              		.loc 1 128 0
+ 320 0200 1000A0E3 		mov	r0, #16
+ 321              	.LVL4:
+ 322 0204 08E04EE2 		sub	lr, lr, #8
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 12
+
+
+ 323              	.LVL5:
+ 324 0208 0810A0E3 		mov	r1, #8
+ 325 020c 0020A0E3 		mov	r2, #0
+ 326 0210 3030A0E3 		mov	r3, #48
+ 327 0214 00E08DE5 		str	lr, [sp, #0]
+ 328 0218 FEFFFFEB 		bl	consolSendNumber
+ 329              	.L28:
+ 330 021c FEFFFFEA 		b	.L28
+ 331              	.L31:
+ 332              		.align	2
+ 333              	.L30:
+ 334 0220 40000000 		.word	.LC2
+ 335              	.LFE5:
+ 336              		.size	exceptionHandlerDabort, .-exceptionHandlerDabort
+ 337              		.section	.rodata.str1.4
+ 338 0061 000000   		.align	2
+ 339              	.LC3:
+ 340 0064 5061626F 		.ascii	"Pabort exception !!!\012Address: 0x\000"
+ 340      72742065 
+ 340      78636570 
+ 340      74696F6E 
+ 340      20212121 
+ 341              		.text
+ 342              		.align	2
+ 343              		.type	exceptionHandlerPabort, %function
+ 344              	exceptionHandlerPabort:
+ 345              	.LFB4:
+ 346              		.loc 1 103 0
+ 347              		@ Function supports interworking.
+ 348              		@ args = 0, pretend = 0, frame = 0
+ 349              		@ frame_needed = 0, uses_anonymous_args = 0
+ 350 0224 04E02DE5 		str	lr, [sp, #-4]!
+ 351              	.LCFI8:
+ 352              		.loc 1 107 0
+ 353 0228 24009FE5 		ldr	r0, .L35
+ 354              		.loc 1 103 0
+ 355 022c 04D04DE2 		sub	sp, sp, #4
+ 356              	.LCFI9:
+ 357              		.loc 1 107 0
+ 358 0230 FEFFFFEB 		bl	consolSendString
+ 359              		.loc 1 108 0
+ 360 0234 1000A0E3 		mov	r0, #16
+ 361              	.LVL6:
+ 362 0238 04E04EE2 		sub	lr, lr, #4
+ 363              	.LVL7:
+ 364 023c 0810A0E3 		mov	r1, #8
+ 365 0240 0020A0E3 		mov	r2, #0
+ 366 0244 3030A0E3 		mov	r3, #48
+ 367 0248 00E08DE5 		str	lr, [sp, #0]
+ 368 024c FEFFFFEB 		bl	consolSendNumber
+ 369              	.L33:
+ 370 0250 FEFFFFEA 		b	.L33
+ 371              	.L36:
+ 372              		.align	2
+ 373              	.L35:
+ 374 0254 64000000 		.word	.LC3
+ 375              	.LFE4:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 13
+
+
+ 376              		.size	exceptionHandlerPabort, .-exceptionHandlerPabort
+ 377              		.section	.rodata.str1.4
+ 378 0085 000000   		.align	2
+ 379              	.LC4:
+ 380 0088 53574920 		.ascii	"SWI exception !!!\012Address: 0x\000"
+ 380      65786365 
+ 380      7074696F 
+ 380      6E202121 
+ 380      210A4164 
+ 381              		.text
+ 382              		.align	2
+ 383              		.type	exceptionHandlerSwi, %function
+ 384              	exceptionHandlerSwi:
+ 385              	.LFB3:
+ 386              		.loc 1 83 0
+ 387              		@ Function supports interworking.
+ 388              		@ args = 0, pretend = 0, frame = 0
+ 389              		@ frame_needed = 0, uses_anonymous_args = 0
+ 390 0258 04E02DE5 		str	lr, [sp, #-4]!
+ 391              	.LCFI10:
+ 392              		.loc 1 87 0
+ 393 025c 24009FE5 		ldr	r0, .L40
+ 394              		.loc 1 83 0
+ 395 0260 04D04DE2 		sub	sp, sp, #4
+ 396              	.LCFI11:
+ 397              		.loc 1 87 0
+ 398 0264 FEFFFFEB 		bl	consolSendString
+ 399              		.loc 1 88 0
+ 400 0268 1000A0E3 		mov	r0, #16
+ 401              	.LVL8:
+ 402 026c 04E04EE2 		sub	lr, lr, #4
+ 403              	.LVL9:
+ 404 0270 0810A0E3 		mov	r1, #8
+ 405 0274 0020A0E3 		mov	r2, #0
+ 406 0278 3030A0E3 		mov	r3, #48
+ 407 027c 00E08DE5 		str	lr, [sp, #0]
+ 408 0280 FEFFFFEB 		bl	consolSendNumber
+ 409              	.L38:
+ 410 0284 FEFFFFEA 		b	.L38
+ 411              	.L41:
+ 412              		.align	2
+ 413              	.L40:
+ 414 0288 88000000 		.word	.LC4
+ 415              	.LFE3:
+ 416              		.size	exceptionHandlerSwi, .-exceptionHandlerSwi
+ 417              		.section	.rodata.str1.4
+ 418 00a6 0000     		.align	2
+ 419              	.LC5:
+ 420 00a8 556E6465 		.ascii	"Undefined instruction exception !!!\012Address: 0x\000"
+ 420      66696E65 
+ 420      6420696E 
+ 420      73747275 
+ 420      6374696F 
+ 421              		.text
+ 422              		.align	2
+ 423              		.type	exceptionHandlerUndef, %function
+ 424              	exceptionHandlerUndef:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 14
+
+
+ 425              	.LFB2:
+ 426              		.loc 1 63 0
+ 427              		@ Function supports interworking.
+ 428              		@ args = 0, pretend = 0, frame = 0
+ 429              		@ frame_needed = 0, uses_anonymous_args = 0
+ 430 028c 04E02DE5 		str	lr, [sp, #-4]!
+ 431              	.LCFI12:
+ 432              		.loc 1 67 0
+ 433 0290 24009FE5 		ldr	r0, .L45
+ 434              		.loc 1 63 0
+ 435 0294 04D04DE2 		sub	sp, sp, #4
+ 436              	.LCFI13:
+ 437              		.loc 1 67 0
+ 438 0298 FEFFFFEB 		bl	consolSendString
+ 439              		.loc 1 68 0
+ 440 029c 1000A0E3 		mov	r0, #16
+ 441              	.LVL10:
+ 442 02a0 04E04EE2 		sub	lr, lr, #4
+ 443              	.LVL11:
+ 444 02a4 0810A0E3 		mov	r1, #8
+ 445 02a8 0020A0E3 		mov	r2, #0
+ 446 02ac 3030A0E3 		mov	r3, #48
+ 447 02b0 00E08DE5 		str	lr, [sp, #0]
+ 448 02b4 FEFFFFEB 		bl	consolSendNumber
+ 449              	.L43:
+ 450 02b8 FEFFFFEA 		b	.L43
+ 451              	.L46:
+ 452              		.align	2
+ 453              	.L45:
+ 454 02bc A8000000 		.word	.LC5
+ 455              	.LFE2:
+ 456              		.size	exceptionHandlerUndef, .-exceptionHandlerUndef
+ 457              		.comm	pHeapStart,4,4
+ 458              		.comm	pHeapEnd,4,4
+ 459              		.section	.debug_frame,"",%progbits
+ 460              	.Lframe0:
+ 461 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 462              	.LSCIE0:
+ 463 0004 FFFFFFFF 		.4byte	0xffffffff
+ 464 0008 01       		.byte	0x1
+ 465 0009 00       		.ascii	"\000"
+ 466 000a 01       		.uleb128 0x1
+ 467 000b 7C       		.sleb128 -4
+ 468 000c 0E       		.byte	0xe
+ 469 000d 0C       		.byte	0xc
+ 470 000e 0D       		.uleb128 0xd
+ 471 000f 00       		.uleb128 0x0
+ 472              		.align	2
+ 473              	.LECIE0:
+ 474              	.LSFDE0:
+ 475 0010 0C000000 		.4byte	.LEFDE0-.LASFDE0
+ 476              	.LASFDE0:
+ 477 0014 00000000 		.4byte	.Lframe0
+ 478 0018 00000000 		.4byte	.LFB8
+ 479 001c 78000000 		.4byte	.LFE8-.LFB8
+ 480              		.align	2
+ 481              	.LEFDE0:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 15
+
+
+ 482              	.LSFDE2:
+ 483 0020 14000000 		.4byte	.LEFDE2-.LASFDE2
+ 484              	.LASFDE2:
+ 485 0024 00000000 		.4byte	.Lframe0
+ 486 0028 78000000 		.4byte	.LFB9
+ 487 002c B4000000 		.4byte	.LFE9-.LFB9
+ 488 0030 74       		.byte	0x4
+ 489              		.4byte	.LCFI0-.LFB9
+ 490 0031 0E       		.byte	0xe
+ 491 0032 04       		.uleb128 0x4
+ 492 0033 8E       		.byte	0x8e
+ 493 0034 01       		.uleb128 0x1
+ 494 0035 000000   		.align	2
+ 495              	.LEFDE2:
+ 496              	.LSFDE4:
+ 497 0038 14000000 		.4byte	.LEFDE4-.LASFDE4
+ 498              	.LASFDE4:
+ 499 003c 00000000 		.4byte	.Lframe0
+ 500 0040 2C010000 		.4byte	.LFB10
+ 501 0044 5C000000 		.4byte	.LFE10-.LFB10
+ 502 0048 44       		.byte	0x4
+ 503              		.4byte	.LCFI1-.LFB10
+ 504 0049 0E       		.byte	0xe
+ 505 004a 04       		.uleb128 0x4
+ 506 004b 8E       		.byte	0x8e
+ 507 004c 01       		.uleb128 0x1
+ 508 004d 000000   		.align	2
+ 509              	.LEFDE4:
+ 510              	.LSFDE6:
+ 511 0050 14000000 		.4byte	.LEFDE6-.LASFDE6
+ 512              	.LASFDE6:
+ 513 0054 00000000 		.4byte	.Lframe0
+ 514 0058 88010000 		.4byte	.LFB7
+ 515 005c 34000000 		.4byte	.LFE7-.LFB7
+ 516 0060 44       		.byte	0x4
+ 517              		.4byte	.LCFI2-.LFB7
+ 518 0061 0E       		.byte	0xe
+ 519 0062 04       		.uleb128 0x4
+ 520 0063 48       		.byte	0x4
+ 521              		.4byte	.LCFI3-.LCFI2
+ 522 0064 0E       		.byte	0xe
+ 523 0065 08       		.uleb128 0x8
+ 524 0066 8E       		.byte	0x8e
+ 525 0067 01       		.uleb128 0x1
+ 526              		.align	2
+ 527              	.LEFDE6:
+ 528              	.LSFDE8:
+ 529 0068 14000000 		.4byte	.LEFDE8-.LASFDE8
+ 530              	.LASFDE8:
+ 531 006c 00000000 		.4byte	.Lframe0
+ 532 0070 BC010000 		.4byte	.LFB6
+ 533 0074 34000000 		.4byte	.LFE6-.LFB6
+ 534 0078 44       		.byte	0x4
+ 535              		.4byte	.LCFI4-.LFB6
+ 536 0079 0E       		.byte	0xe
+ 537 007a 04       		.uleb128 0x4
+ 538 007b 48       		.byte	0x4
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 16
+
+
+ 539              		.4byte	.LCFI5-.LCFI4
+ 540 007c 0E       		.byte	0xe
+ 541 007d 08       		.uleb128 0x8
+ 542 007e 8E       		.byte	0x8e
+ 543 007f 01       		.uleb128 0x1
+ 544              		.align	2
+ 545              	.LEFDE8:
+ 546              	.LSFDE10:
+ 547 0080 14000000 		.4byte	.LEFDE10-.LASFDE10
+ 548              	.LASFDE10:
+ 549 0084 00000000 		.4byte	.Lframe0
+ 550 0088 F0010000 		.4byte	.LFB5
+ 551 008c 34000000 		.4byte	.LFE5-.LFB5
+ 552 0090 44       		.byte	0x4
+ 553              		.4byte	.LCFI6-.LFB5
+ 554 0091 0E       		.byte	0xe
+ 555 0092 04       		.uleb128 0x4
+ 556 0093 48       		.byte	0x4
+ 557              		.4byte	.LCFI7-.LCFI6
+ 558 0094 0E       		.byte	0xe
+ 559 0095 08       		.uleb128 0x8
+ 560 0096 8E       		.byte	0x8e
+ 561 0097 01       		.uleb128 0x1
+ 562              		.align	2
+ 563              	.LEFDE10:
+ 564              	.LSFDE12:
+ 565 0098 14000000 		.4byte	.LEFDE12-.LASFDE12
+ 566              	.LASFDE12:
+ 567 009c 00000000 		.4byte	.Lframe0
+ 568 00a0 24020000 		.4byte	.LFB4
+ 569 00a4 34000000 		.4byte	.LFE4-.LFB4
+ 570 00a8 44       		.byte	0x4
+ 571              		.4byte	.LCFI8-.LFB4
+ 572 00a9 0E       		.byte	0xe
+ 573 00aa 04       		.uleb128 0x4
+ 574 00ab 48       		.byte	0x4
+ 575              		.4byte	.LCFI9-.LCFI8
+ 576 00ac 0E       		.byte	0xe
+ 577 00ad 08       		.uleb128 0x8
+ 578 00ae 8E       		.byte	0x8e
+ 579 00af 01       		.uleb128 0x1
+ 580              		.align	2
+ 581              	.LEFDE12:
+ 582              	.LSFDE14:
+ 583 00b0 14000000 		.4byte	.LEFDE14-.LASFDE14
+ 584              	.LASFDE14:
+ 585 00b4 00000000 		.4byte	.Lframe0
+ 586 00b8 58020000 		.4byte	.LFB3
+ 587 00bc 34000000 		.4byte	.LFE3-.LFB3
+ 588 00c0 44       		.byte	0x4
+ 589              		.4byte	.LCFI10-.LFB3
+ 590 00c1 0E       		.byte	0xe
+ 591 00c2 04       		.uleb128 0x4
+ 592 00c3 48       		.byte	0x4
+ 593              		.4byte	.LCFI11-.LCFI10
+ 594 00c4 0E       		.byte	0xe
+ 595 00c5 08       		.uleb128 0x8
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 17
+
+
+ 596 00c6 8E       		.byte	0x8e
+ 597 00c7 01       		.uleb128 0x1
+ 598              		.align	2
+ 599              	.LEFDE14:
+ 600              	.LSFDE16:
+ 601 00c8 14000000 		.4byte	.LEFDE16-.LASFDE16
+ 602              	.LASFDE16:
+ 603 00cc 00000000 		.4byte	.Lframe0
+ 604 00d0 8C020000 		.4byte	.LFB2
+ 605 00d4 34000000 		.4byte	.LFE2-.LFB2
+ 606 00d8 44       		.byte	0x4
+ 607              		.4byte	.LCFI12-.LFB2
+ 608 00d9 0E       		.byte	0xe
+ 609 00da 04       		.uleb128 0x4
+ 610 00db 48       		.byte	0x4
+ 611              		.4byte	.LCFI13-.LCFI12
+ 612 00dc 0E       		.byte	0xe
+ 613 00dd 08       		.uleb128 0x8
+ 614 00de 8E       		.byte	0x8e
+ 615 00df 01       		.uleb128 0x1
+ 616              		.align	2
+ 617              	.LEFDE16:
+ 618              		.text
+ 619              	.Letext0:
+ 620              		.section	.debug_loc,"",%progbits
+ 621              	.Ldebug_loc0:
+ 622              	.LLST1:
+ 623 0000 78000000 		.4byte	.LFB9-.Ltext0
+ 624 0004 AC000000 		.4byte	.LCFI0-.Ltext0
+ 625 0008 0100     		.2byte	0x1
+ 626 000a 5D       		.byte	0x5d
+ 627 000b AC000000 		.4byte	.LCFI0-.Ltext0
+ 628 000f 2C010000 		.4byte	.LFE9-.Ltext0
+ 629 0013 0200     		.2byte	0x2
+ 630 0015 7D       		.byte	0x7d
+ 631 0016 04       		.sleb128 4
+ 632 0017 00000000 		.4byte	0x0
+ 633 001b 00000000 		.4byte	0x0
+ 634              	.LLST2:
+ 635 001f 2C010000 		.4byte	.LFB10-.Ltext0
+ 636 0023 30010000 		.4byte	.LCFI1-.Ltext0
+ 637 0027 0100     		.2byte	0x1
+ 638 0029 5D       		.byte	0x5d
+ 639 002a 30010000 		.4byte	.LCFI1-.Ltext0
+ 640 002e 88010000 		.4byte	.LFE10-.Ltext0
+ 641 0032 0200     		.2byte	0x2
+ 642 0034 7D       		.byte	0x7d
+ 643 0035 04       		.sleb128 4
+ 644 0036 00000000 		.4byte	0x0
+ 645 003a 00000000 		.4byte	0x0
+ 646              	.LLST3:
+ 647 003e 88010000 		.4byte	.LFB7-.Ltext0
+ 648 0042 8C010000 		.4byte	.LCFI2-.Ltext0
+ 649 0046 0100     		.2byte	0x1
+ 650 0048 5D       		.byte	0x5d
+ 651 0049 8C010000 		.4byte	.LCFI2-.Ltext0
+ 652 004d 94010000 		.4byte	.LCFI3-.Ltext0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 18
+
+
+ 653 0051 0200     		.2byte	0x2
+ 654 0053 7D       		.byte	0x7d
+ 655 0054 04       		.sleb128 4
+ 656 0055 94010000 		.4byte	.LCFI3-.Ltext0
+ 657 0059 BC010000 		.4byte	.LFE7-.Ltext0
+ 658 005d 0200     		.2byte	0x2
+ 659 005f 7D       		.byte	0x7d
+ 660 0060 08       		.sleb128 8
+ 661 0061 00000000 		.4byte	0x0
+ 662 0065 00000000 		.4byte	0x0
+ 663              	.LLST4:
+ 664 0069 9C010000 		.4byte	.LVL0-.Ltext0
+ 665 006d A0010000 		.4byte	.LVL1-.Ltext0
+ 666 0071 0100     		.2byte	0x1
+ 667 0073 5E       		.byte	0x5e
+ 668 0074 00000000 		.4byte	0x0
+ 669 0078 00000000 		.4byte	0x0
+ 670              	.LLST5:
+ 671 007c BC010000 		.4byte	.LFB6-.Ltext0
+ 672 0080 C0010000 		.4byte	.LCFI4-.Ltext0
+ 673 0084 0100     		.2byte	0x1
+ 674 0086 5D       		.byte	0x5d
+ 675 0087 C0010000 		.4byte	.LCFI4-.Ltext0
+ 676 008b C8010000 		.4byte	.LCFI5-.Ltext0
+ 677 008f 0200     		.2byte	0x2
+ 678 0091 7D       		.byte	0x7d
+ 679 0092 04       		.sleb128 4
+ 680 0093 C8010000 		.4byte	.LCFI5-.Ltext0
+ 681 0097 F0010000 		.4byte	.LFE6-.Ltext0
+ 682 009b 0200     		.2byte	0x2
+ 683 009d 7D       		.byte	0x7d
+ 684 009e 08       		.sleb128 8
+ 685 009f 00000000 		.4byte	0x0
+ 686 00a3 00000000 		.4byte	0x0
+ 687              	.LLST6:
+ 688 00a7 D0010000 		.4byte	.LVL2-.Ltext0
+ 689 00ab D4010000 		.4byte	.LVL3-.Ltext0
+ 690 00af 0100     		.2byte	0x1
+ 691 00b1 5E       		.byte	0x5e
+ 692 00b2 00000000 		.4byte	0x0
+ 693 00b6 00000000 		.4byte	0x0
+ 694              	.LLST7:
+ 695 00ba F0010000 		.4byte	.LFB5-.Ltext0
+ 696 00be F4010000 		.4byte	.LCFI6-.Ltext0
+ 697 00c2 0100     		.2byte	0x1
+ 698 00c4 5D       		.byte	0x5d
+ 699 00c5 F4010000 		.4byte	.LCFI6-.Ltext0
+ 700 00c9 FC010000 		.4byte	.LCFI7-.Ltext0
+ 701 00cd 0200     		.2byte	0x2
+ 702 00cf 7D       		.byte	0x7d
+ 703 00d0 04       		.sleb128 4
+ 704 00d1 FC010000 		.4byte	.LCFI7-.Ltext0
+ 705 00d5 24020000 		.4byte	.LFE5-.Ltext0
+ 706 00d9 0200     		.2byte	0x2
+ 707 00db 7D       		.byte	0x7d
+ 708 00dc 08       		.sleb128 8
+ 709 00dd 00000000 		.4byte	0x0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 19
+
+
+ 710 00e1 00000000 		.4byte	0x0
+ 711              	.LLST8:
+ 712 00e5 04020000 		.4byte	.LVL4-.Ltext0
+ 713 00e9 08020000 		.4byte	.LVL5-.Ltext0
+ 714 00ed 0100     		.2byte	0x1
+ 715 00ef 5E       		.byte	0x5e
+ 716 00f0 00000000 		.4byte	0x0
+ 717 00f4 00000000 		.4byte	0x0
+ 718              	.LLST9:
+ 719 00f8 24020000 		.4byte	.LFB4-.Ltext0
+ 720 00fc 28020000 		.4byte	.LCFI8-.Ltext0
+ 721 0100 0100     		.2byte	0x1
+ 722 0102 5D       		.byte	0x5d
+ 723 0103 28020000 		.4byte	.LCFI8-.Ltext0
+ 724 0107 30020000 		.4byte	.LCFI9-.Ltext0
+ 725 010b 0200     		.2byte	0x2
+ 726 010d 7D       		.byte	0x7d
+ 727 010e 04       		.sleb128 4
+ 728 010f 30020000 		.4byte	.LCFI9-.Ltext0
+ 729 0113 58020000 		.4byte	.LFE4-.Ltext0
+ 730 0117 0200     		.2byte	0x2
+ 731 0119 7D       		.byte	0x7d
+ 732 011a 08       		.sleb128 8
+ 733 011b 00000000 		.4byte	0x0
+ 734 011f 00000000 		.4byte	0x0
+ 735              	.LLST10:
+ 736 0123 38020000 		.4byte	.LVL6-.Ltext0
+ 737 0127 3C020000 		.4byte	.LVL7-.Ltext0
+ 738 012b 0100     		.2byte	0x1
+ 739 012d 5E       		.byte	0x5e
+ 740 012e 00000000 		.4byte	0x0
+ 741 0132 00000000 		.4byte	0x0
+ 742              	.LLST11:
+ 743 0136 58020000 		.4byte	.LFB3-.Ltext0
+ 744 013a 5C020000 		.4byte	.LCFI10-.Ltext0
+ 745 013e 0100     		.2byte	0x1
+ 746 0140 5D       		.byte	0x5d
+ 747 0141 5C020000 		.4byte	.LCFI10-.Ltext0
+ 748 0145 64020000 		.4byte	.LCFI11-.Ltext0
+ 749 0149 0200     		.2byte	0x2
+ 750 014b 7D       		.byte	0x7d
+ 751 014c 04       		.sleb128 4
+ 752 014d 64020000 		.4byte	.LCFI11-.Ltext0
+ 753 0151 8C020000 		.4byte	.LFE3-.Ltext0
+ 754 0155 0200     		.2byte	0x2
+ 755 0157 7D       		.byte	0x7d
+ 756 0158 08       		.sleb128 8
+ 757 0159 00000000 		.4byte	0x0
+ 758 015d 00000000 		.4byte	0x0
+ 759              	.LLST12:
+ 760 0161 6C020000 		.4byte	.LVL8-.Ltext0
+ 761 0165 70020000 		.4byte	.LVL9-.Ltext0
+ 762 0169 0100     		.2byte	0x1
+ 763 016b 5E       		.byte	0x5e
+ 764 016c 00000000 		.4byte	0x0
+ 765 0170 00000000 		.4byte	0x0
+ 766              	.LLST13:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 20
+
+
+ 767 0174 8C020000 		.4byte	.LFB2-.Ltext0
+ 768 0178 90020000 		.4byte	.LCFI12-.Ltext0
+ 769 017c 0100     		.2byte	0x1
+ 770 017e 5D       		.byte	0x5d
+ 771 017f 90020000 		.4byte	.LCFI12-.Ltext0
+ 772 0183 98020000 		.4byte	.LCFI13-.Ltext0
+ 773 0187 0200     		.2byte	0x2
+ 774 0189 7D       		.byte	0x7d
+ 775 018a 04       		.sleb128 4
+ 776 018b 98020000 		.4byte	.LCFI13-.Ltext0
+ 777 018f C0020000 		.4byte	.LFE2-.Ltext0
+ 778 0193 0200     		.2byte	0x2
+ 779 0195 7D       		.byte	0x7d
+ 780 0196 08       		.sleb128 8
+ 781 0197 00000000 		.4byte	0x0
+ 782 019b 00000000 		.4byte	0x0
+ 783              	.LLST14:
+ 784 019f A0020000 		.4byte	.LVL10-.Ltext0
+ 785 01a3 A4020000 		.4byte	.LVL11-.Ltext0
+ 786 01a7 0100     		.2byte	0x1
+ 787 01a9 5E       		.byte	0x5e
+ 788 01aa 00000000 		.4byte	0x0
+ 789 01ae 00000000 		.4byte	0x0
+ 790              		.section	.debug_info
+ 791 0000 E1010000 		.4byte	0x1e1
+ 792 0004 0200     		.2byte	0x2
+ 793 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 794 000a 04       		.byte	0x4
+ 795 000b 01       		.uleb128 0x1
+ 796 000c 00000000 		.4byte	.Ldebug_line0
+ 797 0010 C0020000 		.4byte	.Letext0
+ 798 0014 00000000 		.4byte	.Ltext0
+ 799 0018 A6000000 		.4byte	.LASF16
+ 800 001c 01       		.byte	0x1
+ 801 001d 55000000 		.4byte	.LASF17
+ 802 0021 00000000 		.4byte	.LASF18
+ 803 0025 02       		.uleb128 0x2
+ 804 0026 01       		.byte	0x1
+ 805 0027 73000000 		.4byte	.LASF0
+ 806 002b 01       		.byte	0x1
+ 807 002c BD       		.byte	0xbd
+ 808 002d 01       		.byte	0x1
+ 809 002e 00000000 		.4byte	.LFB8
+ 810 0032 78000000 		.4byte	.LFE8
+ 811 0036 01       		.byte	0x1
+ 812 0037 5D       		.byte	0x5d
+ 813 0038 03       		.uleb128 0x3
+ 814 0039 01       		.byte	0x1
+ 815 003a 61000000 		.4byte	.LASF1
+ 816 003e 01       		.byte	0x1
+ 817 003f D5       		.byte	0xd5
+ 818 0040 01       		.byte	0x1
+ 819 0041 78000000 		.4byte	.LFB9
+ 820 0045 2C010000 		.4byte	.LFE9
+ 821 0049 00000000 		.4byte	.LLST1
+ 822 004d 04       		.uleb128 0x4
+ 823 004e 01       		.byte	0x1
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 21
+
+
+ 824 004f 88000000 		.4byte	.LASF2
+ 825 0053 01       		.byte	0x1
+ 826 0054 0E01     		.2byte	0x10e
+ 827 0056 01       		.byte	0x1
+ 828 0057 2C010000 		.4byte	.LFB10
+ 829 005b 88010000 		.4byte	.LFE10
+ 830 005f 1F000000 		.4byte	.LLST2
+ 831 0063 05       		.uleb128 0x5
+ 832 0064 96000000 		.4byte	0x96
+ 833 0068 E3000000 		.4byte	.LASF5
+ 834 006c 01       		.byte	0x1
+ 835 006d A5       		.byte	0xa5
+ 836 006e 01       		.byte	0x1
+ 837 006f 88010000 		.4byte	.LFB7
+ 838 0073 BC010000 		.4byte	.LFE7
+ 839 0077 3E000000 		.4byte	.LLST3
+ 840 007b 06       		.uleb128 0x6
+ 841 007c 05010000 		.4byte	.LASF3
+ 842 0080 01       		.byte	0x1
+ 843 0081 A6       		.byte	0xa6
+ 844 0082 96000000 		.4byte	0x96
+ 845 0086 69000000 		.4byte	.LLST4
+ 846 008a 07       		.uleb128 0x7
+ 847 008b C6000000 		.4byte	.LASF4
+ 848 008f 01       		.byte	0x1
+ 849 0090 A7       		.byte	0xa7
+ 850 0091 96000000 		.4byte	0x96
+ 851 0095 00       		.byte	0x0
+ 852 0096 08       		.uleb128 0x8
+ 853 0097 2F000000 		.4byte	.LASF12
+ 854 009b 04       		.byte	0x4
+ 855 009c 07       		.byte	0x7
+ 856 009d 05       		.uleb128 0x5
+ 857 009e D0000000 		.4byte	0xd0
+ 858 00a2 B2000000 		.4byte	.LASF6
+ 859 00a6 01       		.byte	0x1
+ 860 00a7 8F       		.byte	0x8f
+ 861 00a8 01       		.byte	0x1
+ 862 00a9 BC010000 		.4byte	.LFB6
+ 863 00ad F0010000 		.4byte	.LFE6
+ 864 00b1 7C000000 		.4byte	.LLST5
+ 865 00b5 06       		.uleb128 0x6
+ 866 00b6 05010000 		.4byte	.LASF3
+ 867 00ba 01       		.byte	0x1
+ 868 00bb 90       		.byte	0x90
+ 869 00bc 96000000 		.4byte	0x96
+ 870 00c0 A7000000 		.4byte	.LLST6
+ 871 00c4 07       		.uleb128 0x7
+ 872 00c5 C6000000 		.4byte	.LASF4
+ 873 00c9 01       		.byte	0x1
+ 874 00ca 91       		.byte	0x91
+ 875 00cb 96000000 		.4byte	0x96
+ 876 00cf 00       		.byte	0x0
+ 877 00d0 05       		.uleb128 0x5
+ 878 00d1 03010000 		.4byte	0x103
+ 879 00d5 8F000000 		.4byte	.LASF7
+ 880 00d9 01       		.byte	0x1
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 22
+
+
+ 881 00da 7B       		.byte	0x7b
+ 882 00db 01       		.byte	0x1
+ 883 00dc F0010000 		.4byte	.LFB5
+ 884 00e0 24020000 		.4byte	.LFE5
+ 885 00e4 BA000000 		.4byte	.LLST7
+ 886 00e8 06       		.uleb128 0x6
+ 887 00e9 05010000 		.4byte	.LASF3
+ 888 00ed 01       		.byte	0x1
+ 889 00ee 7C       		.byte	0x7c
+ 890 00ef 96000000 		.4byte	0x96
+ 891 00f3 E5000000 		.4byte	.LLST8
+ 892 00f7 07       		.uleb128 0x7
+ 893 00f8 C6000000 		.4byte	.LASF4
+ 894 00fc 01       		.byte	0x1
+ 895 00fd 7D       		.byte	0x7d
+ 896 00fe 96000000 		.4byte	0x96
+ 897 0102 00       		.byte	0x0
+ 898 0103 09       		.uleb128 0x9
+ 899 0104 35010000 		.4byte	0x135
+ 900 0108 CC000000 		.4byte	.LASF8
+ 901 010c 01       		.byte	0x1
+ 902 010d 67       		.byte	0x67
+ 903 010e 24020000 		.4byte	.LFB4
+ 904 0112 58020000 		.4byte	.LFE4
+ 905 0116 F8000000 		.4byte	.LLST9
+ 906 011a 06       		.uleb128 0x6
+ 907 011b 05010000 		.4byte	.LASF3
+ 908 011f 01       		.byte	0x1
+ 909 0120 68       		.byte	0x68
+ 910 0121 96000000 		.4byte	0x96
+ 911 0125 23010000 		.4byte	.LLST10
+ 912 0129 07       		.uleb128 0x7
+ 913 012a C6000000 		.4byte	.LASF4
+ 914 012e 01       		.byte	0x1
+ 915 012f 69       		.byte	0x69
+ 916 0130 96000000 		.4byte	0x96
+ 917 0134 00       		.byte	0x0
+ 918 0135 05       		.uleb128 0x5
+ 919 0136 68010000 		.4byte	0x168
+ 920 013a 2A010000 		.4byte	.LASF9
+ 921 013e 01       		.byte	0x1
+ 922 013f 53       		.byte	0x53
+ 923 0140 01       		.byte	0x1
+ 924 0141 58020000 		.4byte	.LFB3
+ 925 0145 8C020000 		.4byte	.LFE3
+ 926 0149 36010000 		.4byte	.LLST11
+ 927 014d 06       		.uleb128 0x6
+ 928 014e 05010000 		.4byte	.LASF3
+ 929 0152 01       		.byte	0x1
+ 930 0153 54       		.byte	0x54
+ 931 0154 96000000 		.4byte	0x96
+ 932 0158 61010000 		.4byte	.LLST12
+ 933 015c 07       		.uleb128 0x7
+ 934 015d C6000000 		.4byte	.LASF4
+ 935 0161 01       		.byte	0x1
+ 936 0162 55       		.byte	0x55
+ 937 0163 96000000 		.4byte	0x96
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 23
+
+
+ 938 0167 00       		.byte	0x0
+ 939 0168 05       		.uleb128 0x5
+ 940 0169 9B010000 		.4byte	0x19b
+ 941 016d 14010000 		.4byte	.LASF10
+ 942 0171 01       		.byte	0x1
+ 943 0172 3F       		.byte	0x3f
+ 944 0173 01       		.byte	0x1
+ 945 0174 8C020000 		.4byte	.LFB2
+ 946 0178 C0020000 		.4byte	.LFE2
+ 947 017c 74010000 		.4byte	.LLST13
+ 948 0180 06       		.uleb128 0x6
+ 949 0181 05010000 		.4byte	.LASF3
+ 950 0185 01       		.byte	0x1
+ 951 0186 40       		.byte	0x40
+ 952 0187 96000000 		.4byte	0x96
+ 953 018b 9F010000 		.4byte	.LLST14
+ 954 018f 07       		.uleb128 0x7
+ 955 0190 C6000000 		.4byte	.LASF4
+ 956 0194 01       		.byte	0x1
+ 957 0195 41       		.byte	0x41
+ 958 0196 96000000 		.4byte	0x96
+ 959 019a 00       		.byte	0x0
+ 960 019b 0A       		.uleb128 0xa
+ 961 019c 3C000000 		.4byte	.LASF11
+ 962 01a0 01       		.byte	0x1
+ 963 01a1 21       		.byte	0x21
+ 964 01a2 AD010000 		.4byte	0x1ad
+ 965 01a6 01       		.byte	0x1
+ 966 01a7 05       		.byte	0x5
+ 967 01a8 03       		.byte	0x3
+ 968 01a9 00000000 		.4byte	pHeapStart
+ 969 01ad 0B       		.uleb128 0xb
+ 970 01ae 04       		.byte	0x4
+ 971 01af B3010000 		.4byte	0x1b3
+ 972 01b3 08       		.uleb128 0x8
+ 973 01b4 47000000 		.4byte	.LASF13
+ 974 01b8 01       		.byte	0x1
+ 975 01b9 08       		.byte	0x8
+ 976 01ba 0A       		.uleb128 0xa
+ 977 01bb F7000000 		.4byte	.LASF14
+ 978 01bf 01       		.byte	0x1
+ 979 01c0 22       		.byte	0x22
+ 980 01c1 AD010000 		.4byte	0x1ad
+ 981 01c5 01       		.byte	0x1
+ 982 01c6 05       		.byte	0x5
+ 983 01c7 03       		.byte	0x3
+ 984 01c8 00000000 		.4byte	pHeapEnd
+ 985 01cc 0C       		.uleb128 0xc
+ 986 01cd 656E6400 		.ascii	"end\000"
+ 987 01d1 01       		.byte	0x1
+ 988 01d2 1B       		.byte	0x1b
+ 989 01d3 6E000000 		.4byte	.LASF19
+ 990 01d7 DD010000 		.4byte	0x1dd
+ 991 01db 01       		.byte	0x1
+ 992 01dc 01       		.byte	0x1
+ 993 01dd 08       		.uleb128 0x8
+ 994 01de 00010000 		.4byte	.LASF15
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 24
+
+
+ 995 01e2 01       		.byte	0x1
+ 996 01e3 08       		.byte	0x8
+ 997 01e4 00       		.byte	0x0
+ 998              		.section	.debug_abbrev
+ 999 0000 01       		.uleb128 0x1
+ 1000 0001 11       		.uleb128 0x11
+ 1001 0002 01       		.byte	0x1
+ 1002 0003 10       		.uleb128 0x10
+ 1003 0004 06       		.uleb128 0x6
+ 1004 0005 12       		.uleb128 0x12
+ 1005 0006 01       		.uleb128 0x1
+ 1006 0007 11       		.uleb128 0x11
+ 1007 0008 01       		.uleb128 0x1
+ 1008 0009 25       		.uleb128 0x25
+ 1009 000a 0E       		.uleb128 0xe
+ 1010 000b 13       		.uleb128 0x13
+ 1011 000c 0B       		.uleb128 0xb
+ 1012 000d 03       		.uleb128 0x3
+ 1013 000e 0E       		.uleb128 0xe
+ 1014 000f 1B       		.uleb128 0x1b
+ 1015 0010 0E       		.uleb128 0xe
+ 1016 0011 00       		.byte	0x0
+ 1017 0012 00       		.byte	0x0
+ 1018 0013 02       		.uleb128 0x2
+ 1019 0014 2E       		.uleb128 0x2e
+ 1020 0015 00       		.byte	0x0
+ 1021 0016 3F       		.uleb128 0x3f
+ 1022 0017 0C       		.uleb128 0xc
+ 1023 0018 03       		.uleb128 0x3
+ 1024 0019 0E       		.uleb128 0xe
+ 1025 001a 3A       		.uleb128 0x3a
+ 1026 001b 0B       		.uleb128 0xb
+ 1027 001c 3B       		.uleb128 0x3b
+ 1028 001d 0B       		.uleb128 0xb
+ 1029 001e 27       		.uleb128 0x27
+ 1030 001f 0C       		.uleb128 0xc
+ 1031 0020 11       		.uleb128 0x11
+ 1032 0021 01       		.uleb128 0x1
+ 1033 0022 12       		.uleb128 0x12
+ 1034 0023 01       		.uleb128 0x1
+ 1035 0024 40       		.uleb128 0x40
+ 1036 0025 0A       		.uleb128 0xa
+ 1037 0026 00       		.byte	0x0
+ 1038 0027 00       		.byte	0x0
+ 1039 0028 03       		.uleb128 0x3
+ 1040 0029 2E       		.uleb128 0x2e
+ 1041 002a 00       		.byte	0x0
+ 1042 002b 3F       		.uleb128 0x3f
+ 1043 002c 0C       		.uleb128 0xc
+ 1044 002d 03       		.uleb128 0x3
+ 1045 002e 0E       		.uleb128 0xe
+ 1046 002f 3A       		.uleb128 0x3a
+ 1047 0030 0B       		.uleb128 0xb
+ 1048 0031 3B       		.uleb128 0x3b
+ 1049 0032 0B       		.uleb128 0xb
+ 1050 0033 27       		.uleb128 0x27
+ 1051 0034 0C       		.uleb128 0xc
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 25
+
+
+ 1052 0035 11       		.uleb128 0x11
+ 1053 0036 01       		.uleb128 0x1
+ 1054 0037 12       		.uleb128 0x12
+ 1055 0038 01       		.uleb128 0x1
+ 1056 0039 40       		.uleb128 0x40
+ 1057 003a 06       		.uleb128 0x6
+ 1058 003b 00       		.byte	0x0
+ 1059 003c 00       		.byte	0x0
+ 1060 003d 04       		.uleb128 0x4
+ 1061 003e 2E       		.uleb128 0x2e
+ 1062 003f 00       		.byte	0x0
+ 1063 0040 3F       		.uleb128 0x3f
+ 1064 0041 0C       		.uleb128 0xc
+ 1065 0042 03       		.uleb128 0x3
+ 1066 0043 0E       		.uleb128 0xe
+ 1067 0044 3A       		.uleb128 0x3a
+ 1068 0045 0B       		.uleb128 0xb
+ 1069 0046 3B       		.uleb128 0x3b
+ 1070 0047 05       		.uleb128 0x5
+ 1071 0048 27       		.uleb128 0x27
+ 1072 0049 0C       		.uleb128 0xc
+ 1073 004a 11       		.uleb128 0x11
+ 1074 004b 01       		.uleb128 0x1
+ 1075 004c 12       		.uleb128 0x12
+ 1076 004d 01       		.uleb128 0x1
+ 1077 004e 40       		.uleb128 0x40
+ 1078 004f 06       		.uleb128 0x6
+ 1079 0050 00       		.byte	0x0
+ 1080 0051 00       		.byte	0x0
+ 1081 0052 05       		.uleb128 0x5
+ 1082 0053 2E       		.uleb128 0x2e
+ 1083 0054 01       		.byte	0x1
+ 1084 0055 01       		.uleb128 0x1
+ 1085 0056 13       		.uleb128 0x13
+ 1086 0057 03       		.uleb128 0x3
+ 1087 0058 0E       		.uleb128 0xe
+ 1088 0059 3A       		.uleb128 0x3a
+ 1089 005a 0B       		.uleb128 0xb
+ 1090 005b 3B       		.uleb128 0x3b
+ 1091 005c 0B       		.uleb128 0xb
+ 1092 005d 27       		.uleb128 0x27
+ 1093 005e 0C       		.uleb128 0xc
+ 1094 005f 11       		.uleb128 0x11
+ 1095 0060 01       		.uleb128 0x1
+ 1096 0061 12       		.uleb128 0x12
+ 1097 0062 01       		.uleb128 0x1
+ 1098 0063 40       		.uleb128 0x40
+ 1099 0064 06       		.uleb128 0x6
+ 1100 0065 00       		.byte	0x0
+ 1101 0066 00       		.byte	0x0
+ 1102 0067 06       		.uleb128 0x6
+ 1103 0068 34       		.uleb128 0x34
+ 1104 0069 00       		.byte	0x0
+ 1105 006a 03       		.uleb128 0x3
+ 1106 006b 0E       		.uleb128 0xe
+ 1107 006c 3A       		.uleb128 0x3a
+ 1108 006d 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 26
+
+
+ 1109 006e 3B       		.uleb128 0x3b
+ 1110 006f 0B       		.uleb128 0xb
+ 1111 0070 49       		.uleb128 0x49
+ 1112 0071 13       		.uleb128 0x13
+ 1113 0072 02       		.uleb128 0x2
+ 1114 0073 06       		.uleb128 0x6
+ 1115 0074 00       		.byte	0x0
+ 1116 0075 00       		.byte	0x0
+ 1117 0076 07       		.uleb128 0x7
+ 1118 0077 34       		.uleb128 0x34
+ 1119 0078 00       		.byte	0x0
+ 1120 0079 03       		.uleb128 0x3
+ 1121 007a 0E       		.uleb128 0xe
+ 1122 007b 3A       		.uleb128 0x3a
+ 1123 007c 0B       		.uleb128 0xb
+ 1124 007d 3B       		.uleb128 0x3b
+ 1125 007e 0B       		.uleb128 0xb
+ 1126 007f 49       		.uleb128 0x49
+ 1127 0080 13       		.uleb128 0x13
+ 1128 0081 00       		.byte	0x0
+ 1129 0082 00       		.byte	0x0
+ 1130 0083 08       		.uleb128 0x8
+ 1131 0084 24       		.uleb128 0x24
+ 1132 0085 00       		.byte	0x0
+ 1133 0086 03       		.uleb128 0x3
+ 1134 0087 0E       		.uleb128 0xe
+ 1135 0088 0B       		.uleb128 0xb
+ 1136 0089 0B       		.uleb128 0xb
+ 1137 008a 3E       		.uleb128 0x3e
+ 1138 008b 0B       		.uleb128 0xb
+ 1139 008c 00       		.byte	0x0
+ 1140 008d 00       		.byte	0x0
+ 1141 008e 09       		.uleb128 0x9
+ 1142 008f 2E       		.uleb128 0x2e
+ 1143 0090 01       		.byte	0x1
+ 1144 0091 01       		.uleb128 0x1
+ 1145 0092 13       		.uleb128 0x13
+ 1146 0093 03       		.uleb128 0x3
+ 1147 0094 0E       		.uleb128 0xe
+ 1148 0095 3A       		.uleb128 0x3a
+ 1149 0096 0B       		.uleb128 0xb
+ 1150 0097 3B       		.uleb128 0x3b
+ 1151 0098 0B       		.uleb128 0xb
+ 1152 0099 11       		.uleb128 0x11
+ 1153 009a 01       		.uleb128 0x1
+ 1154 009b 12       		.uleb128 0x12
+ 1155 009c 01       		.uleb128 0x1
+ 1156 009d 40       		.uleb128 0x40
+ 1157 009e 06       		.uleb128 0x6
+ 1158 009f 00       		.byte	0x0
+ 1159 00a0 00       		.byte	0x0
+ 1160 00a1 0A       		.uleb128 0xa
+ 1161 00a2 34       		.uleb128 0x34
+ 1162 00a3 00       		.byte	0x0
+ 1163 00a4 03       		.uleb128 0x3
+ 1164 00a5 0E       		.uleb128 0xe
+ 1165 00a6 3A       		.uleb128 0x3a
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 27
+
+
+ 1166 00a7 0B       		.uleb128 0xb
+ 1167 00a8 3B       		.uleb128 0x3b
+ 1168 00a9 0B       		.uleb128 0xb
+ 1169 00aa 49       		.uleb128 0x49
+ 1170 00ab 13       		.uleb128 0x13
+ 1171 00ac 3F       		.uleb128 0x3f
+ 1172 00ad 0C       		.uleb128 0xc
+ 1173 00ae 02       		.uleb128 0x2
+ 1174 00af 0A       		.uleb128 0xa
+ 1175 00b0 00       		.byte	0x0
+ 1176 00b1 00       		.byte	0x0
+ 1177 00b2 0B       		.uleb128 0xb
+ 1178 00b3 0F       		.uleb128 0xf
+ 1179 00b4 00       		.byte	0x0
+ 1180 00b5 0B       		.uleb128 0xb
+ 1181 00b6 0B       		.uleb128 0xb
+ 1182 00b7 49       		.uleb128 0x49
+ 1183 00b8 13       		.uleb128 0x13
+ 1184 00b9 00       		.byte	0x0
+ 1185 00ba 00       		.byte	0x0
+ 1186 00bb 0C       		.uleb128 0xc
+ 1187 00bc 34       		.uleb128 0x34
+ 1188 00bd 00       		.byte	0x0
+ 1189 00be 03       		.uleb128 0x3
+ 1190 00bf 08       		.uleb128 0x8
+ 1191 00c0 3A       		.uleb128 0x3a
+ 1192 00c1 0B       		.uleb128 0xb
+ 1193 00c2 3B       		.uleb128 0x3b
+ 1194 00c3 0B       		.uleb128 0xb
+ 1195 00c4 8740     		.uleb128 0x2007
+ 1196 00c6 0E       		.uleb128 0xe
+ 1197 00c7 49       		.uleb128 0x49
+ 1198 00c8 13       		.uleb128 0x13
+ 1199 00c9 3F       		.uleb128 0x3f
+ 1200 00ca 0C       		.uleb128 0xc
+ 1201 00cb 3C       		.uleb128 0x3c
+ 1202 00cc 0C       		.uleb128 0xc
+ 1203 00cd 00       		.byte	0x0
+ 1204 00ce 00       		.byte	0x0
+ 1205 00cf 00       		.byte	0x0
+ 1206              		.section	.debug_pubnames,"",%progbits
+ 1207 0000 5F000000 		.4byte	0x5f
+ 1208 0004 0200     		.2byte	0x2
+ 1209 0006 00000000 		.4byte	.Ldebug_info0
+ 1210 000a E5010000 		.4byte	0x1e5
+ 1211 000e 25000000 		.4byte	0x25
+ 1212 0012 65786365 		.ascii	"exceptionHandlerInit\000"
+ 1212      7074696F 
+ 1212      6E48616E 
+ 1212      646C6572 
+ 1212      496E6974 
+ 1213 0027 38000000 		.4byte	0x38
+ 1214 002b 6C6F774C 		.ascii	"lowLevelInit\000"
+ 1214      6576656C 
+ 1214      496E6974 
+ 1214      00
+ 1215 0038 4D000000 		.4byte	0x4d
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 28
+
+
+ 1216 003c 6561496E 		.ascii	"eaInit\000"
+ 1216      697400
+ 1217 0043 9B010000 		.4byte	0x19b
+ 1218 0047 70486561 		.ascii	"pHeapStart\000"
+ 1218      70537461 
+ 1218      727400
+ 1219 0052 BA010000 		.4byte	0x1ba
+ 1220 0056 70486561 		.ascii	"pHeapEnd\000"
+ 1220      70456E64 
+ 1220      00
+ 1221 005f 00000000 		.4byte	0x0
+ 1222              		.section	.debug_aranges,"",%progbits
+ 1223 0000 1C000000 		.4byte	0x1c
+ 1224 0004 0200     		.2byte	0x2
+ 1225 0006 00000000 		.4byte	.Ldebug_info0
+ 1226 000a 04       		.byte	0x4
+ 1227 000b 00       		.byte	0x0
+ 1228 000c 0000     		.2byte	0x0
+ 1229 000e 0000     		.2byte	0x0
+ 1230 0010 00000000 		.4byte	.Ltext0
+ 1231 0014 C0020000 		.4byte	.Letext0-.Ltext0
+ 1232 0018 00000000 		.4byte	0x0
+ 1233 001c 00000000 		.4byte	0x0
+ 1234              		.section	.debug_str,"MS",%progbits,1
+ 1235              	.LASF18:
+ 1236 0000 2F637967 		.ascii	"/cygdrive/c/Embedded/eclipse/Demo/2138/startup\000"
+ 1236      64726976 
+ 1236      652F632F 
+ 1236      456D6265 
+ 1236      64646564 
+ 1237              	.LASF12:
+ 1238 002f 756E7369 		.ascii	"unsigned int\000"
+ 1238      676E6564 
+ 1238      20696E74 
+ 1238      00
+ 1239              	.LASF11:
+ 1240 003c 70486561 		.ascii	"pHeapStart\000"
+ 1240      70537461 
+ 1240      727400
+ 1241              	.LASF13:
+ 1242 0047 756E7369 		.ascii	"unsigned char\000"
+ 1242      676E6564 
+ 1242      20636861 
+ 1242      7200
+ 1243              	.LASF17:
+ 1244 0055 6672616D 		.ascii	"framework.c\000"
+ 1244      65776F72 
+ 1244      6B2E6300 
+ 1245              	.LASF1:
+ 1246 0061 6C6F774C 		.ascii	"lowLevelInit\000"
+ 1246      6576656C 
+ 1246      496E6974 
+ 1246      00
+ 1247              	.LASF19:
+ 1248 006e 2A656E64 		.ascii	"*end\000"
+ 1248      00
+ 1249              	.LASF0:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 29
+
+
+ 1250 0073 65786365 		.ascii	"exceptionHandlerInit\000"
+ 1250      7074696F 
+ 1250      6E48616E 
+ 1250      646C6572 
+ 1250      496E6974 
+ 1251              	.LASF2:
+ 1252 0088 6561496E 		.ascii	"eaInit\000"
+ 1252      697400
+ 1253              	.LASF7:
+ 1254 008f 65786365 		.ascii	"exceptionHandlerDabort\000"
+ 1254      7074696F 
+ 1254      6E48616E 
+ 1254      646C6572 
+ 1254      4461626F 
+ 1255              	.LASF16:
+ 1256 00a6 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 1256      4320342E 
+ 1256      312E3100 
+ 1257              	.LASF6:
+ 1258 00b2 65786365 		.ascii	"exceptionHandlerFiq\000"
+ 1258      7074696F 
+ 1258      6E48616E 
+ 1258      646C6572 
+ 1258      46697100 
+ 1259              	.LASF4:
+ 1260 00c6 76616C75 		.ascii	"value\000"
+ 1260      6500
+ 1261              	.LASF8:
+ 1262 00cc 65786365 		.ascii	"exceptionHandlerPabort\000"
+ 1262      7074696F 
+ 1262      6E48616E 
+ 1262      646C6572 
+ 1262      5061626F 
+ 1263              	.LASF5:
+ 1264 00e3 65786365 		.ascii	"exceptionHandlerIrq\000"
+ 1264      7074696F 
+ 1264      6E48616E 
+ 1264      646C6572 
+ 1264      49727100 
+ 1265              	.LASF14:
+ 1266 00f7 70486561 		.ascii	"pHeapEnd\000"
+ 1266      70456E64 
+ 1266      00
+ 1267              	.LASF15:
+ 1268 0100 63686172 		.ascii	"char\000"
+ 1268      00
+ 1269              	.LASF3:
+ 1270 0105 70726F67 		.ascii	"programCounter\000"
+ 1270      72616D43 
+ 1270      6F756E74 
+ 1270      657200
+ 1271              	.LASF10:
+ 1272 0114 65786365 		.ascii	"exceptionHandlerUndef\000"
+ 1272      7074696F 
+ 1272      6E48616E 
+ 1272      646C6572 
+ 1272      556E6465 
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 30
+
+
+ 1273              	.LASF9:
+ 1274 012a 65786365 		.ascii	"exceptionHandlerSwi\000"
+ 1274      7074696F 
+ 1274      6E48616E 
+ 1274      646C6572 
+ 1274      53776900 
+ 1275              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s 			page 31
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 framework.c
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:13     .text:00000000 exceptionHandlerInit
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:22     .text:00000000 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:59     .text:00000050 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:224    .text:00000188 exceptionHandlerIrq
+                            *COM*:00000004 pHeapStart
+                            *COM*:00000004 pHeapEnd
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:424    .text:0000028c exceptionHandlerUndef
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:384    .text:00000258 exceptionHandlerSwi
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:344    .text:00000224 exceptionHandlerPabort
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:304    .text:000001f0 exceptionHandlerDabort
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:264    .text:000001bc exceptionHandlerFiq
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:74     .text:00000078 lowLevelInit
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:81     .text:00000078 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:164    .text:00000120 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:172    .text:0000012c eaInit
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:178    .text:0000012c $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:213    .text:00000180 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:230    .text:00000188 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:254    .text:000001b8 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:270    .text:000001bc $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:294    .text:000001ec $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:310    .text:000001f0 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:334    .text:00000220 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:350    .text:00000224 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:374    .text:00000254 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:390    .text:00000258 $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:414    .text:00000288 $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:430    .text:0000028c $a
+/cygdrive/c/Users/embedded/AppData/Local/Temp/ccGEn9rR.s:454    .text:000002bc $d
+
+UNDEFINED SYMBOLS
+end
+consolInit
+consolSendString
+consolSendNumber

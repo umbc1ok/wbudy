@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 1
 
 
    1              		.code	16
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   29      202D2077 
   29      726F6E67 
   29      206C656E 
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 2
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 2
 
 
   30 0108 63746572 		.ascii	"cters long)! %d\000"
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   52      202D2072 
   52      65616420 
   52      73747269 
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 3
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 3
 
 
   53 0247 00       		.align	2
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   36:eepromTest.c  ****  ****************************************************************************/
   37:eepromTest.c  **** tU8
   38:eepromTest.c  **** testEEPROM(void)
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 4
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 4
 
 
   39:eepromTest.c  **** {
@@ -192,13 +192,13 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   73              		.loc 1 41 0
   74 0004 6D46     		mov	r5, sp
   75 0006 3A35     		add	r5, r5, #58
-  76 0008 8449     		ldr	r1, .L31
+  76 0008 8549     		ldr	r1, .L31
   77 000a 0A22     		mov	r2, #10
   78 000c 281C     		mov	r0, r5
   79 000e FFF7FEFF 		bl	memcpy
   42:eepromTest.c  ****   tU8 testString2[] = "sTrInG #2";
   80              		.loc 1 42 0
-  81 0012 834B     		ldr	r3, .L31+4
+  81 0012 844B     		ldr	r3, .L31+4
   82 0014 0CAA     		add	r2, sp, #48
   83 0016 101C     		mov	r0, r2
   84 0018 191C     		mov	r1, r3
@@ -235,15 +235,15 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   52:eepromTest.c  ****   {
   53:eepromTest.c  ****     printf("\nTest #1 - write string '%s' to address 0x0000", testString1);
  106              		.loc 1 53 0
- 107 0038 7A48     		ldr	r0, .L31+8
+ 107 0038 7B48     		ldr	r0, .L31+8
  108 003a 291C     		mov	r1, r5
  109 003c FFF7FEFF 		bl	simplePrintf
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 5
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 5
 
 
   54:eepromTest.c  ****     printf("\n        - failed (error code = %d)!", errorCode);
  110              		.loc 1 54 0
- 111 0040 7948     		ldr	r0, .L31+12
+ 111 0040 7A48     		ldr	r0, .L31+12
  112 0042 211C     		mov	r1, r4
  113 0044 FFF7FEFF 		bl	simplePrintf
  114 0048 0026     		mov	r6, #0
@@ -265,12 +265,12 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   62:eepromTest.c  ****     printf("\nTest #1 - write string '%s' to address 0x0000", testString1);
  123              		.loc 1 62 0
  124 0056 6946     		mov	r1, sp
- 125 0058 7248     		ldr	r0, .L31+8
+ 125 0058 7348     		ldr	r0, .L31+8
  126 005a 3A31     		add	r1, r1, #58
  127 005c FFF7FEFF 		bl	simplePrintf
   63:eepromTest.c  ****     printf("\n        - program cycle failed!");
  128              		.loc 1 63 0
- 129 0060 7248     		ldr	r0, .L31+16
+ 129 0060 7348     		ldr	r0, .L31+16
  130 0062 FFF7FEFF 		bl	simplePrintf
  131 0066 0026     		mov	r6, #0
  132              	.L5:
@@ -296,15 +296,15 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   72:eepromTest.c  ****   {
   73:eepromTest.c  ****   	printf("\nTest #2 - write string '%s' to address 0x0040", testString2);
  144              		.loc 1 73 0
- 145 007c 6C48     		ldr	r0, .L31+20
+ 145 007c 6D48     		ldr	r0, .L31+20
  146 007e 291C     		mov	r1, r5
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 6
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 6
 
 
  147 0080 FFF7FEFF 		bl	simplePrintf
   74:eepromTest.c  ****     printf("\n        - failed (error code = %d)!", errorCode);
  148              		.loc 1 74 0
- 149 0084 6848     		ldr	r0, .L31+12
+ 149 0084 6948     		ldr	r0, .L31+12
  150 0086 211C     		mov	r1, r4
  151 0088 FFF7FEFF 		bl	simplePrintf
  152 008c 0026     		mov	r6, #0
@@ -324,12 +324,12 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
   81:eepromTest.c  ****   {
   82:eepromTest.c  ****   	printf("\nTest #2 - write string '%s' to address 0x0040", testString2);
  160              		.loc 1 82 0
- 161 009a 6548     		ldr	r0, .L31+20
+ 161 009a 6648     		ldr	r0, .L31+20
  162 009c 291C     		mov	r1, r5
  163 009e FFF7FEFF 		bl	simplePrintf
   83:eepromTest.c  ****     printf("\n        - program cycle failed!");
  164              		.loc 1 83 0
- 165 00a2 6248     		ldr	r0, .L31+16
+ 165 00a2 6348     		ldr	r0, .L31+16
  166 00a4 FFF7FEFF 		bl	simplePrintf
  167 00a8 0026     		mov	r6, #0
  168              	.L9:
@@ -353,85 +353,86 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
  177 00b8 0006     		lsl	r0, r0, #24
  178 00ba 0416     		asr	r4, r0, #24
  179 00bc 012C     		cmp	r4, #1
- 180 00be 3CD1     		bne	.L11
+ 180 00be 3DD1     		bne	.L11
   93:eepromTest.c  ****   {
   94:eepromTest.c  ****     if (strlen(testBuf) == sizeof(testString1)-1)
  181              		.loc 1 94 0
  182 00c0 281C     		mov	r0, r5
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 7
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 7
 
 
  183 00c2 FFF7FEFF 		bl	strlen
  184 00c6 0928     		cmp	r0, #9
- 185 00c8 3FD0     		beq	.L13
+ 185 00c8 40D0     		beq	.L13
   95:eepromTest.c  **** ;//      printf("\n        - string is '%s'", testBuf);
   96:eepromTest.c  ****     else
   97:eepromTest.c  ****     {
   98:eepromTest.c  ****     	printf("\nTest #3 - read string from address 0x0000");
  186              		.loc 1 98 0
- 187 00ca 5A48     		ldr	r0, .L31+24
+ 187 00ca 5B48     		ldr	r0, .L31+24
  188 00cc FFF7FEFF 		bl	simplePrintf
   99:eepromTest.c  ****       printf("\n        - wrong length (read string is %d characters long)! %d", strlen(testBuf),  
  189              		.loc 1 99 0
  190 00d0 281C     		mov	r0, r5
  191 00d2 FFF7FEFF 		bl	strlen
- 192 00d6 0922     		mov	r2, #9
+ 192 00d6 594C     		ldr	r4, .L31+28
  193 00d8 011C     		mov	r1, r0
- 194 00da 5748     		ldr	r0, .L31+28
- 195 00dc FFF7FEFF 		bl	simplePrintf
+ 194 00da 0922     		mov	r2, #9
+ 195 00dc 201C     		mov	r0, r4
+ 196 00de FFF7FEFF 		bl	simplePrintf
  100:eepromTest.c  **** 
  101:eepromTest.c  ****       printf("\n%d,%d,%d,%d,%d %d,%d,%d,%d,%d %d",
- 196              		.loc 1 101 0
- 197 00e0 EC78     		ldrb	r4, [r5, #3]
- 198 00e2 2978     		ldrb	r1, [r5]
- 199 00e4 6A78     		ldrb	r2, [r5, #1]
- 200 00e6 AB78     		ldrb	r3, [r5, #2]
- 201 00e8 0094     		str	r4, [sp]
- 202 00ea 2C79     		ldrb	r4, [r5, #4]
- 203 00ec 0194     		str	r4, [sp, #4]
- 204 00ee 6C79     		ldrb	r4, [r5, #5]
- 205 00f0 0294     		str	r4, [sp, #8]
- 206 00f2 AC79     		ldrb	r4, [r5, #6]
- 207 00f4 0394     		str	r4, [sp, #12]
- 208 00f6 EC79     		ldrb	r4, [r5, #7]
- 209 00f8 0494     		str	r4, [sp, #16]
- 210 00fa 2C7A     		ldrb	r4, [r5, #8]
- 211 00fc 0594     		str	r4, [sp, #20]
- 212 00fe 6C7A     		ldrb	r4, [r5, #9]
- 213 0100 0694     		str	r4, [sp, #24]
- 214 0102 AC7A     		ldrb	r4, [r5, #10]
- 215 0104 4D48     		ldr	r0, .L31+32
- 216 0106 0794     		str	r4, [sp, #28]
- 217 0108 FFF7FEFF 		bl	simplePrintf
+ 197              		.loc 1 101 0
+ 198 00e2 EC78     		ldrb	r4, [r5, #3]
+ 199 00e4 2978     		ldrb	r1, [r5]
+ 200 00e6 6A78     		ldrb	r2, [r5, #1]
+ 201 00e8 AB78     		ldrb	r3, [r5, #2]
+ 202 00ea 0094     		str	r4, [sp]
+ 203 00ec 2C79     		ldrb	r4, [r5, #4]
+ 204 00ee 0194     		str	r4, [sp, #4]
+ 205 00f0 6C79     		ldrb	r4, [r5, #5]
+ 206 00f2 0294     		str	r4, [sp, #8]
+ 207 00f4 AC79     		ldrb	r4, [r5, #6]
+ 208 00f6 0394     		str	r4, [sp, #12]
+ 209 00f8 EC79     		ldrb	r4, [r5, #7]
+ 210 00fa 0494     		str	r4, [sp, #16]
+ 211 00fc 2C7A     		ldrb	r4, [r5, #8]
+ 212 00fe 0594     		str	r4, [sp, #20]
+ 213 0100 6C7A     		ldrb	r4, [r5, #9]
+ 214 0102 0694     		str	r4, [sp, #24]
+ 215 0104 AC7A     		ldrb	r4, [r5, #10]
+ 216 0106 4E48     		ldr	r0, .L31+32
+ 217 0108 0794     		str	r4, [sp, #28]
+ 218 010a FFF7FEFF 		bl	simplePrintf
  102:eepromTest.c  ****              testBuf[0],testBuf[1],testBuf[2],testBuf[3],testBuf[4],testBuf[5],testBuf[6],testBuf[7
  103:eepromTest.c  ****       printf("\n%c%c%c%c%c%c%c%c%c%c%c",
- 218              		.loc 1 103 0
- 219 010c EC78     		ldrb	r4, [r5, #3]
- 220 010e 2978     		ldrb	r1, [r5]
- 221 0110 6A78     		ldrb	r2, [r5, #1]
- 222 0112 AB78     		ldrb	r3, [r5, #2]
- 223 0114 0094     		str	r4, [sp]
- 224 0116 2C79     		ldrb	r4, [r5, #4]
- 225 0118 0194     		str	r4, [sp, #4]
- 226 011a 6C79     		ldrb	r4, [r5, #5]
- 227 011c 0294     		str	r4, [sp, #8]
- 228 011e AC79     		ldrb	r4, [r5, #6]
- 229 0120 0394     		str	r4, [sp, #12]
- 230 0122 EC79     		ldrb	r4, [r5, #7]
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 8
+ 219              		.loc 1 103 0
+ 220 010e EC78     		ldrb	r4, [r5, #3]
+ 221 0110 2978     		ldrb	r1, [r5]
+ 222 0112 6A78     		ldrb	r2, [r5, #1]
+ 223 0114 AB78     		ldrb	r3, [r5, #2]
+ 224 0116 0094     		str	r4, [sp]
+ 225 0118 2C79     		ldrb	r4, [r5, #4]
+ 226 011a 0194     		str	r4, [sp, #4]
+ 227 011c 6C79     		ldrb	r4, [r5, #5]
+ 228 011e 0294     		str	r4, [sp, #8]
+ 229 0120 AC79     		ldrb	r4, [r5, #6]
+ 230 0122 0394     		str	r4, [sp, #12]
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 8
 
 
- 231 0124 0494     		str	r4, [sp, #16]
- 232 0126 2C7A     		ldrb	r4, [r5, #8]
- 233 0128 0594     		str	r4, [sp, #20]
- 234 012a 6C7A     		ldrb	r4, [r5, #9]
- 235 012c 0694     		str	r4, [sp, #24]
- 236 012e AC7A     		ldrb	r4, [r5, #10]
- 237 0130 4348     		ldr	r0, .L31+36
- 238 0132 0794     		str	r4, [sp, #28]
- 239 0134 FFF7FEFF 		bl	simplePrintf
- 240 0138 06E0     		b	.L28
- 241              	.L11:
+ 231 0124 EC79     		ldrb	r4, [r5, #7]
+ 232 0126 0494     		str	r4, [sp, #16]
+ 233 0128 2C7A     		ldrb	r4, [r5, #8]
+ 234 012a 0594     		str	r4, [sp, #20]
+ 235 012c 6C7A     		ldrb	r4, [r5, #9]
+ 236 012e 0694     		str	r4, [sp, #24]
+ 237 0130 AC7A     		ldrb	r4, [r5, #10]
+ 238 0132 4448     		ldr	r0, .L31+36
+ 239 0134 0794     		str	r4, [sp, #28]
+ 240 0136 FFF7FEFF 		bl	simplePrintf
+ 241 013a 06E0     		b	.L28
+ 242              	.L11:
  104:eepromTest.c  ****              testBuf[0],testBuf[1],testBuf[2],testBuf[3],testBuf[4],testBuf[5],testBuf[6],testBuf[7
  105:eepromTest.c  **** 
  106:eepromTest.c  ****       eepromTestResultOK = FALSE;
@@ -440,77 +441,78 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
  109:eepromTest.c  ****   else
  110:eepromTest.c  ****   {
  111:eepromTest.c  ****   	printf("\nTest #3 - read string from address 0x0000");
- 242              		.loc 1 111 0
- 243 013a 3E48     		ldr	r0, .L31+24
- 244 013c FFF7FEFF 		bl	simplePrintf
+ 243              		.loc 1 111 0
+ 244 013c 3E48     		ldr	r0, .L31+24
+ 245 013e FFF7FEFF 		bl	simplePrintf
  112:eepromTest.c  ****     printf("\n        - failed (error code = %d)!", errorCode);
- 245              		.loc 1 112 0
- 246 0140 3948     		ldr	r0, .L31+12
- 247 0142 211C     		mov	r1, r4
- 248 0144 FFF7FEFF 		bl	simplePrintf
- 249              	.L28:
- 250 0148 0026     		mov	r6, #0
- 251              	.L13:
+ 246              		.loc 1 112 0
+ 247 0142 3A48     		ldr	r0, .L31+12
+ 248 0144 211C     		mov	r1, r4
+ 249 0146 FFF7FEFF 		bl	simplePrintf
+ 250              	.L28:
+ 251 014a 0026     		mov	r6, #0
+ 252              	.L13:
  113:eepromTest.c  ****     eepromTestResultOK = FALSE;
  114:eepromTest.c  ****   }
  115:eepromTest.c  **** 
  116:eepromTest.c  **** //  printf("\nTest #4 - read string from address 0x0040");
  117:eepromTest.c  ****   errorCode = eepromPageRead(0x0040, testBuf, MAX_LENGTH);
- 252              		.loc 1 117 0
- 253 014a 6D46     		mov	r5, sp
- 254 014c 2235     		add	r5, r5, #34
- 255 014e 4020     		mov	r0, #64
- 256 0150 291C     		mov	r1, r5
- 257 0152 0E22     		mov	r2, #14
- 258 0154 FFF7FEFF 		bl	eepromPageRead
+ 253              		.loc 1 117 0
+ 254 014c 6D46     		mov	r5, sp
+ 255 014e 2235     		add	r5, r5, #34
+ 256 0150 4020     		mov	r0, #64
+ 257 0152 291C     		mov	r1, r5
+ 258 0154 0E22     		mov	r2, #14
+ 259 0156 FFF7FEFF 		bl	eepromPageRead
  118:eepromTest.c  ****   if (errorCode == I2C_CODE_OK)
- 259              		.loc 1 118 0
- 260 0158 0006     		lsl	r0, r0, #24
- 261 015a 0416     		asr	r4, r0, #24
- 262 015c 012C     		cmp	r4, #1
- 263 015e 0DD1     		bne	.L15
+ 260              		.loc 1 118 0
+ 261 015a 0006     		lsl	r0, r0, #24
+ 262 015c 0416     		asr	r4, r0, #24
+ 263 015e 012C     		cmp	r4, #1
+ 264 0160 0ED1     		bne	.L15
  119:eepromTest.c  ****   {
  120:eepromTest.c  ****     if (strlen(testBuf) == sizeof(testString2)-1)
- 264              		.loc 1 120 0
- 265 0160 281C     		mov	r0, r5
- 266 0162 FFF7FEFF 		bl	strlen
- 267 0166 0928     		cmp	r0, #9
- 268 0168 10D0     		beq	.L17
+ 265              		.loc 1 120 0
+ 266 0162 281C     		mov	r0, r5
+ 267 0164 FFF7FEFF 		bl	strlen
+ 268 0168 0928     		cmp	r0, #9
+ 269 016a 11D0     		beq	.L17
  121:eepromTest.c  **** ;//      printf("\n        - string is '%s'", testBuf);
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 9
+
+
  122:eepromTest.c  ****     else
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 9
-
-
  123:eepromTest.c  ****     {
  124:eepromTest.c  ****     	printf("\nTest #4 - read string from address 0x0040");
- 269              		.loc 1 124 0
- 270 016a 3648     		ldr	r0, .L31+40
- 271 016c FFF7FEFF 		bl	simplePrintf
+ 270              		.loc 1 124 0
+ 271 016c 3648     		ldr	r0, .L31+40
+ 272 016e FFF7FEFF 		bl	simplePrintf
  125:eepromTest.c  ****       printf("\n        - wrong length (read string is %d characters long)!", strlen(testBuf));
- 272              		.loc 1 125 0
- 273 0170 281C     		mov	r0, r5
- 274 0172 FFF7FEFF 		bl	strlen
- 275 0176 011C     		mov	r1, r0
- 276 0178 3348     		ldr	r0, .L31+44
- 277 017a 04E0     		b	.L29
- 278              	.L15:
+ 273              		.loc 1 125 0
+ 274 0172 281C     		mov	r0, r5
+ 275 0174 FFF7FEFF 		bl	strlen
+ 276 0178 344C     		ldr	r4, .L31+44
+ 277 017a 011C     		mov	r1, r0
+ 278 017c 201C     		mov	r0, r4
+ 279 017e 04E0     		b	.L29
+ 280              	.L15:
  126:eepromTest.c  ****       eepromTestResultOK = FALSE;
  127:eepromTest.c  ****     }
  128:eepromTest.c  ****   }
  129:eepromTest.c  ****   else
  130:eepromTest.c  ****   {
  131:eepromTest.c  ****   	printf("\nTest #4 - read string from address 0x00a0");
- 279              		.loc 1 131 0
- 280 017c 3348     		ldr	r0, .L31+48
- 281 017e FFF7FEFF 		bl	simplePrintf
+ 281              		.loc 1 131 0
+ 282 0180 3348     		ldr	r0, .L31+48
+ 283 0182 FFF7FEFF 		bl	simplePrintf
  132:eepromTest.c  ****     printf("\n        - failed (error code = %d)!", errorCode);
- 282              		.loc 1 132 0
- 283 0182 2948     		ldr	r0, .L31+12
- 284 0184 211C     		mov	r1, r4
- 285              	.L29:
- 286 0186 FFF7FEFF 		bl	simplePrintf
- 287 018a 0026     		mov	r6, #0
- 288              	.L17:
+ 284              		.loc 1 132 0
+ 285 0186 2948     		ldr	r0, .L31+12
+ 286 0188 211C     		mov	r1, r4
+ 287              	.L29:
+ 288 018a FFF7FEFF 		bl	simplePrintf
+ 289 018e 0026     		mov	r6, #0
+ 290              	.L17:
  133:eepromTest.c  ****     eepromTestResultOK = FALSE;
  134:eepromTest.c  ****   }
  135:eepromTest.c  **** 
@@ -519,678 +521,661 @@ ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 1
  138:eepromTest.c  ****    */
  139:eepromTest.c  **** //  printf("\nTest #5 - write string '%s' to address 0x0004", testString2);
  140:eepromTest.c  ****   errorCode = eepromWrite(0x0004, testString2, sizeof(testString2));
- 289              		.loc 1 140 0
- 290 018c 0CAD     		add	r5, sp, #48
- 291 018e 0420     		mov	r0, #4
- 292 0190 291C     		mov	r1, r5
- 293 0192 0A22     		mov	r2, #10
- 294 0194 FFF7FEFF 		bl	eepromWrite
+ 291              		.loc 1 140 0
+ 292 0190 0CAD     		add	r5, sp, #48
+ 293 0192 0420     		mov	r0, #4
+ 294 0194 291C     		mov	r1, r5
+ 295 0196 0A22     		mov	r2, #10
+ 296 0198 FFF7FEFF 		bl	eepromWrite
  141:eepromTest.c  ****   if (errorCode == I2C_CODE_OK)
- 295              		.loc 1 141 0
- 296 0198 0006     		lsl	r0, r0, #24
- 297 019a 0416     		asr	r4, r0, #24
- 298 019c 012C     		cmp	r4, #1
- 299 019e 08D0     		beq	.L19
+ 297              		.loc 1 141 0
+ 298 019c 0006     		lsl	r0, r0, #24
+ 299 019e 0416     		asr	r4, r0, #24
+ 300 01a0 012C     		cmp	r4, #1
+ 301 01a2 08D0     		beq	.L19
  142:eepromTest.c  **** ;//    printf("\n        - done (status code OK)");
  143:eepromTest.c  ****   else
  144:eepromTest.c  ****   {
  145:eepromTest.c  ****   	printf("\nTest #5 - write string '%s' to address 0x0004", testString2);
- 300              		.loc 1 145 0
- 301 01a0 2B48     		ldr	r0, .L31+52
- 302 01a2 291C     		mov	r1, r5
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 10
+ 302              		.loc 1 145 0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 10
 
 
- 303 01a4 FFF7FEFF 		bl	simplePrintf
+ 303 01a4 2B48     		ldr	r0, .L31+52
+ 304 01a6 291C     		mov	r1, r5
+ 305 01a8 FFF7FEFF 		bl	simplePrintf
  146:eepromTest.c  ****     printf("\n        - failed (error code = %d)!", errorCode);
- 304              		.loc 1 146 0
- 305 01a8 1F48     		ldr	r0, .L31+12
- 306 01aa 211C     		mov	r1, r4
- 307 01ac FFF7FEFF 		bl	simplePrintf
- 308 01b0 0026     		mov	r6, #0
- 309              	.L19:
+ 306              		.loc 1 146 0
+ 307 01ac 1F48     		ldr	r0, .L31+12
+ 308 01ae 211C     		mov	r1, r4
+ 309 01b0 FFF7FEFF 		bl	simplePrintf
+ 310 01b4 0026     		mov	r6, #0
+ 311              	.L19:
  147:eepromTest.c  ****     eepromTestResultOK = FALSE;
  148:eepromTest.c  ****   }
  149:eepromTest.c  ****   
  150:eepromTest.c  ****   if (eepromPoll() == I2C_CODE_OK)
- 310              		.loc 1 150 0
- 311 01b2 FFF7FEFF 		bl	eepromPoll
- 312 01b6 0006     		lsl	r0, r0, #24
- 313 01b8 0016     		asr	r0, r0, #24
- 314 01ba 0128     		cmp	r0, #1
- 315 01bc 07D0     		beq	.L21
+ 312              		.loc 1 150 0
+ 313 01b6 FFF7FEFF 		bl	eepromPoll
+ 314 01ba 0006     		lsl	r0, r0, #24
+ 315 01bc 0016     		asr	r0, r0, #24
+ 316 01be 0128     		cmp	r0, #1
+ 317 01c0 07D0     		beq	.L21
  151:eepromTest.c  **** ;//    printf("\n        - program cycle completed");
  152:eepromTest.c  ****   else
  153:eepromTest.c  ****   {
  154:eepromTest.c  ****   	printf("\nTest #5 - write string '%s' to address 0x0004", testString2);
- 316              		.loc 1 154 0
- 317 01be 2448     		ldr	r0, .L31+52
- 318 01c0 291C     		mov	r1, r5
- 319 01c2 FFF7FEFF 		bl	simplePrintf
+ 318              		.loc 1 154 0
+ 319 01c2 2448     		ldr	r0, .L31+52
+ 320 01c4 291C     		mov	r1, r5
+ 321 01c6 FFF7FEFF 		bl	simplePrintf
  155:eepromTest.c  ****     printf("\n        - program cycle failed!");
- 320              		.loc 1 155 0
- 321 01c6 1948     		ldr	r0, .L31+16
- 322 01c8 FFF7FEFF 		bl	simplePrintf
- 323 01cc 0026     		mov	r6, #0
- 324              	.L21:
+ 322              		.loc 1 155 0
+ 323 01ca 1948     		ldr	r0, .L31+16
+ 324 01cc FFF7FEFF 		bl	simplePrintf
+ 325 01d0 0026     		mov	r6, #0
+ 326              	.L21:
  156:eepromTest.c  ****     eepromTestResultOK = FALSE;
  157:eepromTest.c  ****   }
  158:eepromTest.c  **** 
  159:eepromTest.c  **** //  printf("\nTest #6 - read string from address 0x0000");
  160:eepromTest.c  ****   errorCode = eepromPageRead(0x0000, testBuf, MAX_LENGTH);
- 325              		.loc 1 160 0
- 326 01ce 6D46     		mov	r5, sp
- 327 01d0 2235     		add	r5, r5, #34
- 328 01d2 0020     		mov	r0, #0
- 329 01d4 291C     		mov	r1, r5
- 330 01d6 0E22     		mov	r2, #14
- 331 01d8 FFF7FEFF 		bl	eepromPageRead
+ 327              		.loc 1 160 0
+ 328 01d2 6D46     		mov	r5, sp
+ 329 01d4 2235     		add	r5, r5, #34
+ 330 01d6 0020     		mov	r0, #0
+ 331 01d8 291C     		mov	r1, r5
+ 332 01da 0E22     		mov	r2, #14
+ 333 01dc FFF7FEFF 		bl	eepromPageRead
  161:eepromTest.c  ****   if (errorCode == I2C_CODE_OK)
- 332              		.loc 1 161 0
- 333 01dc 0006     		lsl	r0, r0, #24
- 334 01de 0416     		asr	r4, r0, #24
- 335 01e0 012C     		cmp	r4, #1
- 336 01e2 0DD1     		bne	.L23
+ 334              		.loc 1 161 0
+ 335 01e0 0006     		lsl	r0, r0, #24
+ 336 01e2 0416     		asr	r4, r0, #24
+ 337 01e4 012C     		cmp	r4, #1
+ 338 01e6 0ED1     		bne	.L23
  162:eepromTest.c  ****   {
  163:eepromTest.c  ****     if (strlen(testBuf) == sizeof(testString2)-1+4)
- 337              		.loc 1 163 0
- 338 01e4 281C     		mov	r0, r5
- 339 01e6 FFF7FEFF 		bl	strlen
- 340 01ea 0D28     		cmp	r0, #13
- 341 01ec 10D0     		beq	.L25
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 11
+ 339              		.loc 1 163 0
+ 340 01e8 281C     		mov	r0, r5
+ 341 01ea FFF7FEFF 		bl	strlen
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 11
 
 
+ 342 01ee 0D28     		cmp	r0, #13
+ 343 01f0 11D0     		beq	.L25
  164:eepromTest.c  **** ;//      printf("\n        - string is '%s'", testBuf);
  165:eepromTest.c  ****     else
  166:eepromTest.c  ****     {
  167:eepromTest.c  ****     	printf("\nTest #6 - read string from address 0x0000");
- 342              		.loc 1 167 0
- 343 01ee 1948     		ldr	r0, .L31+56
- 344 01f0 FFF7FEFF 		bl	simplePrintf
+ 344              		.loc 1 167 0
+ 345 01f2 1948     		ldr	r0, .L31+56
+ 346 01f4 FFF7FEFF 		bl	simplePrintf
  168:eepromTest.c  ****       printf("\n        - wrong length (read string is %d characters long)!", strlen(testBuf));
- 345              		.loc 1 168 0
- 346 01f4 281C     		mov	r0, r5
- 347 01f6 FFF7FEFF 		bl	strlen
- 348 01fa 011C     		mov	r1, r0
- 349 01fc 1248     		ldr	r0, .L31+44
- 350 01fe 04E0     		b	.L30
- 351              	.L23:
+ 347              		.loc 1 168 0
+ 348 01f8 281C     		mov	r0, r5
+ 349 01fa FFF7FEFF 		bl	strlen
+ 350 01fe 134C     		ldr	r4, .L31+44
+ 351 0200 011C     		mov	r1, r0
+ 352 0202 201C     		mov	r0, r4
+ 353 0204 04E0     		b	.L30
+ 354              	.L23:
  169:eepromTest.c  ****       eepromTestResultOK = FALSE;
  170:eepromTest.c  ****     }
  171:eepromTest.c  ****   }
  172:eepromTest.c  ****   else
  173:eepromTest.c  ****   {
  174:eepromTest.c  ****   	printf("\nTest #6 - read string from address 0x0000");
- 352              		.loc 1 174 0
- 353 0200 1448     		ldr	r0, .L31+56
- 354 0202 FFF7FEFF 		bl	simplePrintf
+ 355              		.loc 1 174 0
+ 356 0206 1448     		ldr	r0, .L31+56
+ 357 0208 FFF7FEFF 		bl	simplePrintf
  175:eepromTest.c  ****     printf("\n        - failed (error code = %d)!", errorCode);
- 355              		.loc 1 175 0
- 356 0206 0848     		ldr	r0, .L31+12
- 357 0208 211C     		mov	r1, r4
- 358              	.L30:
- 359 020a FFF7FEFF 		bl	simplePrintf
- 360 020e 0026     		mov	r6, #0
- 361              	.L25:
+ 358              		.loc 1 175 0
+ 359 020c 0748     		ldr	r0, .L31+12
+ 360 020e 211C     		mov	r1, r4
+ 361              	.L30:
+ 362 0210 FFF7FEFF 		bl	simplePrintf
+ 363 0214 0026     		mov	r6, #0
+ 364              	.L25:
  176:eepromTest.c  ****     eepromTestResultOK = FALSE;
  177:eepromTest.c  ****   }
  178:eepromTest.c  ****   
  179:eepromTest.c  ****   return eepromTestResultOK;
  180:eepromTest.c  **** }
- 362              		.loc 1 180 0
- 363 0210 301C     		mov	r0, r6
- 364 0212 11B0     		add	sp, sp, #68
- 365              		@ sp needed for prologue
- 366              	.LVL3:
- 367 0214 70BC     		pop	{r4, r5, r6}
- 368 0216 02BC     		pop	{r1}
- 369 0218 0847     		bx	r1
- 370              	.L32:
- 371 021a C046     		.align	2
- 372              	.L31:
- 373 021c 48020000 		.word	.LC0
- 374 0220 54020000 		.word	.LC2
- 375 0224 00000000 		.word	.LC4
- 376 0228 30000000 		.word	.LC6
- 377 022c 58000000 		.word	.LC8
- 378 0230 7C000000 		.word	.LC10
- 379 0234 AC000000 		.word	.LC12
- 380 0238 D8000000 		.word	.LC14
- 381 023c 18010000 		.word	.LC16
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 12
+ 365              		.loc 1 180 0
+ 366 0216 301C     		mov	r0, r6
+ 367 0218 11B0     		add	sp, sp, #68
+ 368              		@ sp needed for prologue
+ 369              	.LVL3:
+ 370 021a 70BC     		pop	{r4, r5, r6}
+ 371 021c 02BC     		pop	{r1}
+ 372 021e 0847     		bx	r1
+ 373              	.L32:
+ 374              		.align	2
+ 375              	.L31:
+ 376 0220 48020000 		.word	.LC0
+ 377 0224 54020000 		.word	.LC2
+ 378 0228 00000000 		.word	.LC4
+ 379 022c 30000000 		.word	.LC6
+ 380 0230 58000000 		.word	.LC8
+ 381 0234 7C000000 		.word	.LC10
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 12
 
 
- 382 0240 3C010000 		.word	.LC18
- 383 0244 54010000 		.word	.LC20
- 384 0248 80010000 		.word	.LC22
- 385 024c C0010000 		.word	.LC24
- 386 0250 EC010000 		.word	.LC26
- 387 0254 1C020000 		.word	.LC28
- 388              	.LFE2:
- 389              		.size	testEEPROM, .-testEEPROM
- 390              		.section	.debug_frame,"",%progbits
- 391              	.Lframe0:
- 392 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
- 393              	.LSCIE0:
- 394 0004 FFFFFFFF 		.4byte	0xffffffff
- 395 0008 01       		.byte	0x1
- 396 0009 00       		.ascii	"\000"
- 397 000a 01       		.uleb128 0x1
- 398 000b 7C       		.sleb128 -4
- 399 000c 0E       		.byte	0xe
- 400 000d 0C       		.byte	0xc
- 401 000e 0D       		.uleb128 0xd
- 402 000f 00       		.uleb128 0x0
- 403              		.align	2
- 404              	.LECIE0:
- 405              	.LSFDE0:
- 406 0010 1C000000 		.4byte	.LEFDE0-.LASFDE0
- 407              	.LASFDE0:
- 408 0014 00000000 		.4byte	.Lframe0
- 409 0018 00000000 		.4byte	.LFB2
- 410 001c 58020000 		.4byte	.LFE2-.LFB2
- 411 0020 42       		.byte	0x4
- 412              		.4byte	.LCFI0-.LFB2
- 413 0021 0E       		.byte	0xe
- 414 0022 10       		.uleb128 0x10
- 415 0023 84       		.byte	0x84
- 416 0024 04       		.uleb128 0x4
- 417 0025 85       		.byte	0x85
- 418 0026 03       		.uleb128 0x3
- 419 0027 86       		.byte	0x86
- 420 0028 02       		.uleb128 0x2
- 421 0029 8E       		.byte	0x8e
- 422 002a 01       		.uleb128 0x1
- 423 002b 42       		.byte	0x4
- 424              		.4byte	.LCFI1-.LCFI0
- 425 002c 0E       		.byte	0xe
- 426 002d 54       		.uleb128 0x54
- 427 002e 0000     		.align	2
- 428              	.LEFDE0:
- 429              		.text
- 430              	.Letext0:
- 431              		.section	.debug_loc,"",%progbits
- 432              	.Ldebug_loc0:
- 433              	.LLST0:
- 434 0000 00000000 		.4byte	.LFB2-.Ltext0
- 435 0004 02000000 		.4byte	.LCFI0-.Ltext0
- 436 0008 0100     		.2byte	0x1
- 437 000a 5D       		.byte	0x5d
- 438 000b 02000000 		.4byte	.LCFI0-.Ltext0
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 13
+ 382 0238 AC000000 		.word	.LC12
+ 383 023c D8000000 		.word	.LC14
+ 384 0240 18010000 		.word	.LC16
+ 385 0244 3C010000 		.word	.LC18
+ 386 0248 54010000 		.word	.LC20
+ 387 024c 80010000 		.word	.LC22
+ 388 0250 C0010000 		.word	.LC24
+ 389 0254 EC010000 		.word	.LC26
+ 390 0258 1C020000 		.word	.LC28
+ 391              	.LFE2:
+ 392              		.size	testEEPROM, .-testEEPROM
+ 393              		.section	.debug_frame,"",%progbits
+ 394              	.Lframe0:
+ 395 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 396              	.LSCIE0:
+ 397 0004 FFFFFFFF 		.4byte	0xffffffff
+ 398 0008 01       		.byte	0x1
+ 399 0009 00       		.ascii	"\000"
+ 400 000a 01       		.uleb128 0x1
+ 401 000b 7C       		.sleb128 -4
+ 402 000c 0E       		.byte	0xe
+ 403 000d 0C       		.byte	0xc
+ 404 000e 0D       		.uleb128 0xd
+ 405 000f 00       		.uleb128 0x0
+ 406              		.align	2
+ 407              	.LECIE0:
+ 408              	.LSFDE0:
+ 409 0010 1C000000 		.4byte	.LEFDE0-.LASFDE0
+ 410              	.LASFDE0:
+ 411 0014 00000000 		.4byte	.Lframe0
+ 412 0018 00000000 		.4byte	.LFB2
+ 413 001c 5C020000 		.4byte	.LFE2-.LFB2
+ 414 0020 42       		.byte	0x4
+ 415              		.4byte	.LCFI0-.LFB2
+ 416 0021 0E       		.byte	0xe
+ 417 0022 10       		.uleb128 0x10
+ 418 0023 84       		.byte	0x84
+ 419 0024 04       		.uleb128 0x4
+ 420 0025 85       		.byte	0x85
+ 421 0026 03       		.uleb128 0x3
+ 422 0027 86       		.byte	0x86
+ 423 0028 02       		.uleb128 0x2
+ 424 0029 8E       		.byte	0x8e
+ 425 002a 01       		.uleb128 0x1
+ 426 002b 42       		.byte	0x4
+ 427              		.4byte	.LCFI1-.LCFI0
+ 428 002c 0E       		.byte	0xe
+ 429 002d 54       		.uleb128 0x54
+ 430 002e 0000     		.align	2
+ 431              	.LEFDE0:
+ 432              		.file 2 "pre_emptive_os/api/general.h"
+ 433              		.text
+ 434              	.Letext0:
+ 435              		.section	.debug_loc,"",%progbits
+ 436              	.Ldebug_loc0:
+ 437              	.LLST0:
+ 438 0000 00000000 		.4byte	.LFB2-.Ltext0
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 13
 
 
- 439 000f 04000000 		.4byte	.LCFI1-.Ltext0
- 440 0013 0200     		.2byte	0x2
- 441 0015 7D       		.byte	0x7d
- 442 0016 10       		.sleb128 16
- 443 0017 04000000 		.4byte	.LCFI1-.Ltext0
- 444 001b 58020000 		.4byte	.LFE2-.Ltext0
- 445 001f 0300     		.2byte	0x3
- 446 0021 7D       		.byte	0x7d
- 447 0022 D400     		.sleb128 84
- 448 0024 00000000 		.4byte	0x0
- 449 0028 00000000 		.4byte	0x0
- 450              	.LLST1:
- 451 002c 36000000 		.4byte	.LVL0-.Ltext0
- 452 0030 38000000 		.4byte	.LVL1-.Ltext0
- 453 0034 0100     		.2byte	0x1
- 454 0036 56       		.byte	0x56
- 455 0037 4A000000 		.4byte	.LVL2-.Ltext0
- 456 003b 14020000 		.4byte	.LVL3-.Ltext0
- 457 003f 0100     		.2byte	0x1
- 458 0041 56       		.byte	0x56
- 459 0042 00000000 		.4byte	0x0
- 460 0046 00000000 		.4byte	0x0
- 461              		.file 2 "pre_emptive_os/api/general.h"
- 462              		.section	.debug_info
- 463 0000 16010000 		.4byte	0x116
- 464 0004 0200     		.2byte	0x2
- 465 0006 00000000 		.4byte	.Ldebug_abbrev0
- 466 000a 04       		.byte	0x4
- 467 000b 01       		.uleb128 0x1
- 468 000c 50000000 		.4byte	.LASF14
- 469 0010 01       		.byte	0x1
- 470 0011 94000000 		.4byte	.LASF15
- 471 0015 E0000000 		.4byte	.LASF16
- 472 0019 00000000 		.4byte	.Ltext0
- 473 001d 58020000 		.4byte	.Letext0
- 474 0021 00000000 		.4byte	.Ldebug_line0
- 475 0025 02       		.uleb128 0x2
- 476 0026 74553800 		.ascii	"tU8\000"
- 477 002a 02       		.byte	0x2
- 478 002b 47       		.byte	0x47
- 479 002c 30000000 		.4byte	0x30
- 480 0030 03       		.uleb128 0x3
- 481 0031 01       		.byte	0x1
- 482 0032 08       		.byte	0x8
- 483 0033 86000000 		.4byte	.LASF0
- 484 0037 03       		.uleb128 0x3
- 485 0038 02       		.byte	0x2
- 486 0039 07       		.byte	0x7
- 487 003a C1000000 		.4byte	.LASF1
- 488 003e 03       		.uleb128 0x3
- 489 003f 04       		.byte	0x4
- 490 0040 07       		.byte	0x7
- 491 0041 21000000 		.4byte	.LASF2
- 492 0045 02       		.uleb128 0x2
- 493 0046 74533800 		.ascii	"tS8\000"
- 494 004a 02       		.byte	0x2
- 495 004b 4A       		.byte	0x4a
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 14
+ 439 0004 02000000 		.4byte	.LCFI0-.Ltext0
+ 440 0008 0100     		.2byte	0x1
+ 441 000a 5D       		.byte	0x5d
+ 442 000b 02000000 		.4byte	.LCFI0-.Ltext0
+ 443 000f 04000000 		.4byte	.LCFI1-.Ltext0
+ 444 0013 0200     		.2byte	0x2
+ 445 0015 7D       		.byte	0x7d
+ 446 0016 10       		.sleb128 16
+ 447 0017 04000000 		.4byte	.LCFI1-.Ltext0
+ 448 001b 5C020000 		.4byte	.LFE2-.Ltext0
+ 449 001f 0300     		.2byte	0x3
+ 450 0021 7D       		.byte	0x7d
+ 451 0022 D400     		.sleb128 84
+ 452 0024 00000000 		.4byte	0x0
+ 453 0028 00000000 		.4byte	0x0
+ 454              	.LLST1:
+ 455 002c 36000000 		.4byte	.LVL0-.Ltext0
+ 456 0030 38000000 		.4byte	.LVL1-.Ltext0
+ 457 0034 0100     		.2byte	0x1
+ 458 0036 56       		.byte	0x56
+ 459 0037 4A000000 		.4byte	.LVL2-.Ltext0
+ 460 003b 1A020000 		.4byte	.LVL3-.Ltext0
+ 461 003f 0100     		.2byte	0x1
+ 462 0041 56       		.byte	0x56
+ 463 0042 00000000 		.4byte	0x0
+ 464 0046 00000000 		.4byte	0x0
+ 465              		.section	.debug_info
+ 466 0000 1A010000 		.4byte	0x11a
+ 467 0004 0200     		.2byte	0x2
+ 468 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 469 000a 04       		.byte	0x4
+ 470 000b 01       		.uleb128 0x1
+ 471 000c 00000000 		.4byte	.Ldebug_line0
+ 472 0010 5C020000 		.4byte	.Letext0
+ 473 0014 00000000 		.4byte	.Ltext0
+ 474 0018 33000000 		.4byte	.LASF15
+ 475 001c 01       		.byte	0x1
+ 476 001d 62000000 		.4byte	.LASF16
+ 477 0021 BA000000 		.4byte	.LASF17
+ 478 0025 02       		.uleb128 0x2
+ 479 0026 74553800 		.ascii	"tU8\000"
+ 480 002a 02       		.byte	0x2
+ 481 002b 47       		.byte	0x47
+ 482 002c 30000000 		.4byte	0x30
+ 483 0030 03       		.uleb128 0x3
+ 484 0031 7B000000 		.4byte	.LASF0
+ 485 0035 01       		.byte	0x1
+ 486 0036 08       		.byte	0x8
+ 487 0037 03       		.uleb128 0x3
+ 488 0038 A2000000 		.4byte	.LASF1
+ 489 003c 02       		.byte	0x2
+ 490 003d 07       		.byte	0x7
+ 491 003e 03       		.uleb128 0x3
+ 492 003f 95000000 		.4byte	.LASF2
+ 493 0043 04       		.byte	0x4
+ 494 0044 07       		.byte	0x7
+ 495 0045 02       		.uleb128 0x2
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 14
 
 
- 496 004c 50000000 		.4byte	0x50
- 497 0050 03       		.uleb128 0x3
- 498 0051 01       		.byte	0x1
- 499 0052 06       		.byte	0x6
- 500 0053 D4000000 		.4byte	.LASF3
- 501 0057 03       		.uleb128 0x3
- 502 0058 02       		.byte	0x2
- 503 0059 05       		.byte	0x5
- 504 005a 6C010000 		.4byte	.LASF4
- 505 005e 04       		.uleb128 0x4
- 506 005f 04       		.byte	0x4
- 507 0060 05       		.byte	0x5
- 508 0061 696E7400 		.ascii	"int\000"
- 509 0065 03       		.uleb128 0x3
- 510 0066 04       		.byte	0x4
- 511 0067 05       		.byte	0x5
- 512 0068 A6000000 		.4byte	.LASF5
- 513 006c 03       		.uleb128 0x3
- 514 006d 08       		.byte	0x8
- 515 006e 05       		.byte	0x5
- 516 006f 00000000 		.4byte	.LASF6
- 517 0073 05       		.uleb128 0x5
- 518 0074 04       		.byte	0x4
- 519 0075 07       		.byte	0x7
- 520 0076 03       		.uleb128 0x3
- 521 0077 04       		.byte	0x4
- 522 0078 07       		.byte	0x7
- 523 0079 AF000000 		.4byte	.LASF7
- 524 007d 03       		.uleb128 0x3
- 525 007e 01       		.byte	0x1
- 526 007f 08       		.byte	0x8
- 527 0080 A1000000 		.4byte	.LASF8
- 528 0084 03       		.uleb128 0x3
- 529 0085 08       		.byte	0x8
- 530 0086 07       		.byte	0x7
- 531 0087 5C000000 		.4byte	.LASF9
- 532 008b 06       		.uleb128 0x6
- 533 008c 01       		.byte	0x1
- 534 008d 7B000000 		.4byte	.LASF17
- 535 0091 01       		.byte	0x1
- 536 0092 27       		.byte	0x27
- 537 0093 01       		.byte	0x1
- 538 0094 25000000 		.4byte	0x25
- 539 0098 00000000 		.4byte	.LFB2
- 540 009c 58020000 		.4byte	.LFE2
- 541 00a0 00000000 		.4byte	.LLST0
- 542 00a4 ED000000 		.4byte	0xed
- 543 00a8 07       		.uleb128 0x7
- 544 00a9 0E000000 		.4byte	.LASF10
- 545 00ad 01       		.byte	0x1
- 546 00ae 28       		.byte	0x28
- 547 00af 25000000 		.4byte	0x25
- 548 00b3 2C000000 		.4byte	.LLST1
- 549 00b7 08       		.uleb128 0x8
- 550 00b8 2E000000 		.4byte	.LASF11
- 551 00bc 01       		.byte	0x1
- 552 00bd 29       		.byte	0x29
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 15
+ 496 0046 74533800 		.ascii	"tS8\000"
+ 497 004a 02       		.byte	0x2
+ 498 004b 4A       		.byte	0x4a
+ 499 004c 50000000 		.4byte	0x50
+ 500 0050 03       		.uleb128 0x3
+ 501 0051 3F000000 		.4byte	.LASF3
+ 502 0055 01       		.byte	0x1
+ 503 0056 06       		.byte	0x6
+ 504 0057 03       		.uleb128 0x3
+ 505 0058 00000000 		.4byte	.LASF4
+ 506 005c 02       		.byte	0x2
+ 507 005d 05       		.byte	0x5
+ 508 005e 04       		.uleb128 0x4
+ 509 005f 696E7400 		.ascii	"int\000"
+ 510 0063 04       		.byte	0x4
+ 511 0064 05       		.byte	0x5
+ 512 0065 03       		.uleb128 0x3
+ 513 0066 59000000 		.4byte	.LASF5
+ 514 006a 04       		.byte	0x4
+ 515 006b 05       		.byte	0x5
+ 516 006c 03       		.uleb128 0x3
+ 517 006d 4B000000 		.4byte	.LASF6
+ 518 0071 08       		.byte	0x8
+ 519 0072 05       		.byte	0x5
+ 520 0073 03       		.uleb128 0x3
+ 521 0074 E1000000 		.4byte	.LASF7
+ 522 0078 04       		.byte	0x4
+ 523 0079 07       		.byte	0x7
+ 524 007a 03       		.uleb128 0x3
+ 525 007b E1000000 		.4byte	.LASF7
+ 526 007f 04       		.byte	0x4
+ 527 0080 07       		.byte	0x7
+ 528 0081 03       		.uleb128 0x3
+ 529 0082 B5000000 		.4byte	.LASF8
+ 530 0086 01       		.byte	0x1
+ 531 0087 08       		.byte	0x8
+ 532 0088 03       		.uleb128 0x3
+ 533 0089 14000000 		.4byte	.LASF9
+ 534 008d 08       		.byte	0x8
+ 535 008e 07       		.byte	0x7
+ 536 008f 05       		.uleb128 0x5
+ 537 0090 F1000000 		.4byte	0xf1
+ 538 0094 01       		.byte	0x1
+ 539 0095 F3000000 		.4byte	.LASF18
+ 540 0099 01       		.byte	0x1
+ 541 009a 27       		.byte	0x27
+ 542 009b 01       		.byte	0x1
+ 543 009c 25000000 		.4byte	0x25
+ 544 00a0 00000000 		.4byte	.LFB2
+ 545 00a4 5C020000 		.4byte	.LFE2
+ 546 00a8 00000000 		.4byte	.LLST0
+ 547 00ac 06       		.uleb128 0x6
+ 548 00ad FE000000 		.4byte	.LASF10
+ 549 00b1 01       		.byte	0x1
+ 550 00b2 28       		.byte	0x28
+ 551 00b3 25000000 		.4byte	0x25
+ 552 00b7 2C000000 		.4byte	.LLST1
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 15
 
 
- 553 00be ED000000 		.4byte	0xed
- 554 00c2 02       		.byte	0x2
- 555 00c3 91       		.byte	0x91
- 556 00c4 66       		.sleb128 -26
- 557 00c5 08       		.uleb128 0x8
- 558 00c6 3A000000 		.4byte	.LASF12
- 559 00ca 01       		.byte	0x1
- 560 00cb 2A       		.byte	0x2a
- 561 00cc FD000000 		.4byte	0xfd
- 562 00d0 02       		.byte	0x2
- 563 00d1 91       		.byte	0x91
- 564 00d2 5C       		.sleb128 -36
- 565 00d3 08       		.uleb128 0x8
- 566 00d4 73000000 		.4byte	.LASF13
- 567 00d8 01       		.byte	0x1
- 568 00d9 2B       		.byte	0x2b
- 569 00da 0D010000 		.4byte	0x10d
- 570 00de 02       		.byte	0x2
- 571 00df 91       		.byte	0x91
- 572 00e0 4E       		.sleb128 -50
- 573 00e1 09       		.uleb128 0x9
- 574 00e2 46000000 		.4byte	.LASF18
- 575 00e6 01       		.byte	0x1
- 576 00e7 2C       		.byte	0x2c
- 577 00e8 45000000 		.4byte	0x45
- 578 00ec 00       		.byte	0x0
- 579 00ed 0A       		.uleb128 0xa
- 580 00ee 25000000 		.4byte	0x25
- 581 00f2 FD000000 		.4byte	0xfd
- 582 00f6 0B       		.uleb128 0xb
- 583 00f7 73000000 		.4byte	0x73
- 584 00fb 09       		.byte	0x9
- 585 00fc 00       		.byte	0x0
- 586 00fd 0A       		.uleb128 0xa
- 587 00fe 25000000 		.4byte	0x25
- 588 0102 0D010000 		.4byte	0x10d
- 589 0106 0B       		.uleb128 0xb
- 590 0107 73000000 		.4byte	0x73
- 591 010b 09       		.byte	0x9
- 592 010c 00       		.byte	0x0
- 593 010d 0C       		.uleb128 0xc
- 594 010e 25000000 		.4byte	0x25
- 595 0112 0B       		.uleb128 0xb
- 596 0113 73000000 		.4byte	0x73
- 597 0117 0D       		.byte	0xd
- 598 0118 00       		.byte	0x0
- 599 0119 00       		.byte	0x0
- 600              		.section	.debug_abbrev
- 601 0000 01       		.uleb128 0x1
- 602 0001 11       		.uleb128 0x11
- 603 0002 01       		.byte	0x1
- 604 0003 25       		.uleb128 0x25
- 605 0004 0E       		.uleb128 0xe
- 606 0005 13       		.uleb128 0x13
- 607 0006 0B       		.uleb128 0xb
- 608 0007 03       		.uleb128 0x3
- 609 0008 0E       		.uleb128 0xe
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 16
+ 553 00bb 07       		.uleb128 0x7
+ 554 00bc 89000000 		.4byte	.LASF11
+ 555 00c0 01       		.byte	0x1
+ 556 00c1 29       		.byte	0x29
+ 557 00c2 F1000000 		.4byte	0xf1
+ 558 00c6 02       		.byte	0x2
+ 559 00c7 91       		.byte	0x91
+ 560 00c8 66       		.sleb128 -26
+ 561 00c9 07       		.uleb128 0x7
+ 562 00ca 6F000000 		.4byte	.LASF12
+ 563 00ce 01       		.byte	0x1
+ 564 00cf 2A       		.byte	0x2a
+ 565 00d0 01010000 		.4byte	0x101
+ 566 00d4 02       		.byte	0x2
+ 567 00d5 91       		.byte	0x91
+ 568 00d6 5C       		.sleb128 -36
+ 569 00d7 07       		.uleb128 0x7
+ 570 00d8 2B000000 		.4byte	.LASF13
+ 571 00dc 01       		.byte	0x1
+ 572 00dd 2B       		.byte	0x2b
+ 573 00de 11010000 		.4byte	0x111
+ 574 00e2 02       		.byte	0x2
+ 575 00e3 91       		.byte	0x91
+ 576 00e4 4E       		.sleb128 -50
+ 577 00e5 08       		.uleb128 0x8
+ 578 00e6 0A000000 		.4byte	.LASF14
+ 579 00ea 01       		.byte	0x1
+ 580 00eb 2C       		.byte	0x2c
+ 581 00ec 45000000 		.4byte	0x45
+ 582 00f0 00       		.byte	0x0
+ 583 00f1 09       		.uleb128 0x9
+ 584 00f2 01010000 		.4byte	0x101
+ 585 00f6 25000000 		.4byte	0x25
+ 586 00fa 0A       		.uleb128 0xa
+ 587 00fb 73000000 		.4byte	0x73
+ 588 00ff 09       		.byte	0x9
+ 589 0100 00       		.byte	0x0
+ 590 0101 09       		.uleb128 0x9
+ 591 0102 11010000 		.4byte	0x111
+ 592 0106 25000000 		.4byte	0x25
+ 593 010a 0A       		.uleb128 0xa
+ 594 010b 73000000 		.4byte	0x73
+ 595 010f 09       		.byte	0x9
+ 596 0110 00       		.byte	0x0
+ 597 0111 0B       		.uleb128 0xb
+ 598 0112 25000000 		.4byte	0x25
+ 599 0116 0A       		.uleb128 0xa
+ 600 0117 73000000 		.4byte	0x73
+ 601 011b 0D       		.byte	0xd
+ 602 011c 00       		.byte	0x0
+ 603 011d 00       		.byte	0x0
+ 604              		.section	.debug_abbrev
+ 605 0000 01       		.uleb128 0x1
+ 606 0001 11       		.uleb128 0x11
+ 607 0002 01       		.byte	0x1
+ 608 0003 10       		.uleb128 0x10
+ 609 0004 06       		.uleb128 0x6
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 16
 
 
- 610 0009 1B       		.uleb128 0x1b
- 611 000a 0E       		.uleb128 0xe
- 612 000b 11       		.uleb128 0x11
- 613 000c 01       		.uleb128 0x1
- 614 000d 12       		.uleb128 0x12
- 615 000e 01       		.uleb128 0x1
- 616 000f 10       		.uleb128 0x10
- 617 0010 06       		.uleb128 0x6
- 618 0011 00       		.byte	0x0
- 619 0012 00       		.byte	0x0
- 620 0013 02       		.uleb128 0x2
- 621 0014 16       		.uleb128 0x16
- 622 0015 00       		.byte	0x0
- 623 0016 03       		.uleb128 0x3
- 624 0017 08       		.uleb128 0x8
- 625 0018 3A       		.uleb128 0x3a
- 626 0019 0B       		.uleb128 0xb
- 627 001a 3B       		.uleb128 0x3b
- 628 001b 0B       		.uleb128 0xb
- 629 001c 49       		.uleb128 0x49
- 630 001d 13       		.uleb128 0x13
- 631 001e 00       		.byte	0x0
- 632 001f 00       		.byte	0x0
- 633 0020 03       		.uleb128 0x3
- 634 0021 24       		.uleb128 0x24
- 635 0022 00       		.byte	0x0
- 636 0023 0B       		.uleb128 0xb
- 637 0024 0B       		.uleb128 0xb
- 638 0025 3E       		.uleb128 0x3e
- 639 0026 0B       		.uleb128 0xb
- 640 0027 03       		.uleb128 0x3
- 641 0028 0E       		.uleb128 0xe
- 642 0029 00       		.byte	0x0
- 643 002a 00       		.byte	0x0
- 644 002b 04       		.uleb128 0x4
- 645 002c 24       		.uleb128 0x24
- 646 002d 00       		.byte	0x0
- 647 002e 0B       		.uleb128 0xb
- 648 002f 0B       		.uleb128 0xb
- 649 0030 3E       		.uleb128 0x3e
- 650 0031 0B       		.uleb128 0xb
- 651 0032 03       		.uleb128 0x3
- 652 0033 08       		.uleb128 0x8
- 653 0034 00       		.byte	0x0
- 654 0035 00       		.byte	0x0
- 655 0036 05       		.uleb128 0x5
- 656 0037 24       		.uleb128 0x24
- 657 0038 00       		.byte	0x0
- 658 0039 0B       		.uleb128 0xb
- 659 003a 0B       		.uleb128 0xb
- 660 003b 3E       		.uleb128 0x3e
- 661 003c 0B       		.uleb128 0xb
- 662 003d 00       		.byte	0x0
- 663 003e 00       		.byte	0x0
- 664 003f 06       		.uleb128 0x6
- 665 0040 2E       		.uleb128 0x2e
- 666 0041 01       		.byte	0x1
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 17
+ 610 0005 12       		.uleb128 0x12
+ 611 0006 01       		.uleb128 0x1
+ 612 0007 11       		.uleb128 0x11
+ 613 0008 01       		.uleb128 0x1
+ 614 0009 25       		.uleb128 0x25
+ 615 000a 0E       		.uleb128 0xe
+ 616 000b 13       		.uleb128 0x13
+ 617 000c 0B       		.uleb128 0xb
+ 618 000d 03       		.uleb128 0x3
+ 619 000e 0E       		.uleb128 0xe
+ 620 000f 1B       		.uleb128 0x1b
+ 621 0010 0E       		.uleb128 0xe
+ 622 0011 00       		.byte	0x0
+ 623 0012 00       		.byte	0x0
+ 624 0013 02       		.uleb128 0x2
+ 625 0014 16       		.uleb128 0x16
+ 626 0015 00       		.byte	0x0
+ 627 0016 03       		.uleb128 0x3
+ 628 0017 08       		.uleb128 0x8
+ 629 0018 3A       		.uleb128 0x3a
+ 630 0019 0B       		.uleb128 0xb
+ 631 001a 3B       		.uleb128 0x3b
+ 632 001b 0B       		.uleb128 0xb
+ 633 001c 49       		.uleb128 0x49
+ 634 001d 13       		.uleb128 0x13
+ 635 001e 00       		.byte	0x0
+ 636 001f 00       		.byte	0x0
+ 637 0020 03       		.uleb128 0x3
+ 638 0021 24       		.uleb128 0x24
+ 639 0022 00       		.byte	0x0
+ 640 0023 03       		.uleb128 0x3
+ 641 0024 0E       		.uleb128 0xe
+ 642 0025 0B       		.uleb128 0xb
+ 643 0026 0B       		.uleb128 0xb
+ 644 0027 3E       		.uleb128 0x3e
+ 645 0028 0B       		.uleb128 0xb
+ 646 0029 00       		.byte	0x0
+ 647 002a 00       		.byte	0x0
+ 648 002b 04       		.uleb128 0x4
+ 649 002c 24       		.uleb128 0x24
+ 650 002d 00       		.byte	0x0
+ 651 002e 03       		.uleb128 0x3
+ 652 002f 08       		.uleb128 0x8
+ 653 0030 0B       		.uleb128 0xb
+ 654 0031 0B       		.uleb128 0xb
+ 655 0032 3E       		.uleb128 0x3e
+ 656 0033 0B       		.uleb128 0xb
+ 657 0034 00       		.byte	0x0
+ 658 0035 00       		.byte	0x0
+ 659 0036 05       		.uleb128 0x5
+ 660 0037 2E       		.uleb128 0x2e
+ 661 0038 01       		.byte	0x1
+ 662 0039 01       		.uleb128 0x1
+ 663 003a 13       		.uleb128 0x13
+ 664 003b 3F       		.uleb128 0x3f
+ 665 003c 0C       		.uleb128 0xc
+ 666 003d 03       		.uleb128 0x3
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 17
 
 
- 667 0042 3F       		.uleb128 0x3f
- 668 0043 0C       		.uleb128 0xc
- 669 0044 03       		.uleb128 0x3
- 670 0045 0E       		.uleb128 0xe
- 671 0046 3A       		.uleb128 0x3a
- 672 0047 0B       		.uleb128 0xb
- 673 0048 3B       		.uleb128 0x3b
- 674 0049 0B       		.uleb128 0xb
- 675 004a 27       		.uleb128 0x27
- 676 004b 0C       		.uleb128 0xc
- 677 004c 49       		.uleb128 0x49
- 678 004d 13       		.uleb128 0x13
- 679 004e 11       		.uleb128 0x11
- 680 004f 01       		.uleb128 0x1
- 681 0050 12       		.uleb128 0x12
- 682 0051 01       		.uleb128 0x1
- 683 0052 40       		.uleb128 0x40
- 684 0053 06       		.uleb128 0x6
- 685 0054 01       		.uleb128 0x1
- 686 0055 13       		.uleb128 0x13
- 687 0056 00       		.byte	0x0
- 688 0057 00       		.byte	0x0
- 689 0058 07       		.uleb128 0x7
- 690 0059 34       		.uleb128 0x34
- 691 005a 00       		.byte	0x0
- 692 005b 03       		.uleb128 0x3
- 693 005c 0E       		.uleb128 0xe
- 694 005d 3A       		.uleb128 0x3a
- 695 005e 0B       		.uleb128 0xb
- 696 005f 3B       		.uleb128 0x3b
- 697 0060 0B       		.uleb128 0xb
- 698 0061 49       		.uleb128 0x49
- 699 0062 13       		.uleb128 0x13
- 700 0063 02       		.uleb128 0x2
- 701 0064 06       		.uleb128 0x6
- 702 0065 00       		.byte	0x0
- 703 0066 00       		.byte	0x0
- 704 0067 08       		.uleb128 0x8
- 705 0068 34       		.uleb128 0x34
- 706 0069 00       		.byte	0x0
- 707 006a 03       		.uleb128 0x3
- 708 006b 0E       		.uleb128 0xe
- 709 006c 3A       		.uleb128 0x3a
- 710 006d 0B       		.uleb128 0xb
- 711 006e 3B       		.uleb128 0x3b
- 712 006f 0B       		.uleb128 0xb
- 713 0070 49       		.uleb128 0x49
- 714 0071 13       		.uleb128 0x13
- 715 0072 02       		.uleb128 0x2
- 716 0073 0A       		.uleb128 0xa
- 717 0074 00       		.byte	0x0
- 718 0075 00       		.byte	0x0
- 719 0076 09       		.uleb128 0x9
- 720 0077 34       		.uleb128 0x34
- 721 0078 00       		.byte	0x0
- 722 0079 03       		.uleb128 0x3
- 723 007a 0E       		.uleb128 0xe
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 18
+ 667 003e 0E       		.uleb128 0xe
+ 668 003f 3A       		.uleb128 0x3a
+ 669 0040 0B       		.uleb128 0xb
+ 670 0041 3B       		.uleb128 0x3b
+ 671 0042 0B       		.uleb128 0xb
+ 672 0043 27       		.uleb128 0x27
+ 673 0044 0C       		.uleb128 0xc
+ 674 0045 49       		.uleb128 0x49
+ 675 0046 13       		.uleb128 0x13
+ 676 0047 11       		.uleb128 0x11
+ 677 0048 01       		.uleb128 0x1
+ 678 0049 12       		.uleb128 0x12
+ 679 004a 01       		.uleb128 0x1
+ 680 004b 40       		.uleb128 0x40
+ 681 004c 06       		.uleb128 0x6
+ 682 004d 00       		.byte	0x0
+ 683 004e 00       		.byte	0x0
+ 684 004f 06       		.uleb128 0x6
+ 685 0050 34       		.uleb128 0x34
+ 686 0051 00       		.byte	0x0
+ 687 0052 03       		.uleb128 0x3
+ 688 0053 0E       		.uleb128 0xe
+ 689 0054 3A       		.uleb128 0x3a
+ 690 0055 0B       		.uleb128 0xb
+ 691 0056 3B       		.uleb128 0x3b
+ 692 0057 0B       		.uleb128 0xb
+ 693 0058 49       		.uleb128 0x49
+ 694 0059 13       		.uleb128 0x13
+ 695 005a 02       		.uleb128 0x2
+ 696 005b 06       		.uleb128 0x6
+ 697 005c 00       		.byte	0x0
+ 698 005d 00       		.byte	0x0
+ 699 005e 07       		.uleb128 0x7
+ 700 005f 34       		.uleb128 0x34
+ 701 0060 00       		.byte	0x0
+ 702 0061 03       		.uleb128 0x3
+ 703 0062 0E       		.uleb128 0xe
+ 704 0063 3A       		.uleb128 0x3a
+ 705 0064 0B       		.uleb128 0xb
+ 706 0065 3B       		.uleb128 0x3b
+ 707 0066 0B       		.uleb128 0xb
+ 708 0067 49       		.uleb128 0x49
+ 709 0068 13       		.uleb128 0x13
+ 710 0069 02       		.uleb128 0x2
+ 711 006a 0A       		.uleb128 0xa
+ 712 006b 00       		.byte	0x0
+ 713 006c 00       		.byte	0x0
+ 714 006d 08       		.uleb128 0x8
+ 715 006e 34       		.uleb128 0x34
+ 716 006f 00       		.byte	0x0
+ 717 0070 03       		.uleb128 0x3
+ 718 0071 0E       		.uleb128 0xe
+ 719 0072 3A       		.uleb128 0x3a
+ 720 0073 0B       		.uleb128 0xb
+ 721 0074 3B       		.uleb128 0x3b
+ 722 0075 0B       		.uleb128 0xb
+ 723 0076 49       		.uleb128 0x49
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 18
 
 
- 724 007b 3A       		.uleb128 0x3a
- 725 007c 0B       		.uleb128 0xb
- 726 007d 3B       		.uleb128 0x3b
- 727 007e 0B       		.uleb128 0xb
- 728 007f 49       		.uleb128 0x49
- 729 0080 13       		.uleb128 0x13
- 730 0081 00       		.byte	0x0
- 731 0082 00       		.byte	0x0
- 732 0083 0A       		.uleb128 0xa
- 733 0084 01       		.uleb128 0x1
- 734 0085 01       		.byte	0x1
- 735 0086 49       		.uleb128 0x49
- 736 0087 13       		.uleb128 0x13
- 737 0088 01       		.uleb128 0x1
- 738 0089 13       		.uleb128 0x13
- 739 008a 00       		.byte	0x0
- 740 008b 00       		.byte	0x0
- 741 008c 0B       		.uleb128 0xb
- 742 008d 21       		.uleb128 0x21
- 743 008e 00       		.byte	0x0
- 744 008f 49       		.uleb128 0x49
- 745 0090 13       		.uleb128 0x13
- 746 0091 2F       		.uleb128 0x2f
- 747 0092 0B       		.uleb128 0xb
- 748 0093 00       		.byte	0x0
- 749 0094 00       		.byte	0x0
- 750 0095 0C       		.uleb128 0xc
- 751 0096 01       		.uleb128 0x1
- 752 0097 01       		.byte	0x1
- 753 0098 49       		.uleb128 0x49
- 754 0099 13       		.uleb128 0x13
- 755 009a 00       		.byte	0x0
- 756 009b 00       		.byte	0x0
- 757 009c 00       		.byte	0x0
- 758              		.section	.debug_pubnames,"",%progbits
- 759 0000 1D000000 		.4byte	0x1d
- 760 0004 0200     		.2byte	0x2
- 761 0006 00000000 		.4byte	.Ldebug_info0
- 762 000a 1A010000 		.4byte	0x11a
- 763 000e 8B000000 		.4byte	0x8b
- 764 0012 74657374 		.ascii	"testEEPROM\000"
- 764      45455052 
- 764      4F4D00
- 765 001d 00000000 		.4byte	0x0
- 766              		.section	.debug_aranges,"",%progbits
- 767 0000 1C000000 		.4byte	0x1c
- 768 0004 0200     		.2byte	0x2
- 769 0006 00000000 		.4byte	.Ldebug_info0
- 770 000a 04       		.byte	0x4
- 771 000b 00       		.byte	0x0
- 772 000c 0000     		.2byte	0x0
- 773 000e 0000     		.2byte	0x0
- 774 0010 00000000 		.4byte	.Ltext0
- 775 0014 58020000 		.4byte	.Letext0-.Ltext0
- 776 0018 00000000 		.4byte	0x0
- 777 001c 00000000 		.4byte	0x0
- 778              		.section	.debug_str,"MS",%progbits,1
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 19
+ 724 0077 13       		.uleb128 0x13
+ 725 0078 00       		.byte	0x0
+ 726 0079 00       		.byte	0x0
+ 727 007a 09       		.uleb128 0x9
+ 728 007b 01       		.uleb128 0x1
+ 729 007c 01       		.byte	0x1
+ 730 007d 01       		.uleb128 0x1
+ 731 007e 13       		.uleb128 0x13
+ 732 007f 49       		.uleb128 0x49
+ 733 0080 13       		.uleb128 0x13
+ 734 0081 00       		.byte	0x0
+ 735 0082 00       		.byte	0x0
+ 736 0083 0A       		.uleb128 0xa
+ 737 0084 21       		.uleb128 0x21
+ 738 0085 00       		.byte	0x0
+ 739 0086 49       		.uleb128 0x49
+ 740 0087 13       		.uleb128 0x13
+ 741 0088 2F       		.uleb128 0x2f
+ 742 0089 0B       		.uleb128 0xb
+ 743 008a 00       		.byte	0x0
+ 744 008b 00       		.byte	0x0
+ 745 008c 0B       		.uleb128 0xb
+ 746 008d 01       		.uleb128 0x1
+ 747 008e 01       		.byte	0x1
+ 748 008f 49       		.uleb128 0x49
+ 749 0090 13       		.uleb128 0x13
+ 750 0091 00       		.byte	0x0
+ 751 0092 00       		.byte	0x0
+ 752 0093 00       		.byte	0x0
+ 753              		.section	.debug_pubnames,"",%progbits
+ 754 0000 1D000000 		.4byte	0x1d
+ 755 0004 0200     		.2byte	0x2
+ 756 0006 00000000 		.4byte	.Ldebug_info0
+ 757 000a 1E010000 		.4byte	0x11e
+ 758 000e 8F000000 		.4byte	0x8f
+ 759 0012 74657374 		.ascii	"testEEPROM\000"
+ 759      45455052 
+ 759      4F4D00
+ 760 001d 00000000 		.4byte	0x0
+ 761              		.section	.debug_aranges,"",%progbits
+ 762 0000 1C000000 		.4byte	0x1c
+ 763 0004 0200     		.2byte	0x2
+ 764 0006 00000000 		.4byte	.Ldebug_info0
+ 765 000a 04       		.byte	0x4
+ 766 000b 00       		.byte	0x0
+ 767 000c 0000     		.2byte	0x0
+ 768 000e 0000     		.2byte	0x0
+ 769 0010 00000000 		.4byte	.Ltext0
+ 770 0014 5C020000 		.4byte	.Letext0-.Ltext0
+ 771 0018 00000000 		.4byte	0x0
+ 772 001c 00000000 		.4byte	0x0
+ 773              		.section	.debug_str,"MS",%progbits,1
+ 774              	.LASF4:
+ 775 0000 73686F72 		.ascii	"short int\000"
+ 775      7420696E 
+ 775      7400
+ 776              	.LASF14:
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 19
 
 
- 779              	.LASF6:
- 780 0000 6C6F6E67 		.ascii	"long long int\000"
- 780      206C6F6E 
- 780      6720696E 
- 780      7400
- 781              	.LASF10:
- 782 000e 65657072 		.ascii	"eepromTestResultOK\000"
- 782      6F6D5465 
- 782      73745265 
- 782      73756C74 
- 782      4F4B00
- 783              	.LASF2:
- 784 0021 756E7369 		.ascii	"unsigned int\000"
- 784      676E6564 
- 784      20696E74 
- 784      00
- 785              	.LASF11:
- 786 002e 74657374 		.ascii	"testString1\000"
- 786      53747269 
- 786      6E673100 
- 787              	.LASF12:
- 788 003a 74657374 		.ascii	"testString2\000"
- 788      53747269 
- 788      6E673200 
- 789              	.LASF18:
- 790 0046 6572726F 		.ascii	"errorCode\000"
- 790      72436F64 
- 790      6500
- 791              	.LASF14:
- 792 0050 474E5520 		.ascii	"GNU C 4.2.2\000"
- 792      4320342E 
- 792      322E3200 
- 793              	.LASF9:
- 794 005c 6C6F6E67 		.ascii	"long long unsigned int\000"
- 794      206C6F6E 
- 794      6720756E 
- 794      7369676E 
- 794      65642069 
- 795              	.LASF13:
- 796 0073 74657374 		.ascii	"testBuf\000"
- 796      42756600 
- 797              	.LASF17:
- 798 007b 74657374 		.ascii	"testEEPROM\000"
- 798      45455052 
- 798      4F4D00
- 799              	.LASF0:
- 800 0086 756E7369 		.ascii	"unsigned char\000"
- 800      676E6564 
- 800      20636861 
- 800      7200
- 801              	.LASF15:
- 802 0094 65657072 		.ascii	"eepromTest.c\000"
- 802      6F6D5465 
- 802      73742E63 
- 802      00
- 803              	.LASF8:
- 804 00a1 63686172 		.ascii	"char\000"
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 20
+ 777 000a 6572726F 		.ascii	"errorCode\000"
+ 777      72436F64 
+ 777      6500
+ 778              	.LASF9:
+ 779 0014 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 779      206C6F6E 
+ 779      6720756E 
+ 779      7369676E 
+ 779      65642069 
+ 780              	.LASF13:
+ 781 002b 74657374 		.ascii	"testBuf\000"
+ 781      42756600 
+ 782              	.LASF15:
+ 783 0033 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 783      4320342E 
+ 783      312E3100 
+ 784              	.LASF3:
+ 785 003f 7369676E 		.ascii	"signed char\000"
+ 785      65642063 
+ 785      68617200 
+ 786              	.LASF6:
+ 787 004b 6C6F6E67 		.ascii	"long long int\000"
+ 787      206C6F6E 
+ 787      6720696E 
+ 787      7400
+ 788              	.LASF5:
+ 789 0059 6C6F6E67 		.ascii	"long int\000"
+ 789      20696E74 
+ 789      00
+ 790              	.LASF16:
+ 791 0062 65657072 		.ascii	"eepromTest.c\000"
+ 791      6F6D5465 
+ 791      73742E63 
+ 791      00
+ 792              	.LASF12:
+ 793 006f 74657374 		.ascii	"testString2\000"
+ 793      53747269 
+ 793      6E673200 
+ 794              	.LASF0:
+ 795 007b 756E7369 		.ascii	"unsigned char\000"
+ 795      676E6564 
+ 795      20636861 
+ 795      7200
+ 796              	.LASF11:
+ 797 0089 74657374 		.ascii	"testString1\000"
+ 797      53747269 
+ 797      6E673100 
+ 798              	.LASF2:
+ 799 0095 756E7369 		.ascii	"unsigned int\000"
+ 799      676E6564 
+ 799      20696E74 
+ 799      00
+ 800              	.LASF1:
+ 801 00a2 73686F72 		.ascii	"short unsigned int\000"
+ 801      7420756E 
+ 801      7369676E 
+ 801      65642069 
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 20
 
 
- 804      00
- 805              	.LASF5:
- 806 00a6 6C6F6E67 		.ascii	"long int\000"
- 806      20696E74 
- 806      00
- 807              	.LASF7:
- 808 00af 6C6F6E67 		.ascii	"long unsigned int\000"
- 808      20756E73 
- 808      69676E65 
- 808      6420696E 
- 808      7400
- 809              	.LASF1:
- 810 00c1 73686F72 		.ascii	"short unsigned int\000"
- 810      7420756E 
- 810      7369676E 
- 810      65642069 
- 810      6E7400
- 811              	.LASF3:
- 812 00d4 7369676E 		.ascii	"signed char\000"
- 812      65642063 
- 812      68617200 
- 813              	.LASF16:
- 814 00e0 2F637967 		.ascii	"/cygdrive/c/Users/Anders/Fr\345n Gamla Datorn/Mina "
- 814      64726976 
- 814      652F632F 
- 814      55736572 
- 814      732F416E 
- 815 0110 646F6B75 		.ascii	"dokument/Embedded Artists/Products/Education boards"
- 815      6D656E74 
- 815      2F456D62 
- 815      65646465 
- 815      64204172 
- 816 0143 2F4C5043 		.ascii	"/LPC2138 EDU/testPrograms/productionTest\000"
- 816      32313338 
- 816      20454455 
- 816      2F746573 
- 816      7450726F 
- 817              	.LASF4:
- 818 016c 73686F72 		.ascii	"short int\000"
- 818      7420696E 
- 818      7400
- 819              		.ident	"GCC: (GNU) 4.2.2"
-ARM GAS  /cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s 			page 21
+ 801      6E7400
+ 802              	.LASF8:
+ 803 00b5 63686172 		.ascii	"char\000"
+ 803      00
+ 804              	.LASF17:
+ 805 00ba 2F637967 		.ascii	"/cygdrive/c/Embedded/eclipse/Demo/2138\000"
+ 805      64726976 
+ 805      652F632F 
+ 805      456D6265 
+ 805      64646564 
+ 806              	.LASF7:
+ 807 00e1 6C6F6E67 		.ascii	"long unsigned int\000"
+ 807      20756E73 
+ 807      69676E65 
+ 807      6420696E 
+ 807      7400
+ 808              	.LASF18:
+ 809 00f3 74657374 		.ascii	"testEEPROM\000"
+ 809      45455052 
+ 809      4F4D00
+ 810              	.LASF10:
+ 811 00fe 65657072 		.ascii	"eepromTestResultOK\000"
+ 811      6F6D5465 
+ 811      73745265 
+ 811      73756C74 
+ 811      4F4B00
+ 812              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s 			page 21
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 eepromTest.c
-/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s:1      .text:00000000 $t
-/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s:65     .text:00000000 testEEPROM
-/cygdrive/c/Users/Anders/AppData/Local/Temp/ccJzgnhA.s:373    .text:0000021c $d
+/cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s:1      .text:00000000 $t
+/cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s:65     .text:00000000 testEEPROM
+/cygdrive/c/Users/embedded/AppData/Local/Temp/cc3Yu0KJ.s:376    .text:00000220 $d
 
 UNDEFINED SYMBOLS
 memcpy
