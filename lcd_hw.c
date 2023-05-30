@@ -14,8 +14,7 @@
 /******************************************************************************
  * Includes
  *****************************************************************************/
-#include "../pre_emptive_os/api/osapi.h"
-#include "../pre_emptive_os/api/general.h"
+#include "general.h"
 #include <lpc2xxx.h>
 #include "lcd_hw.h"
 
@@ -48,12 +47,16 @@ sendToLCD(tU8 firstBit, tU8 data)
 {
   //disable SPI
   IOCLR = LCD_CLK;
-  PINSEL0 &= 0xffffc0ff;
+  PINSEL0 &= 0xffffc0ffU;
   
-  if (1 == firstBit)
+  if ((tU8)1 == firstBit)
+  {
     IOSET = LCD_MOSI;   //set MOSI
+  }
   else
+  {
     IOCLR = LCD_MOSI;   //reset MOSI
+  }
   
   //Set clock high
   IOSET = LCD_CLK;
@@ -74,7 +77,9 @@ sendToLCD(tU8 firstBit, tU8 data)
   //send byte
   SPI_SPDR = data;
   while((SPI_SPSR & 0x80) == 0)
+  {
     ;
+  }
 }
 
 
@@ -111,7 +116,11 @@ void
 selectLCD(tBool select)
 {
   if (TRUE == select)
+  {
     IOCLR = LCD_CS;
+  }
   else
+  {
     IOSET = LCD_CS;
+  }
 }

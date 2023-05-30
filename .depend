@@ -1,28 +1,20 @@
-main.o: main.c pre_emptive_os/api/osapi.h \
-  pre_emptive_os/api/../api/general.h pre_emptive_os/api/general.h \
-  startup/printf_P.h startup/config.h startup/consol.h startup/ea_init.h \
-  startup/lpc2xxx.h startup/consol.h i2c.h adc.h \
-  startup/../pre_emptive_os/api/general.h lcd.h pca9532.h \
-  startup/general.h ea_97x60c.h
-eepromTest.o: eepromTest.c pre_emptive_os/api/general.h startup/lpc2xxx.h \
-  startup/config.h startup/printf_P.h startup/config.h startup/consol.h \
-  eeprom.h i2c.h
-eeprom.o: eeprom.c startup/general.h i2c.h
-i2c.o: i2c.c startup/general.h i2c.h startup/lpc2xxx.h
-adc.o: adc.c pre_emptive_os/api/osapi.h \
-  pre_emptive_os/api/../api/general.h pre_emptive_os/api/general.h \
-  startup/printf_P.h startup/config.h startup/consol.h startup/lpc2xxx.h \
-  startup/config.h adc.h startup/../pre_emptive_os/api/general.h
-pca9532.o: pca9532.c startup/../pre_emptive_os/api/osapi.h \
-  startup/../pre_emptive_os/api/../api/general.h \
-  startup/../pre_emptive_os/api/general.h startup/lpc2xxx.h \
-  startup/printf_P.h startup/config.h startup/consol.h i2c.h eeprom.h \
-  pca9532.h startup/general.h
-lcd.o: lcd.c startup/../pre_emptive_os/api/general.h \
-  startup/../pre_emptive_os/api/osapi.h \
-  startup/../pre_emptive_os/api/../api/general.h lcd.h ascii.h lcd_hw.h \
-  startup/general.h startup/lpc2xxx.h
-lcd_hw.o: lcd_hw.c startup/../pre_emptive_os/api/osapi.h \
-  startup/../pre_emptive_os/api/../api/general.h \
-  startup/../pre_emptive_os/api/general.h startup/lpc2xxx.h lcd_hw.h \
-  startup/general.h
+main.o: main.c general.h startup/lpc2xxx.h startup/printf_P.h \
+ startup/config.h startup/consol.h startup/printf_init.h startup/consol.h \
+ startup/config.h irq/irq_handler.h timer.h VIC.h i2c.h lm75.h \
+ additional.h lcd.h lcd_hw.h htu21df.h bmp180.h tsl2561.h pca9532.h \
+ Common_Def.h
+i2c.o: i2c.c i2c.h general.h startup/lpc2xxx.h
+lm75.o: lm75.c lm75.h general.h i2c.h startup/lpc2xxx.h additional.h \
+ startup/config.h lcd.h lcd_hw.h
+additional.o: additional.c additional.h general.h startup/lpc2xxx.h \
+ startup/config.h
+lcd.o: lcd.c lcd.h general.h lcd_hw.h startup/lpc2xxx.h
+lcd_hw.o: lcd_hw.c general.h startup/lpc2xxx.h lcd_hw.h
+pca9532.o: pca9532.c general.h startup/lpc2xxx.h startup/printf_P.h \
+ startup/config.h startup/consol.h i2c.h pca9532.h eeprom.h
+eeprom.o: eeprom.c eeprom.h general.h i2c.h startup/lpc2xxx.h
+htu21df.o: htu21df.c htu21df.h general.h additional.h startup/lpc2xxx.h \
+ startup/config.h i2c.h
+tsl2561.o: tsl2561.c tsl2561.h general.h
+bmp180.o: bmp180.c bmp180.h general.h additional.h startup/lpc2xxx.h \
+ startup/config.h

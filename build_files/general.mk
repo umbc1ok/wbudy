@@ -18,12 +18,12 @@ endif
 #----------------------------------------------------------------------
 # TOOL DEFINITIONS
 #----------------------------------------------------------------------
-TOOLTARGET      = arm-elf
+TOOLTARGET      = c:/Embedded/Tools/bin/arm-none-eabi
 AR              = $(TOOLTARGET)-ar
 AS              = $(TOOLTARGET)-gcc
 AWK             = gawk
 CC              = $(TOOLTARGET)-gcc
-LD              = $(TOOLTARGET)-gcc
+LD              = $(TOOLTARGET)-g++
 OBJCOPY         = $(TOOLTARGET)-objcopy
 RANLIB          = $(TOOLTARGET)-ranlib
 RM              = rm -f
@@ -73,12 +73,16 @@ endif
 #----------------------------------------------------------------------
 # COMPILER AND ASSEMBLER OPTIONS
 #----------------------------------------------------------------------
-W_OPTS    = -Wall -Wcast-align -Wcast-qual -Wimplicit \
-            -Wnested-externs -Wpointer-arith -Wswitch \
-            -Wreturn-type 
+#W_OPTS    = -Wall -Wcast-align -Wcast-qual -Wimplicit \
+#            -Wnested-externs -Wpointer-arith -Wswitch \
+#            -Wreturn-type 
 # -Wshadow -Wunused
 # -Wmissing-declarations -Wmissing-prototypes -Wredundant-decls -Wstrict-prototypes
-
+#W_OPTS    = -Wall -Wcast-align -Wcast-qual -Wimplicit \
+#            -Wnested-externs -Wpointer-arith -Wswitch \
+#            -Wreturn-type \
+#			-Wformat -Wformat-security\
+#			-Werror -Wextra -pedantic
 CPU       = arm7tdmi
 OPTS      = -mcpu=$(CPU) $(THUMB_IW)
 CA_OPTS   = $(OPTS) $(INC) -DEL -DGCC $(THUMB_IW) $(T_FLAGS) $(EFLAGS) -D$(CPU_VARIANT) $(RAM_EXEC)
@@ -513,9 +517,9 @@ endif
 endif
 
 ifndef LD_SCRIPT_PATH
-LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref
+LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref  -specs=nano.specs -specs=nosys.specs
 else
-LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT_PATH)/$(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref
+LD_OPTS   = $(OPTS) $(EFLAGS) -nostartfiles -T $(LD_SCRIPT_PATH)/$(LD_SCRIPT) -o $(NAME).elf -Wl,-Map=$(NAME).map,--cref  -specs=nano.specs -specs=nosys.specs
 endif
 
 #----------------------------------------------------------------------

@@ -6,6 +6,8 @@
  * Description:
  *    Framework specific implementation of consol
  *
+ * Change log:
+ *    1.12.2016: MM: modified for c++ support
  *****************************************************************************/
 
 
@@ -43,6 +45,9 @@
 #define UART_DLM UART1_DLM     //RW - Divisor Latch MSB (DLAB = 1)
 #endif
 
+#ifdef __cplusplus  
+extern "C" {
+#endif
 /******************************************************************************
  * Public functions
  *****************************************************************************/
@@ -201,6 +206,9 @@ int consolGetIntNum(void);
  *
  ****************************************************************************/
 void consolScanf(char *pFmt, ...);
+#ifdef __cplusplus  
+}
+#endif
 
 
 #endif

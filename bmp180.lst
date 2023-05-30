@@ -1,0 +1,3109 @@
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"bmp180.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	__aeabi_lmul
+  16              		.global	__aeabi_ldivmod
+  17              		.global	__aeabi_uldivmod
+  18              		.align	1
+  19              		.global	calculatePressure
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  23              		.fpu softvfp
+  24              		.type	calculatePressure, %function
+  25              	calculatePressure:
+  26              	.LFB0:
+  27              		.file 1 "bmp180.c"
+   1:bmp180.c      **** /*
+   2:bmp180.c      ****     Plik, zawierajcy kod źródłowy funkcji przeznaczonych
+   3:bmp180.c      ****     do obsługi czujnika ciśnienia BMP180.
+   4:bmp180.c      **** */
+   5:bmp180.c      **** 
+   6:bmp180.c      **** #include "bmp180.h"
+   7:bmp180.c      **** 
+   8:bmp180.c      **** tS64 calculatePressure(tU64 readPress, tU64 readTemp, tU16 *calibrationArray, tU8 pressureOss)
+   9:bmp180.c      **** {
+  28              		.loc 1 9 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 8, pretend = 0, frame = 392
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 20
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 E3B0     		sub	sp, sp, #396
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 416
+  44 0004 00AF     		add	r7, sp, #0
+  45              	.LCFI2:
+  46              		.cfi_def_cfa_register 7
+  47 0006 8C24     		movs	r4, #140
+  48 0008 6400     		lsls	r4, r4, #1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 2
+
+
+  49 000a 3C19     		adds	r4, r7, r4
+  50 000c 2060     		str	r0, [r4]
+  51 000e 6160     		str	r1, [r4, #4]
+  52 0010 8821     		movs	r1, #136
+  53 0012 4900     		lsls	r1, r1, #1
+  54 0014 7918     		adds	r1, r7, r1
+  55 0016 0A60     		str	r2, [r1]
+  56 0018 4B60     		str	r3, [r1, #4]
+  10:bmp180.c      ****     // Compensation data read from BMP180 EEPROM.
+  11:bmp180.c      ****     tS16 AC1;
+  12:bmp180.c      ****     tS16 AC2;
+  13:bmp180.c      ****     tS16 AC3;
+  14:bmp180.c      ****     tS16 B1;
+  15:bmp180.c      ****     tS16 B2;
+  16:bmp180.c      ****     tS16 MB;
+  17:bmp180.c      ****     tS16 MC;
+  18:bmp180.c      ****     tS16 MD;
+  19:bmp180.c      ****     tU16 AC4; 
+  20:bmp180.c      ****     tU16 AC5;
+  21:bmp180.c      ****     tU16 AC6;
+  22:bmp180.c      **** 
+  23:bmp180.c      ****     // Getting coefficient value with correct types, according to documentation.
+  24:bmp180.c      **** 
+  25:bmp180.c      ****     AC1 = calibrationArray[0];
+  57              		.loc 1 25 0
+  58 001a 9021     		movs	r1, #144
+  59 001c 8823     		movs	r3, #136
+  60 001e 5B00     		lsls	r3, r3, #1
+  61 0020 FB18     		adds	r3, r7, r3
+  62 0022 5B18     		adds	r3, r3, r1
+  63 0024 1B68     		ldr	r3, [r3]
+  64 0026 1B88     		ldrh	r3, [r3]
+  65 0028 6E22     		movs	r2, #110
+  66 002a 8820     		movs	r0, #136
+  67 002c 4000     		lsls	r0, r0, #1
+  68 002e 8446     		mov	ip, r0
+  69 0030 BC44     		add	ip, ip, r7
+  70 0032 6244     		add	r2, r2, ip
+  71 0034 1380     		strh	r3, [r2]
+  26:bmp180.c      ****     AC2 = calibrationArray[1];
+  72              		.loc 1 26 0
+  73 0036 8823     		movs	r3, #136
+  74 0038 5B00     		lsls	r3, r3, #1
+  75 003a FB18     		adds	r3, r7, r3
+  76 003c 5B18     		adds	r3, r3, r1
+  77 003e 1B68     		ldr	r3, [r3]
+  78 0040 0233     		adds	r3, r3, #2
+  79 0042 1B88     		ldrh	r3, [r3]
+  80 0044 6C22     		movs	r2, #108
+  81 0046 8820     		movs	r0, #136
+  82 0048 4000     		lsls	r0, r0, #1
+  83 004a 8446     		mov	ip, r0
+  84 004c BC44     		add	ip, ip, r7
+  85 004e 6244     		add	r2, r2, ip
+  86 0050 1380     		strh	r3, [r2]
+  27:bmp180.c      ****     AC3 = calibrationArray[2];
+  87              		.loc 1 27 0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 3
+
+
+  88 0052 8823     		movs	r3, #136
+  89 0054 5B00     		lsls	r3, r3, #1
+  90 0056 FB18     		adds	r3, r7, r3
+  91 0058 5B18     		adds	r3, r3, r1
+  92 005a 1B68     		ldr	r3, [r3]
+  93 005c 0433     		adds	r3, r3, #4
+  94 005e 1B88     		ldrh	r3, [r3]
+  95 0060 6A22     		movs	r2, #106
+  96 0062 8820     		movs	r0, #136
+  97 0064 4000     		lsls	r0, r0, #1
+  98 0066 8446     		mov	ip, r0
+  99 0068 BC44     		add	ip, ip, r7
+ 100 006a 6244     		add	r2, r2, ip
+ 101 006c 1380     		strh	r3, [r2]
+  28:bmp180.c      ****     AC4 = calibrationArray[3];
+ 102              		.loc 1 28 0
+ 103 006e 6823     		movs	r3, #104
+ 104 0070 8822     		movs	r2, #136
+ 105 0072 5200     		lsls	r2, r2, #1
+ 106 0074 BA18     		adds	r2, r7, r2
+ 107 0076 D218     		adds	r2, r2, r3
+ 108 0078 8823     		movs	r3, #136
+ 109 007a 5B00     		lsls	r3, r3, #1
+ 110 007c FB18     		adds	r3, r7, r3
+ 111 007e 5B18     		adds	r3, r3, r1
+ 112 0080 1B68     		ldr	r3, [r3]
+ 113 0082 DB88     		ldrh	r3, [r3, #6]
+ 114 0084 1380     		strh	r3, [r2]
+  29:bmp180.c      ****     AC5 = calibrationArray[4];
+ 115              		.loc 1 29 0
+ 116 0086 6624     		movs	r4, #102
+ 117 0088 8823     		movs	r3, #136
+ 118 008a 5B00     		lsls	r3, r3, #1
+ 119 008c FB18     		adds	r3, r7, r3
+ 120 008e 1A19     		adds	r2, r3, r4
+ 121 0090 8823     		movs	r3, #136
+ 122 0092 5B00     		lsls	r3, r3, #1
+ 123 0094 FB18     		adds	r3, r7, r3
+ 124 0096 5B18     		adds	r3, r3, r1
+ 125 0098 1B68     		ldr	r3, [r3]
+ 126 009a 1B89     		ldrh	r3, [r3, #8]
+ 127 009c 1380     		strh	r3, [r2]
+  30:bmp180.c      ****     AC6 = calibrationArray[5];
+ 128              		.loc 1 30 0
+ 129 009e 6420     		movs	r0, #100
+ 130 00a0 8823     		movs	r3, #136
+ 131 00a2 5B00     		lsls	r3, r3, #1
+ 132 00a4 FB18     		adds	r3, r7, r3
+ 133 00a6 1A18     		adds	r2, r3, r0
+ 134 00a8 8823     		movs	r3, #136
+ 135 00aa 5B00     		lsls	r3, r3, #1
+ 136 00ac FB18     		adds	r3, r7, r3
+ 137 00ae 5B18     		adds	r3, r3, r1
+ 138 00b0 1B68     		ldr	r3, [r3]
+ 139 00b2 5B89     		ldrh	r3, [r3, #10]
+ 140 00b4 1380     		strh	r3, [r2]
+  31:bmp180.c      ****     B1 = calibrationArray[6];
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 4
+
+
+ 141              		.loc 1 31 0
+ 142 00b6 8823     		movs	r3, #136
+ 143 00b8 5B00     		lsls	r3, r3, #1
+ 144 00ba FB18     		adds	r3, r7, r3
+ 145 00bc 5B18     		adds	r3, r3, r1
+ 146 00be 1B68     		ldr	r3, [r3]
+ 147 00c0 0C33     		adds	r3, r3, #12
+ 148 00c2 1B88     		ldrh	r3, [r3]
+ 149 00c4 6222     		movs	r2, #98
+ 150 00c6 8824     		movs	r4, #136
+ 151 00c8 6400     		lsls	r4, r4, #1
+ 152 00ca A446     		mov	ip, r4
+ 153 00cc BC44     		add	ip, ip, r7
+ 154 00ce 6244     		add	r2, r2, ip
+ 155 00d0 1380     		strh	r3, [r2]
+  32:bmp180.c      ****     B2 = calibrationArray[7];
+ 156              		.loc 1 32 0
+ 157 00d2 8823     		movs	r3, #136
+ 158 00d4 5B00     		lsls	r3, r3, #1
+ 159 00d6 FB18     		adds	r3, r7, r3
+ 160 00d8 5B18     		adds	r3, r3, r1
+ 161 00da 1B68     		ldr	r3, [r3]
+ 162 00dc 0E33     		adds	r3, r3, #14
+ 163 00de 1B88     		ldrh	r3, [r3]
+ 164 00e0 6022     		movs	r2, #96
+ 165 00e2 8824     		movs	r4, #136
+ 166 00e4 6400     		lsls	r4, r4, #1
+ 167 00e6 A446     		mov	ip, r4
+ 168 00e8 BC44     		add	ip, ip, r7
+ 169 00ea 6244     		add	r2, r2, ip
+ 170 00ec 1380     		strh	r3, [r2]
+  33:bmp180.c      ****     MB = calibrationArray[8];
+ 171              		.loc 1 33 0
+ 172 00ee 8823     		movs	r3, #136
+ 173 00f0 5B00     		lsls	r3, r3, #1
+ 174 00f2 FB18     		adds	r3, r7, r3
+ 175 00f4 5B18     		adds	r3, r3, r1
+ 176 00f6 1B68     		ldr	r3, [r3]
+ 177 00f8 1033     		adds	r3, r3, #16
+ 178 00fa 1B88     		ldrh	r3, [r3]
+ 179 00fc 5E22     		movs	r2, #94
+ 180 00fe 8824     		movs	r4, #136
+ 181 0100 6400     		lsls	r4, r4, #1
+ 182 0102 A446     		mov	ip, r4
+ 183 0104 BC44     		add	ip, ip, r7
+ 184 0106 6244     		add	r2, r2, ip
+ 185 0108 1380     		strh	r3, [r2]
+  34:bmp180.c      ****     MC = calibrationArray[9];
+ 186              		.loc 1 34 0
+ 187 010a 8823     		movs	r3, #136
+ 188 010c 5B00     		lsls	r3, r3, #1
+ 189 010e FB18     		adds	r3, r7, r3
+ 190 0110 5B18     		adds	r3, r3, r1
+ 191 0112 1B68     		ldr	r3, [r3]
+ 192 0114 1233     		adds	r3, r3, #18
+ 193 0116 1B88     		ldrh	r3, [r3]
+ 194 0118 5C22     		movs	r2, #92
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 5
+
+
+ 195 011a 8824     		movs	r4, #136
+ 196 011c 6400     		lsls	r4, r4, #1
+ 197 011e A446     		mov	ip, r4
+ 198 0120 BC44     		add	ip, ip, r7
+ 199 0122 6244     		add	r2, r2, ip
+ 200 0124 1380     		strh	r3, [r2]
+  35:bmp180.c      ****     MD = calibrationArray[10];
+ 201              		.loc 1 35 0
+ 202 0126 8823     		movs	r3, #136
+ 203 0128 5B00     		lsls	r3, r3, #1
+ 204 012a FB18     		adds	r3, r7, r3
+ 205 012c 5B18     		adds	r3, r3, r1
+ 206 012e 1B68     		ldr	r3, [r3]
+ 207 0130 1433     		adds	r3, r3, #20
+ 208 0132 1B88     		ldrh	r3, [r3]
+ 209 0134 5A22     		movs	r2, #90
+ 210 0136 8821     		movs	r1, #136
+ 211 0138 4900     		lsls	r1, r1, #1
+ 212 013a 8C46     		mov	ip, r1
+ 213 013c BC44     		add	ip, ip, r7
+ 214 013e 6244     		add	r2, r2, ip
+ 215 0140 1380     		strh	r3, [r2]
+  36:bmp180.c      **** 
+  37:bmp180.c      ****     // Calculations for temperature.
+  38:bmp180.c      **** 
+  39:bmp180.c      ****     tS64 X1 = ((tS64)(((tS64)readTemp - (tS64)AC6) * (tS64)AC5) / (tS64)((tU64)1 << 15));
+ 216              		.loc 1 39 0
+ 217 0142 8823     		movs	r3, #136
+ 218 0144 5B00     		lsls	r3, r3, #1
+ 219 0146 FB18     		adds	r3, r7, r3
+ 220 0148 1968     		ldr	r1, [r3]
+ 221 014a 5A68     		ldr	r2, [r3, #4]
+ 222 014c 8823     		movs	r3, #136
+ 223 014e 5B00     		lsls	r3, r3, #1
+ 224 0150 FB18     		adds	r3, r7, r3
+ 225 0152 1B18     		adds	r3, r3, r0
+ 226 0154 1B88     		ldrh	r3, [r3]
+ 227 0156 1B04     		lsls	r3, r3, #16
+ 228 0158 1B0C     		lsrs	r3, r3, #16
+ 229 015a BB64     		str	r3, [r7, #72]
+ 230 015c 0023     		movs	r3, #0
+ 231 015e FB64     		str	r3, [r7, #76]
+ 232 0160 BB6C     		ldr	r3, [r7, #72]
+ 233 0162 FC6C     		ldr	r4, [r7, #76]
+ 234 0164 C91A     		subs	r1, r1, r3
+ 235 0166 A241     		sbcs	r2, r2, r4
+ 236 0168 0800     		movs	r0, r1
+ 237 016a 1100     		movs	r1, r2
+ 238 016c 6624     		movs	r4, #102
+ 239 016e 8823     		movs	r3, #136
+ 240 0170 5B00     		lsls	r3, r3, #1
+ 241 0172 FB18     		adds	r3, r7, r3
+ 242 0174 1B19     		adds	r3, r3, r4
+ 243 0176 1B88     		ldrh	r3, [r3]
+ 244 0178 1B04     		lsls	r3, r3, #16
+ 245 017a 1B0C     		lsrs	r3, r3, #16
+ 246 017c 3B64     		str	r3, [r7, #64]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 6
+
+
+ 247 017e 0023     		movs	r3, #0
+ 248 0180 7B64     		str	r3, [r7, #68]
+ 249 0182 3A6C     		ldr	r2, [r7, #64]
+ 250 0184 7B6C     		ldr	r3, [r7, #68]
+ 251 0186 FFF7FEFF 		bl	__aeabi_lmul
+ 252              	.LVL0:
+ 253 018a 0300     		movs	r3, r0
+ 254 018c 0C00     		movs	r4, r1
+ 255 018e 1900     		movs	r1, r3
+ 256 0190 2200     		movs	r2, r4
+ 257 0192 002A     		cmp	r2, #0
+ 258 0194 03DA     		bge	.L2
+ 259 0196 CA4B     		ldr	r3, .L41
+ 260 0198 0024     		movs	r4, #0
+ 261 019a C918     		adds	r1, r1, r3
+ 262 019c 6241     		adcs	r2, r2, r4
+ 263              	.L2:
+ 264 019e 5304     		lsls	r3, r2, #17
+ 265 01a0 C80B     		lsrs	r0, r1, #15
+ 266 01a2 E824     		movs	r4, #232
+ 267 01a4 3C19     		adds	r4, r7, r4
+ 268 01a6 2060     		str	r0, [r4]
+ 269 01a8 E820     		movs	r0, #232
+ 270 01aa 3818     		adds	r0, r7, r0
+ 271 01ac 0068     		ldr	r0, [r0]
+ 272 01ae 1843     		orrs	r0, r3
+ 273 01b0 E823     		movs	r3, #232
+ 274 01b2 FB18     		adds	r3, r7, r3
+ 275 01b4 1860     		str	r0, [r3]
+ 276 01b6 D313     		asrs	r3, r2, #15
+ 277 01b8 EC22     		movs	r2, #236
+ 278 01ba BA18     		adds	r2, r7, r2
+ 279 01bc 1360     		str	r3, [r2]
+ 280 01be E823     		movs	r3, #232
+ 281 01c0 FB18     		adds	r3, r7, r3
+ 282 01c2 5C68     		ldr	r4, [r3, #4]
+ 283 01c4 1B68     		ldr	r3, [r3]
+ 284 01c6 B022     		movs	r2, #176
+ 285 01c8 5200     		lsls	r2, r2, #1
+ 286 01ca BA18     		adds	r2, r7, r2
+ 287 01cc 1360     		str	r3, [r2]
+ 288 01ce 5460     		str	r4, [r2, #4]
+  40:bmp180.c      ****     //tS64 X2 = ((tS64)MC * ((tS64)1 << 11)) / (X1 + (tS64)MD);
+  41:bmp180.c      ****     tS64 X2 = ((tS64)MC * (tS64)((tU64)1 << 11)) / (X1 + (tS64)MD);
+ 289              		.loc 1 41 0
+ 290 01d0 5C23     		movs	r3, #92
+ 291 01d2 8822     		movs	r2, #136
+ 292 01d4 5200     		lsls	r2, r2, #1
+ 293 01d6 9446     		mov	ip, r2
+ 294 01d8 BC44     		add	ip, ip, r7
+ 295 01da 6344     		add	r3, r3, ip
+ 296 01dc 1B88     		ldrh	r3, [r3]
+ 297 01de 1B04     		lsls	r3, r3, #16
+ 298 01e0 1B14     		asrs	r3, r3, #16
+ 299 01e2 BB63     		str	r3, [r7, #56]
+ 300 01e4 DB17     		asrs	r3, r3, #31
+ 301 01e6 FB63     		str	r3, [r7, #60]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 7
+
+
+ 302 01e8 B96B     		ldr	r1, [r7, #56]
+ 303 01ea FA6B     		ldr	r2, [r7, #60]
+ 304 01ec 0B00     		movs	r3, r1
+ 305 01ee 5B0D     		lsrs	r3, r3, #21
+ 306 01f0 1000     		movs	r0, r2
+ 307 01f2 C002     		lsls	r0, r0, #11
+ 308 01f4 FC24     		movs	r4, #252
+ 309 01f6 3C19     		adds	r4, r7, r4
+ 310 01f8 2060     		str	r0, [r4]
+ 311 01fa FC20     		movs	r0, #252
+ 312 01fc 3818     		adds	r0, r7, r0
+ 313 01fe 0068     		ldr	r0, [r0]
+ 314 0200 1843     		orrs	r0, r3
+ 315 0202 FC23     		movs	r3, #252
+ 316 0204 FB18     		adds	r3, r7, r3
+ 317 0206 1860     		str	r0, [r3]
+ 318 0208 0B00     		movs	r3, r1
+ 319 020a DB02     		lsls	r3, r3, #11
+ 320 020c F822     		movs	r2, #248
+ 321 020e BA18     		adds	r2, r7, r2
+ 322 0210 1360     		str	r3, [r2]
+ 323 0212 5A23     		movs	r3, #90
+ 324 0214 8822     		movs	r2, #136
+ 325 0216 5200     		lsls	r2, r2, #1
+ 326 0218 9446     		mov	ip, r2
+ 327 021a BC44     		add	ip, ip, r7
+ 328 021c 6344     		add	r3, r3, ip
+ 329 021e 1B88     		ldrh	r3, [r3]
+ 330 0220 1B04     		lsls	r3, r3, #16
+ 331 0222 1B14     		asrs	r3, r3, #16
+ 332 0224 3B63     		str	r3, [r7, #48]
+ 333 0226 DB17     		asrs	r3, r3, #31
+ 334 0228 7B63     		str	r3, [r7, #52]
+ 335 022a B023     		movs	r3, #176
+ 336 022c 5B00     		lsls	r3, r3, #1
+ 337 022e FB18     		adds	r3, r7, r3
+ 338 0230 5C68     		ldr	r4, [r3, #4]
+ 339 0232 1B68     		ldr	r3, [r3]
+ 340 0234 396B     		ldr	r1, [r7, #48]
+ 341 0236 7A6B     		ldr	r2, [r7, #52]
+ 342 0238 C918     		adds	r1, r1, r3
+ 343 023a 6241     		adcs	r2, r2, r4
+ 344 023c 0B00     		movs	r3, r1
+ 345 023e 1400     		movs	r4, r2
+ 346 0240 1A00     		movs	r2, r3
+ 347 0242 2300     		movs	r3, r4
+ 348 0244 F821     		movs	r1, #248
+ 349 0246 7918     		adds	r1, r7, r1
+ 350 0248 0868     		ldr	r0, [r1]
+ 351 024a 4968     		ldr	r1, [r1, #4]
+ 352 024c FFF7FEFF 		bl	__aeabi_ldivmod
+ 353              	.LVL1:
+ 354 0250 0300     		movs	r3, r0
+ 355 0252 0C00     		movs	r4, r1
+ 356 0254 AC22     		movs	r2, #172
+ 357 0256 5200     		lsls	r2, r2, #1
+ 358 0258 BA18     		adds	r2, r7, r2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 8
+
+
+ 359 025a 1360     		str	r3, [r2]
+ 360 025c 5460     		str	r4, [r2, #4]
+  42:bmp180.c      ****     tS64 B5 = X1 + X2;
+ 361              		.loc 1 42 0
+ 362 025e B023     		movs	r3, #176
+ 363 0260 5B00     		lsls	r3, r3, #1
+ 364 0262 FB18     		adds	r3, r7, r3
+ 365 0264 1968     		ldr	r1, [r3]
+ 366 0266 5A68     		ldr	r2, [r3, #4]
+ 367 0268 AC23     		movs	r3, #172
+ 368 026a 5B00     		lsls	r3, r3, #1
+ 369 026c FB18     		adds	r3, r7, r3
+ 370 026e 5C68     		ldr	r4, [r3, #4]
+ 371 0270 1B68     		ldr	r3, [r3]
+ 372 0272 5B18     		adds	r3, r3, r1
+ 373 0274 5441     		adcs	r4, r4, r2
+ 374 0276 A822     		movs	r2, #168
+ 375 0278 5200     		lsls	r2, r2, #1
+ 376 027a BA18     		adds	r2, r7, r2
+ 377 027c 1360     		str	r3, [r2]
+ 378 027e 5460     		str	r4, [r2, #4]
+  43:bmp180.c      ****     tS64 T = (B5 + 8) / (tS64)((tU64)1 << 4);
+ 379              		.loc 1 43 0
+ 380 0280 A823     		movs	r3, #168
+ 381 0282 5B00     		lsls	r3, r3, #1
+ 382 0284 FB18     		adds	r3, r7, r3
+ 383 0286 1968     		ldr	r1, [r3]
+ 384 0288 5A68     		ldr	r2, [r3, #4]
+ 385 028a 0823     		movs	r3, #8
+ 386 028c 0024     		movs	r4, #0
+ 387 028e 5B18     		adds	r3, r3, r1
+ 388 0290 5441     		adcs	r4, r4, r2
+ 389 0292 1900     		movs	r1, r3
+ 390 0294 2200     		movs	r2, r4
+ 391 0296 002A     		cmp	r2, #0
+ 392 0298 03DA     		bge	.L4
+ 393 029a 0F23     		movs	r3, #15
+ 394 029c 0024     		movs	r4, #0
+ 395 029e C918     		adds	r1, r1, r3
+ 396 02a0 6241     		adcs	r2, r2, r4
+ 397              	.L4:
+ 398 02a2 1307     		lsls	r3, r2, #28
+ 399 02a4 0809     		lsrs	r0, r1, #4
+ 400 02a6 E024     		movs	r4, #224
+ 401 02a8 3C19     		adds	r4, r7, r4
+ 402 02aa 2060     		str	r0, [r4]
+ 403 02ac E020     		movs	r0, #224
+ 404 02ae 3818     		adds	r0, r7, r0
+ 405 02b0 0068     		ldr	r0, [r0]
+ 406 02b2 1843     		orrs	r0, r3
+ 407 02b4 E023     		movs	r3, #224
+ 408 02b6 FB18     		adds	r3, r7, r3
+ 409 02b8 1860     		str	r0, [r3]
+ 410 02ba 1311     		asrs	r3, r2, #4
+ 411 02bc E422     		movs	r2, #228
+ 412 02be BA18     		adds	r2, r7, r2
+ 413 02c0 1360     		str	r3, [r2]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 9
+
+
+ 414 02c2 E023     		movs	r3, #224
+ 415 02c4 FB18     		adds	r3, r7, r3
+ 416 02c6 5C68     		ldr	r4, [r3, #4]
+ 417 02c8 1B68     		ldr	r3, [r3]
+ 418 02ca A422     		movs	r2, #164
+ 419 02cc 5200     		lsls	r2, r2, #1
+ 420 02ce BA18     		adds	r2, r7, r2
+ 421 02d0 1360     		str	r3, [r2]
+ 422 02d2 5460     		str	r4, [r2, #4]
+  44:bmp180.c      **** 
+  45:bmp180.c      ****     // Calculations for pressure.
+  46:bmp180.c      **** 
+  47:bmp180.c      ****     tS64 B6 = B5 - 4000;
+ 423              		.loc 1 47 0
+ 424 02d4 A823     		movs	r3, #168
+ 425 02d6 5B00     		lsls	r3, r3, #1
+ 426 02d8 FB18     		adds	r3, r7, r3
+ 427 02da 1968     		ldr	r1, [r3]
+ 428 02dc 5A68     		ldr	r2, [r3, #4]
+ 429 02de 794B     		ldr	r3, .L41+4
+ 430 02e0 0124     		movs	r4, #1
+ 431 02e2 6442     		rsbs	r4, r4, #0
+ 432 02e4 5B18     		adds	r3, r3, r1
+ 433 02e6 5441     		adcs	r4, r4, r2
+ 434 02e8 A022     		movs	r2, #160
+ 435 02ea 5200     		lsls	r2, r2, #1
+ 436 02ec BA18     		adds	r2, r7, r2
+ 437 02ee 1360     		str	r3, [r2]
+ 438 02f0 5460     		str	r4, [r2, #4]
+  48:bmp180.c      ****     X1 = (B2 * ((B6 * B6) / (tS64)((tU64)1 << 12)) / (tS64)((tU64)1 << 11));
+ 439              		.loc 1 48 0
+ 440 02f2 6023     		movs	r3, #96
+ 441 02f4 8822     		movs	r2, #136
+ 442 02f6 5200     		lsls	r2, r2, #1
+ 443 02f8 9446     		mov	ip, r2
+ 444 02fa BC44     		add	ip, ip, r7
+ 445 02fc 6344     		add	r3, r3, ip
+ 446 02fe 1B88     		ldrh	r3, [r3]
+ 447 0300 1B04     		lsls	r3, r3, #16
+ 448 0302 1B14     		asrs	r3, r3, #16
+ 449 0304 BB62     		str	r3, [r7, #40]
+ 450 0306 DB17     		asrs	r3, r3, #31
+ 451 0308 FB62     		str	r3, [r7, #44]
+ 452 030a A023     		movs	r3, #160
+ 453 030c 5B00     		lsls	r3, r3, #1
+ 454 030e FB18     		adds	r3, r7, r3
+ 455 0310 1A68     		ldr	r2, [r3]
+ 456 0312 5B68     		ldr	r3, [r3, #4]
+ 457 0314 A021     		movs	r1, #160
+ 458 0316 4900     		lsls	r1, r1, #1
+ 459 0318 7918     		adds	r1, r7, r1
+ 460 031a 0868     		ldr	r0, [r1]
+ 461 031c 4968     		ldr	r1, [r1, #4]
+ 462 031e FFF7FEFF 		bl	__aeabi_lmul
+ 463              	.LVL2:
+ 464 0322 0300     		movs	r3, r0
+ 465 0324 0C00     		movs	r4, r1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 10
+
+
+ 466 0326 1900     		movs	r1, r3
+ 467 0328 2200     		movs	r2, r4
+ 468 032a 002A     		cmp	r2, #0
+ 469 032c 03DA     		bge	.L6
+ 470 032e 664B     		ldr	r3, .L41+8
+ 471 0330 0024     		movs	r4, #0
+ 472 0332 C918     		adds	r1, r1, r3
+ 473 0334 6241     		adcs	r2, r2, r4
+ 474              	.L6:
+ 475 0336 1305     		lsls	r3, r2, #20
+ 476 0338 080B     		lsrs	r0, r1, #12
+ 477 033a D824     		movs	r4, #216
+ 478 033c 3C19     		adds	r4, r7, r4
+ 479 033e 2060     		str	r0, [r4]
+ 480 0340 D820     		movs	r0, #216
+ 481 0342 3818     		adds	r0, r7, r0
+ 482 0344 0068     		ldr	r0, [r0]
+ 483 0346 1843     		orrs	r0, r3
+ 484 0348 D823     		movs	r3, #216
+ 485 034a FB18     		adds	r3, r7, r3
+ 486 034c 1860     		str	r0, [r3]
+ 487 034e 1313     		asrs	r3, r2, #12
+ 488 0350 DC22     		movs	r2, #220
+ 489 0352 BA18     		adds	r2, r7, r2
+ 490 0354 1360     		str	r3, [r2]
+ 491 0356 D823     		movs	r3, #216
+ 492 0358 FB18     		adds	r3, r7, r3
+ 493 035a 5C68     		ldr	r4, [r3, #4]
+ 494 035c 1B68     		ldr	r3, [r3]
+ 495 035e 1A00     		movs	r2, r3
+ 496 0360 2300     		movs	r3, r4
+ 497 0362 B86A     		ldr	r0, [r7, #40]
+ 498 0364 F96A     		ldr	r1, [r7, #44]
+ 499 0366 FFF7FEFF 		bl	__aeabi_lmul
+ 500              	.LVL3:
+ 501 036a 0300     		movs	r3, r0
+ 502 036c 0C00     		movs	r4, r1
+ 503 036e 1900     		movs	r1, r3
+ 504 0370 2200     		movs	r2, r4
+ 505 0372 002A     		cmp	r2, #0
+ 506 0374 03DA     		bge	.L8
+ 507 0376 554B     		ldr	r3, .L41+12
+ 508 0378 0024     		movs	r4, #0
+ 509 037a C918     		adds	r1, r1, r3
+ 510 037c 6241     		adcs	r2, r2, r4
+ 511              	.L8:
+ 512 037e 5305     		lsls	r3, r2, #21
+ 513 0380 C80A     		lsrs	r0, r1, #11
+ 514 0382 D024     		movs	r4, #208
+ 515 0384 3C19     		adds	r4, r7, r4
+ 516 0386 2060     		str	r0, [r4]
+ 517 0388 D020     		movs	r0, #208
+ 518 038a 3818     		adds	r0, r7, r0
+ 519 038c 0068     		ldr	r0, [r0]
+ 520 038e 1843     		orrs	r0, r3
+ 521 0390 D023     		movs	r3, #208
+ 522 0392 FB18     		adds	r3, r7, r3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 11
+
+
+ 523 0394 1860     		str	r0, [r3]
+ 524 0396 D312     		asrs	r3, r2, #11
+ 525 0398 D422     		movs	r2, #212
+ 526 039a BA18     		adds	r2, r7, r2
+ 527 039c 1360     		str	r3, [r2]
+ 528 039e D023     		movs	r3, #208
+ 529 03a0 FB18     		adds	r3, r7, r3
+ 530 03a2 5C68     		ldr	r4, [r3, #4]
+ 531 03a4 1B68     		ldr	r3, [r3]
+ 532 03a6 B022     		movs	r2, #176
+ 533 03a8 5200     		lsls	r2, r2, #1
+ 534 03aa BA18     		adds	r2, r7, r2
+ 535 03ac 1360     		str	r3, [r2]
+ 536 03ae 5460     		str	r4, [r2, #4]
+  49:bmp180.c      ****     X2 = (AC2 * B6) / (tS64)((tU64)1 << 11);
+ 537              		.loc 1 49 0
+ 538 03b0 6C23     		movs	r3, #108
+ 539 03b2 8822     		movs	r2, #136
+ 540 03b4 5200     		lsls	r2, r2, #1
+ 541 03b6 9446     		mov	ip, r2
+ 542 03b8 BC44     		add	ip, ip, r7
+ 543 03ba 6344     		add	r3, r3, ip
+ 544 03bc 1B88     		ldrh	r3, [r3]
+ 545 03be 1B04     		lsls	r3, r3, #16
+ 546 03c0 1B14     		asrs	r3, r3, #16
+ 547 03c2 3B62     		str	r3, [r7, #32]
+ 548 03c4 DB17     		asrs	r3, r3, #31
+ 549 03c6 7B62     		str	r3, [r7, #36]
+ 550 03c8 A023     		movs	r3, #160
+ 551 03ca 5B00     		lsls	r3, r3, #1
+ 552 03cc FB18     		adds	r3, r7, r3
+ 553 03ce 1A68     		ldr	r2, [r3]
+ 554 03d0 5B68     		ldr	r3, [r3, #4]
+ 555 03d2 386A     		ldr	r0, [r7, #32]
+ 556 03d4 796A     		ldr	r1, [r7, #36]
+ 557 03d6 FFF7FEFF 		bl	__aeabi_lmul
+ 558              	.LVL4:
+ 559 03da 0300     		movs	r3, r0
+ 560 03dc 0C00     		movs	r4, r1
+ 561 03de 1900     		movs	r1, r3
+ 562 03e0 2200     		movs	r2, r4
+ 563 03e2 002A     		cmp	r2, #0
+ 564 03e4 03DA     		bge	.L10
+ 565 03e6 394B     		ldr	r3, .L41+12
+ 566 03e8 0024     		movs	r4, #0
+ 567 03ea C918     		adds	r1, r1, r3
+ 568 03ec 6241     		adcs	r2, r2, r4
+ 569              	.L10:
+ 570 03ee 5305     		lsls	r3, r2, #21
+ 571 03f0 C80A     		lsrs	r0, r1, #11
+ 572 03f2 C824     		movs	r4, #200
+ 573 03f4 3C19     		adds	r4, r7, r4
+ 574 03f6 2060     		str	r0, [r4]
+ 575 03f8 C820     		movs	r0, #200
+ 576 03fa 3818     		adds	r0, r7, r0
+ 577 03fc 0068     		ldr	r0, [r0]
+ 578 03fe 1843     		orrs	r0, r3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 12
+
+
+ 579 0400 C823     		movs	r3, #200
+ 580 0402 FB18     		adds	r3, r7, r3
+ 581 0404 1860     		str	r0, [r3]
+ 582 0406 D312     		asrs	r3, r2, #11
+ 583 0408 CC22     		movs	r2, #204
+ 584 040a BA18     		adds	r2, r7, r2
+ 585 040c 1360     		str	r3, [r2]
+ 586 040e C823     		movs	r3, #200
+ 587 0410 FB18     		adds	r3, r7, r3
+ 588 0412 5C68     		ldr	r4, [r3, #4]
+ 589 0414 1B68     		ldr	r3, [r3]
+ 590 0416 AC22     		movs	r2, #172
+ 591 0418 5200     		lsls	r2, r2, #1
+ 592 041a BA18     		adds	r2, r7, r2
+ 593 041c 1360     		str	r3, [r2]
+ 594 041e 5460     		str	r4, [r2, #4]
+  50:bmp180.c      ****     tS64 X3 = X1 + X2;
+ 595              		.loc 1 50 0
+ 596 0420 B023     		movs	r3, #176
+ 597 0422 5B00     		lsls	r3, r3, #1
+ 598 0424 FB18     		adds	r3, r7, r3
+ 599 0426 1968     		ldr	r1, [r3]
+ 600 0428 5A68     		ldr	r2, [r3, #4]
+ 601 042a AC23     		movs	r3, #172
+ 602 042c 5B00     		lsls	r3, r3, #1
+ 603 042e FB18     		adds	r3, r7, r3
+ 604 0430 5C68     		ldr	r4, [r3, #4]
+ 605 0432 1B68     		ldr	r3, [r3]
+ 606 0434 5B18     		adds	r3, r3, r1
+ 607 0436 5441     		adcs	r4, r4, r2
+ 608 0438 9C22     		movs	r2, #156
+ 609 043a 5200     		lsls	r2, r2, #1
+ 610 043c BA18     		adds	r2, r7, r2
+ 611 043e 1360     		str	r3, [r2]
+ 612 0440 5460     		str	r4, [r2, #4]
+  51:bmp180.c      **** 
+  52:bmp180.c      ****     tS64 B3 = (((tS64)((tU64)(((tU64)AC1 * (tU64)4) + (tU64)X3) << pressureOss) + (tS64)2) / (tS64)
+ 613              		.loc 1 52 0
+ 614 0442 6E23     		movs	r3, #110
+ 615 0444 8822     		movs	r2, #136
+ 616 0446 5200     		lsls	r2, r2, #1
+ 617 0448 9446     		mov	ip, r2
+ 618 044a BC44     		add	ip, ip, r7
+ 619 044c 6344     		add	r3, r3, ip
+ 620 044e 1B88     		ldrh	r3, [r3]
+ 621 0450 1B04     		lsls	r3, r3, #16
+ 622 0452 1B14     		asrs	r3, r3, #16
+ 623 0454 BB61     		str	r3, [r7, #24]
+ 624 0456 DB17     		asrs	r3, r3, #31
+ 625 0458 FB61     		str	r3, [r7, #28]
+ 626 045a B969     		ldr	r1, [r7, #24]
+ 627 045c FA69     		ldr	r2, [r7, #28]
+ 628 045e 0B00     		movs	r3, r1
+ 629 0460 9B0F     		lsrs	r3, r3, #30
+ 630 0462 1000     		movs	r0, r2
+ 631 0464 8000     		lsls	r0, r0, #2
+ 632 0466 F424     		movs	r4, #244
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 13
+
+
+ 633 0468 3C19     		adds	r4, r7, r4
+ 634 046a 2060     		str	r0, [r4]
+ 635 046c F420     		movs	r0, #244
+ 636 046e 3818     		adds	r0, r7, r0
+ 637 0470 0068     		ldr	r0, [r0]
+ 638 0472 1843     		orrs	r0, r3
+ 639 0474 F423     		movs	r3, #244
+ 640 0476 FB18     		adds	r3, r7, r3
+ 641 0478 1860     		str	r0, [r3]
+ 642 047a 0B00     		movs	r3, r1
+ 643 047c 9B00     		lsls	r3, r3, #2
+ 644 047e F022     		movs	r2, #240
+ 645 0480 BA18     		adds	r2, r7, r2
+ 646 0482 1360     		str	r3, [r2]
+ 647 0484 9C23     		movs	r3, #156
+ 648 0486 5B00     		lsls	r3, r3, #1
+ 649 0488 FB18     		adds	r3, r7, r3
+ 650 048a 5C68     		ldr	r4, [r3, #4]
+ 651 048c 1B68     		ldr	r3, [r3]
+ 652 048e F022     		movs	r2, #240
+ 653 0490 BA18     		adds	r2, r7, r2
+ 654 0492 1168     		ldr	r1, [r2]
+ 655 0494 5268     		ldr	r2, [r2, #4]
+ 656 0496 C918     		adds	r1, r1, r3
+ 657 0498 6241     		adcs	r2, r2, r4
+ 658 049a 9423     		movs	r3, #148
+ 659 049c 8820     		movs	r0, #136
+ 660 049e 4000     		lsls	r0, r0, #1
+ 661 04a0 8446     		mov	ip, r0
+ 662 04a2 BC44     		add	ip, ip, r7
+ 663 04a4 6344     		add	r3, r3, ip
+ 664 04a6 1878     		ldrb	r0, [r3]
+ 665 04a8 0300     		movs	r3, r0
+ 666 04aa 203B     		subs	r3, r3, #32
+ 667 04ac 002B     		cmp	r3, #0
+ 668 04ae 0FDB     		blt	.L12
+ 669 04b0 0C00     		movs	r4, r1
+ 670 04b2 9C40     		lsls	r4, r4, r3
+ 671 04b4 8623     		movs	r3, #134
+ 672 04b6 5B00     		lsls	r3, r3, #1
+ 673 04b8 FB18     		adds	r3, r7, r3
+ 674 04ba 1C60     		str	r4, [r3]
+ 675 04bc 1DE0     		b	.L13
+ 676              	.L42:
+ 677 04be C046     		.align	2
+ 678              	.L41:
+ 679 04c0 FF7F0000 		.word	32767
+ 680 04c4 60F0FFFF 		.word	-4000
+ 681 04c8 FF0F0000 		.word	4095
+ 682 04cc FF070000 		.word	2047
+ 683              	.L12:
+ 684 04d0 2023     		movs	r3, #32
+ 685 04d2 1B1A     		subs	r3, r3, r0
+ 686 04d4 0C00     		movs	r4, r1
+ 687 04d6 DC40     		lsrs	r4, r4, r3
+ 688 04d8 A446     		mov	ip, r4
+ 689 04da 1400     		movs	r4, r2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 14
+
+
+ 690 04dc 8440     		lsls	r4, r4, r0
+ 691 04de 8623     		movs	r3, #134
+ 692 04e0 5B00     		lsls	r3, r3, #1
+ 693 04e2 FB18     		adds	r3, r7, r3
+ 694 04e4 1C60     		str	r4, [r3]
+ 695 04e6 8624     		movs	r4, #134
+ 696 04e8 6400     		lsls	r4, r4, #1
+ 697 04ea 3C19     		adds	r4, r7, r4
+ 698 04ec 2468     		ldr	r4, [r4]
+ 699 04ee 6346     		mov	r3, ip
+ 700 04f0 1C43     		orrs	r4, r3
+ 701 04f2 8623     		movs	r3, #134
+ 702 04f4 5B00     		lsls	r3, r3, #1
+ 703 04f6 FB18     		adds	r3, r7, r3
+ 704 04f8 1C60     		str	r4, [r3]
+ 705              	.L13:
+ 706 04fa 0B00     		movs	r3, r1
+ 707 04fc 8340     		lsls	r3, r3, r0
+ 708 04fe 8422     		movs	r2, #132
+ 709 0500 5200     		lsls	r2, r2, #1
+ 710 0502 BA18     		adds	r2, r7, r2
+ 711 0504 1360     		str	r3, [r2]
+ 712 0506 8423     		movs	r3, #132
+ 713 0508 5B00     		lsls	r3, r3, #1
+ 714 050a FB18     		adds	r3, r7, r3
+ 715 050c 1968     		ldr	r1, [r3]
+ 716 050e 5A68     		ldr	r2, [r3, #4]
+ 717 0510 0223     		movs	r3, #2
+ 718 0512 0024     		movs	r4, #0
+ 719 0514 5B18     		adds	r3, r3, r1
+ 720 0516 5441     		adcs	r4, r4, r2
+ 721 0518 1900     		movs	r1, r3
+ 722 051a 2200     		movs	r2, r4
+ 723 051c 002A     		cmp	r2, #0
+ 724 051e 03DA     		bge	.L14
+ 725 0520 0323     		movs	r3, #3
+ 726 0522 0024     		movs	r4, #0
+ 727 0524 C918     		adds	r1, r1, r3
+ 728 0526 6241     		adcs	r2, r2, r4
+ 729              	.L14:
+ 730 0528 9307     		lsls	r3, r2, #30
+ 731 052a 8808     		lsrs	r0, r1, #2
+ 732 052c C024     		movs	r4, #192
+ 733 052e 3C19     		adds	r4, r7, r4
+ 734 0530 2060     		str	r0, [r4]
+ 735 0532 C020     		movs	r0, #192
+ 736 0534 3818     		adds	r0, r7, r0
+ 737 0536 0068     		ldr	r0, [r0]
+ 738 0538 1843     		orrs	r0, r3
+ 739 053a C023     		movs	r3, #192
+ 740 053c FB18     		adds	r3, r7, r3
+ 741 053e 1860     		str	r0, [r3]
+ 742 0540 9310     		asrs	r3, r2, #2
+ 743 0542 C422     		movs	r2, #196
+ 744 0544 BA18     		adds	r2, r7, r2
+ 745 0546 1360     		str	r3, [r2]
+ 746 0548 C023     		movs	r3, #192
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 15
+
+
+ 747 054a FB18     		adds	r3, r7, r3
+ 748 054c 5C68     		ldr	r4, [r3, #4]
+ 749 054e 1B68     		ldr	r3, [r3]
+ 750 0550 9822     		movs	r2, #152
+ 751 0552 5200     		lsls	r2, r2, #1
+ 752 0554 BA18     		adds	r2, r7, r2
+ 753 0556 1360     		str	r3, [r2]
+ 754 0558 5460     		str	r4, [r2, #4]
+  53:bmp180.c      ****     X1 = ((tS64)AC3 * B6) / (tS64)((tU64)1 << 13);
+ 755              		.loc 1 53 0
+ 756 055a 6A23     		movs	r3, #106
+ 757 055c 8822     		movs	r2, #136
+ 758 055e 5200     		lsls	r2, r2, #1
+ 759 0560 9446     		mov	ip, r2
+ 760 0562 BC44     		add	ip, ip, r7
+ 761 0564 6344     		add	r3, r3, ip
+ 762 0566 1B88     		ldrh	r3, [r3]
+ 763 0568 1B04     		lsls	r3, r3, #16
+ 764 056a 1B14     		asrs	r3, r3, #16
+ 765 056c 3B61     		str	r3, [r7, #16]
+ 766 056e DB17     		asrs	r3, r3, #31
+ 767 0570 7B61     		str	r3, [r7, #20]
+ 768 0572 A023     		movs	r3, #160
+ 769 0574 5B00     		lsls	r3, r3, #1
+ 770 0576 FB18     		adds	r3, r7, r3
+ 771 0578 1A68     		ldr	r2, [r3]
+ 772 057a 5B68     		ldr	r3, [r3, #4]
+ 773 057c 3869     		ldr	r0, [r7, #16]
+ 774 057e 7969     		ldr	r1, [r7, #20]
+ 775 0580 FFF7FEFF 		bl	__aeabi_lmul
+ 776              	.LVL5:
+ 777 0584 0300     		movs	r3, r0
+ 778 0586 0C00     		movs	r4, r1
+ 779 0588 1900     		movs	r1, r3
+ 780 058a 2200     		movs	r2, r4
+ 781 058c 002A     		cmp	r2, #0
+ 782 058e 03DA     		bge	.L16
+ 783 0590 A64B     		ldr	r3, .L43
+ 784 0592 0024     		movs	r4, #0
+ 785 0594 C918     		adds	r1, r1, r3
+ 786 0596 6241     		adcs	r2, r2, r4
+ 787              	.L16:
+ 788 0598 D304     		lsls	r3, r2, #19
+ 789 059a 480B     		lsrs	r0, r1, #13
+ 790 059c B824     		movs	r4, #184
+ 791 059e 3C19     		adds	r4, r7, r4
+ 792 05a0 2060     		str	r0, [r4]
+ 793 05a2 B820     		movs	r0, #184
+ 794 05a4 3818     		adds	r0, r7, r0
+ 795 05a6 0068     		ldr	r0, [r0]
+ 796 05a8 1843     		orrs	r0, r3
+ 797 05aa B823     		movs	r3, #184
+ 798 05ac FB18     		adds	r3, r7, r3
+ 799 05ae 1860     		str	r0, [r3]
+ 800 05b0 5313     		asrs	r3, r2, #13
+ 801 05b2 BC22     		movs	r2, #188
+ 802 05b4 BA18     		adds	r2, r7, r2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 16
+
+
+ 803 05b6 1360     		str	r3, [r2]
+ 804 05b8 B823     		movs	r3, #184
+ 805 05ba FB18     		adds	r3, r7, r3
+ 806 05bc 5C68     		ldr	r4, [r3, #4]
+ 807 05be 1B68     		ldr	r3, [r3]
+ 808 05c0 B022     		movs	r2, #176
+ 809 05c2 5200     		lsls	r2, r2, #1
+ 810 05c4 BA18     		adds	r2, r7, r2
+ 811 05c6 1360     		str	r3, [r2]
+ 812 05c8 5460     		str	r4, [r2, #4]
+  54:bmp180.c      ****     X2 = (B1 * ((B6 * B6) / (tS64)((tU64)1 << 12))) / (tS64)((tU64)1 << 16);
+ 813              		.loc 1 54 0
+ 814 05ca 6223     		movs	r3, #98
+ 815 05cc 8822     		movs	r2, #136
+ 816 05ce 5200     		lsls	r2, r2, #1
+ 817 05d0 9446     		mov	ip, r2
+ 818 05d2 BC44     		add	ip, ip, r7
+ 819 05d4 6344     		add	r3, r3, ip
+ 820 05d6 1B88     		ldrh	r3, [r3]
+ 821 05d8 1B04     		lsls	r3, r3, #16
+ 822 05da 1B14     		asrs	r3, r3, #16
+ 823 05dc BB60     		str	r3, [r7, #8]
+ 824 05de DB17     		asrs	r3, r3, #31
+ 825 05e0 FB60     		str	r3, [r7, #12]
+ 826 05e2 A023     		movs	r3, #160
+ 827 05e4 5B00     		lsls	r3, r3, #1
+ 828 05e6 FB18     		adds	r3, r7, r3
+ 829 05e8 1A68     		ldr	r2, [r3]
+ 830 05ea 5B68     		ldr	r3, [r3, #4]
+ 831 05ec A021     		movs	r1, #160
+ 832 05ee 4900     		lsls	r1, r1, #1
+ 833 05f0 7918     		adds	r1, r7, r1
+ 834 05f2 0868     		ldr	r0, [r1]
+ 835 05f4 4968     		ldr	r1, [r1, #4]
+ 836 05f6 FFF7FEFF 		bl	__aeabi_lmul
+ 837              	.LVL6:
+ 838 05fa 0300     		movs	r3, r0
+ 839 05fc 0C00     		movs	r4, r1
+ 840 05fe 1900     		movs	r1, r3
+ 841 0600 2200     		movs	r2, r4
+ 842 0602 002A     		cmp	r2, #0
+ 843 0604 03DA     		bge	.L18
+ 844 0606 8A4B     		ldr	r3, .L43+4
+ 845 0608 0024     		movs	r4, #0
+ 846 060a C918     		adds	r1, r1, r3
+ 847 060c 6241     		adcs	r2, r2, r4
+ 848              	.L18:
+ 849 060e 1305     		lsls	r3, r2, #20
+ 850 0610 080B     		lsrs	r0, r1, #12
+ 851 0612 B024     		movs	r4, #176
+ 852 0614 3C19     		adds	r4, r7, r4
+ 853 0616 2060     		str	r0, [r4]
+ 854 0618 B020     		movs	r0, #176
+ 855 061a 3818     		adds	r0, r7, r0
+ 856 061c 0068     		ldr	r0, [r0]
+ 857 061e 1843     		orrs	r0, r3
+ 858 0620 B023     		movs	r3, #176
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 17
+
+
+ 859 0622 FB18     		adds	r3, r7, r3
+ 860 0624 1860     		str	r0, [r3]
+ 861 0626 1313     		asrs	r3, r2, #12
+ 862 0628 B422     		movs	r2, #180
+ 863 062a BA18     		adds	r2, r7, r2
+ 864 062c 1360     		str	r3, [r2]
+ 865 062e B023     		movs	r3, #176
+ 866 0630 FB18     		adds	r3, r7, r3
+ 867 0632 5C68     		ldr	r4, [r3, #4]
+ 868 0634 1B68     		ldr	r3, [r3]
+ 869 0636 1A00     		movs	r2, r3
+ 870 0638 2300     		movs	r3, r4
+ 871 063a B868     		ldr	r0, [r7, #8]
+ 872 063c F968     		ldr	r1, [r7, #12]
+ 873 063e FFF7FEFF 		bl	__aeabi_lmul
+ 874              	.LVL7:
+ 875 0642 0300     		movs	r3, r0
+ 876 0644 0C00     		movs	r4, r1
+ 877 0646 1900     		movs	r1, r3
+ 878 0648 2200     		movs	r2, r4
+ 879 064a 002A     		cmp	r2, #0
+ 880 064c 03DA     		bge	.L20
+ 881 064e 794B     		ldr	r3, .L43+8
+ 882 0650 0024     		movs	r4, #0
+ 883 0652 C918     		adds	r1, r1, r3
+ 884 0654 6241     		adcs	r2, r2, r4
+ 885              	.L20:
+ 886 0656 1304     		lsls	r3, r2, #16
+ 887 0658 080C     		lsrs	r0, r1, #16
+ 888 065a A824     		movs	r4, #168
+ 889 065c 3C19     		adds	r4, r7, r4
+ 890 065e 2060     		str	r0, [r4]
+ 891 0660 A820     		movs	r0, #168
+ 892 0662 3818     		adds	r0, r7, r0
+ 893 0664 0068     		ldr	r0, [r0]
+ 894 0666 1843     		orrs	r0, r3
+ 895 0668 A823     		movs	r3, #168
+ 896 066a FB18     		adds	r3, r7, r3
+ 897 066c 1860     		str	r0, [r3]
+ 898 066e 1314     		asrs	r3, r2, #16
+ 899 0670 AC22     		movs	r2, #172
+ 900 0672 BA18     		adds	r2, r7, r2
+ 901 0674 1360     		str	r3, [r2]
+ 902 0676 A823     		movs	r3, #168
+ 903 0678 FB18     		adds	r3, r7, r3
+ 904 067a 5C68     		ldr	r4, [r3, #4]
+ 905 067c 1B68     		ldr	r3, [r3]
+ 906 067e AC22     		movs	r2, #172
+ 907 0680 5200     		lsls	r2, r2, #1
+ 908 0682 BA18     		adds	r2, r7, r2
+ 909 0684 1360     		str	r3, [r2]
+ 910 0686 5460     		str	r4, [r2, #4]
+  55:bmp180.c      ****     X3 = ((X1 + X2) + 2) / (tS64)((tU64)1 << 2);
+ 911              		.loc 1 55 0
+ 912 0688 B023     		movs	r3, #176
+ 913 068a 5B00     		lsls	r3, r3, #1
+ 914 068c FB18     		adds	r3, r7, r3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 18
+
+
+ 915 068e 1968     		ldr	r1, [r3]
+ 916 0690 5A68     		ldr	r2, [r3, #4]
+ 917 0692 AC23     		movs	r3, #172
+ 918 0694 5B00     		lsls	r3, r3, #1
+ 919 0696 FB18     		adds	r3, r7, r3
+ 920 0698 5C68     		ldr	r4, [r3, #4]
+ 921 069a 1B68     		ldr	r3, [r3]
+ 922 069c C918     		adds	r1, r1, r3
+ 923 069e 6241     		adcs	r2, r2, r4
+ 924 06a0 0223     		movs	r3, #2
+ 925 06a2 0024     		movs	r4, #0
+ 926 06a4 5B18     		adds	r3, r3, r1
+ 927 06a6 5441     		adcs	r4, r4, r2
+ 928 06a8 1900     		movs	r1, r3
+ 929 06aa 2200     		movs	r2, r4
+ 930 06ac 002A     		cmp	r2, #0
+ 931 06ae 03DA     		bge	.L22
+ 932 06b0 0323     		movs	r3, #3
+ 933 06b2 0024     		movs	r4, #0
+ 934 06b4 C918     		adds	r1, r1, r3
+ 935 06b6 6241     		adcs	r2, r2, r4
+ 936              	.L22:
+ 937 06b8 9307     		lsls	r3, r2, #30
+ 938 06ba 8808     		lsrs	r0, r1, #2
+ 939 06bc A024     		movs	r4, #160
+ 940 06be 3C19     		adds	r4, r7, r4
+ 941 06c0 2060     		str	r0, [r4]
+ 942 06c2 A020     		movs	r0, #160
+ 943 06c4 3818     		adds	r0, r7, r0
+ 944 06c6 0068     		ldr	r0, [r0]
+ 945 06c8 1843     		orrs	r0, r3
+ 946 06ca A023     		movs	r3, #160
+ 947 06cc FB18     		adds	r3, r7, r3
+ 948 06ce 1860     		str	r0, [r3]
+ 949 06d0 9310     		asrs	r3, r2, #2
+ 950 06d2 A422     		movs	r2, #164
+ 951 06d4 BA18     		adds	r2, r7, r2
+ 952 06d6 1360     		str	r3, [r2]
+ 953 06d8 A023     		movs	r3, #160
+ 954 06da FB18     		adds	r3, r7, r3
+ 955 06dc 5C68     		ldr	r4, [r3, #4]
+ 956 06de 1B68     		ldr	r3, [r3]
+ 957 06e0 9C22     		movs	r2, #156
+ 958 06e2 5200     		lsls	r2, r2, #1
+ 959 06e4 BA18     		adds	r2, r7, r2
+ 960 06e6 1360     		str	r3, [r2]
+ 961 06e8 5460     		str	r4, [r2, #4]
+  56:bmp180.c      **** 
+  57:bmp180.c      ****     tU64 B4 = ((tU64)AC4 * (tU64)((tU64)X3 + ((tU64)1 << 15))) / ((tU64)1 << 15);
+ 962              		.loc 1 57 0
+ 963 06ea 6823     		movs	r3, #104
+ 964 06ec 8822     		movs	r2, #136
+ 965 06ee 5200     		lsls	r2, r2, #1
+ 966 06f0 9446     		mov	ip, r2
+ 967 06f2 BC44     		add	ip, ip, r7
+ 968 06f4 6344     		add	r3, r3, ip
+ 969 06f6 1B88     		ldrh	r3, [r3]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 19
+
+
+ 970 06f8 1B04     		lsls	r3, r3, #16
+ 971 06fa 1B0C     		lsrs	r3, r3, #16
+ 972 06fc 3B60     		str	r3, [r7]
+ 973 06fe 0023     		movs	r3, #0
+ 974 0700 7B60     		str	r3, [r7, #4]
+ 975 0702 9C23     		movs	r3, #156
+ 976 0704 5B00     		lsls	r3, r3, #1
+ 977 0706 FB18     		adds	r3, r7, r3
+ 978 0708 1968     		ldr	r1, [r3]
+ 979 070a 5A68     		ldr	r2, [r3, #4]
+ 980 070c 8023     		movs	r3, #128
+ 981 070e 1B02     		lsls	r3, r3, #8
+ 982 0710 0024     		movs	r4, #0
+ 983 0712 5B18     		adds	r3, r3, r1
+ 984 0714 5441     		adcs	r4, r4, r2
+ 985 0716 1A00     		movs	r2, r3
+ 986 0718 2300     		movs	r3, r4
+ 987 071a 3868     		ldr	r0, [r7]
+ 988 071c 7968     		ldr	r1, [r7, #4]
+ 989 071e FFF7FEFF 		bl	__aeabi_lmul
+ 990              	.LVL8:
+ 991 0722 0300     		movs	r3, r0
+ 992 0724 0C00     		movs	r4, r1
+ 993 0726 6104     		lsls	r1, r4, #17
+ 994 0728 DA0B     		lsrs	r2, r3, #15
+ 995 072a 0A43     		orrs	r2, r1
+ 996 072c 9421     		movs	r1, #148
+ 997 072e 4900     		lsls	r1, r1, #1
+ 998 0730 7918     		adds	r1, r7, r1
+ 999 0732 0A60     		str	r2, [r1]
+ 1000 0734 E30B     		lsrs	r3, r4, #15
+ 1001 0736 9622     		movs	r2, #150
+ 1002 0738 5200     		lsls	r2, r2, #1
+ 1003 073a BA18     		adds	r2, r7, r2
+ 1004 073c 1360     		str	r3, [r2]
+  58:bmp180.c      ****     tU64 B7 = ((tU64)(readPress - (tU64)B3) * (tU64)((tU64)50000 >> (tU64)pressureOss));
+ 1005              		.loc 1 58 0
+ 1006 073e 9823     		movs	r3, #152
+ 1007 0740 5B00     		lsls	r3, r3, #1
+ 1008 0742 FB18     		adds	r3, r7, r3
+ 1009 0744 1968     		ldr	r1, [r3]
+ 1010 0746 5A68     		ldr	r2, [r3, #4]
+ 1011 0748 8C23     		movs	r3, #140
+ 1012 074a 5B00     		lsls	r3, r3, #1
+ 1013 074c FB18     		adds	r3, r7, r3
+ 1014 074e 5C68     		ldr	r4, [r3, #4]
+ 1015 0750 1B68     		ldr	r3, [r3]
+ 1016 0752 5B1A     		subs	r3, r3, r1
+ 1017 0754 9441     		sbcs	r4, r4, r2
+ 1018 0756 8422     		movs	r2, #132
+ 1019 0758 5200     		lsls	r2, r2, #1
+ 1020 075a BA18     		adds	r2, r7, r2
+ 1021 075c 1360     		str	r3, [r2]
+ 1022 075e 5460     		str	r4, [r2, #4]
+ 1023 0760 9423     		movs	r3, #148
+ 1024 0762 8822     		movs	r2, #136
+ 1025 0764 5200     		lsls	r2, r2, #1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 20
+
+
+ 1026 0766 9446     		mov	ip, r2
+ 1027 0768 BC44     		add	ip, ip, r7
+ 1028 076a 6344     		add	r3, r3, ip
+ 1029 076c 1978     		ldrb	r1, [r3]
+ 1030 076e 0A00     		movs	r2, r1
+ 1031 0770 203A     		subs	r2, r2, #32
+ 1032 0772 002A     		cmp	r2, #0
+ 1033 0774 05DB     		blt	.L24
+ 1034 0776 0023     		movs	r3, #0
+ 1035 0778 D340     		lsrs	r3, r3, r2
+ 1036 077a 7A1C     		adds	r2, r7, #1
+ 1037 077c FF32     		adds	r2, r2, #255
+ 1038 077e 1360     		str	r3, [r2]
+ 1039 0780 10E0     		b	.L25
+ 1040              	.L24:
+ 1041 0782 2023     		movs	r3, #32
+ 1042 0784 5A1A     		subs	r2, r3, r1
+ 1043 0786 0023     		movs	r3, #0
+ 1044 0788 9340     		lsls	r3, r3, r2
+ 1045 078a 1A00     		movs	r2, r3
+ 1046 078c 2A4B     		ldr	r3, .L43+12
+ 1047 078e CB40     		lsrs	r3, r3, r1
+ 1048 0790 781C     		adds	r0, r7, #1
+ 1049 0792 FF30     		adds	r0, r0, #255
+ 1050 0794 0360     		str	r3, [r0]
+ 1051 0796 7B1C     		adds	r3, r7, #1
+ 1052 0798 FF33     		adds	r3, r3, #255
+ 1053 079a 1B68     		ldr	r3, [r3]
+ 1054 079c 1343     		orrs	r3, r2
+ 1055 079e 7A1C     		adds	r2, r7, #1
+ 1056 07a0 FF32     		adds	r2, r2, #255
+ 1057 07a2 1360     		str	r3, [r2]
+ 1058              	.L25:
+ 1059 07a4 0023     		movs	r3, #0
+ 1060 07a6 CB40     		lsrs	r3, r3, r1
+ 1061 07a8 7A1D     		adds	r2, r7, #5
+ 1062 07aa FF32     		adds	r2, r2, #255
+ 1063 07ac 1360     		str	r3, [r2]
+ 1064 07ae 7B1C     		adds	r3, r7, #1
+ 1065 07b0 FF33     		adds	r3, r3, #255
+ 1066 07b2 1A68     		ldr	r2, [r3]
+ 1067 07b4 5B68     		ldr	r3, [r3, #4]
+ 1068 07b6 8421     		movs	r1, #132
+ 1069 07b8 4900     		lsls	r1, r1, #1
+ 1070 07ba 7918     		adds	r1, r7, r1
+ 1071 07bc 0868     		ldr	r0, [r1]
+ 1072 07be 4968     		ldr	r1, [r1, #4]
+ 1073 07c0 FFF7FEFF 		bl	__aeabi_lmul
+ 1074              	.LVL9:
+ 1075 07c4 0300     		movs	r3, r0
+ 1076 07c6 0C00     		movs	r4, r1
+ 1077 07c8 9022     		movs	r2, #144
+ 1078 07ca 5200     		lsls	r2, r2, #1
+ 1079 07cc BA18     		adds	r2, r7, r2
+ 1080 07ce 1360     		str	r3, [r2]
+ 1081 07d0 5460     		str	r4, [r2, #4]
+  59:bmp180.c      **** 
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 21
+
+
+  60:bmp180.c      ****     tS64 p;
+  61:bmp180.c      ****     if (B7 < 0x80000000UL)
+ 1082              		.loc 1 61 0
+ 1083 07d2 9223     		movs	r3, #146
+ 1084 07d4 5B00     		lsls	r3, r3, #1
+ 1085 07d6 FB18     		adds	r3, r7, r3
+ 1086 07d8 1B68     		ldr	r3, [r3]
+ 1087 07da 002B     		cmp	r3, #0
+ 1088 07dc 30D1     		bne	.L26
+ 1089 07de 9223     		movs	r3, #146
+ 1090 07e0 5B00     		lsls	r3, r3, #1
+ 1091 07e2 FB18     		adds	r3, r7, r3
+ 1092 07e4 1B68     		ldr	r3, [r3]
+ 1093 07e6 002B     		cmp	r3, #0
+ 1094 07e8 06D1     		bne	.L40
+ 1095 07ea 9023     		movs	r3, #144
+ 1096 07ec 5B00     		lsls	r3, r3, #1
+ 1097 07ee FB18     		adds	r3, r7, r3
+ 1098 07f0 1A68     		ldr	r2, [r3]
+ 1099 07f2 124B     		ldr	r3, .L43+16
+ 1100 07f4 9A42     		cmp	r2, r3
+ 1101 07f6 23D8     		bhi	.L26
+ 1102              	.L40:
+  62:bmp180.c      ****     {
+  63:bmp180.c      ****         p = ((tS64)((tU64)B7 << 1) / (tS64)B4);
+ 1103              		.loc 1 63 0
+ 1104 07f8 9023     		movs	r3, #144
+ 1105 07fa 5B00     		lsls	r3, r3, #1
+ 1106 07fc FB18     		adds	r3, r7, r3
+ 1107 07fe 5C68     		ldr	r4, [r3, #4]
+ 1108 0800 1B68     		ldr	r3, [r3]
+ 1109 0802 DB18     		adds	r3, r3, r3
+ 1110 0804 6441     		adcs	r4, r4, r4
+ 1111 0806 1800     		movs	r0, r3
+ 1112 0808 2100     		movs	r1, r4
+ 1113 080a 9423     		movs	r3, #148
+ 1114 080c 5B00     		lsls	r3, r3, #1
+ 1115 080e FB18     		adds	r3, r7, r3
+ 1116 0810 5C68     		ldr	r4, [r3, #4]
+ 1117 0812 1B68     		ldr	r3, [r3]
+ 1118 0814 1A00     		movs	r2, r3
+ 1119 0816 2300     		movs	r3, r4
+ 1120 0818 FFF7FEFF 		bl	__aeabi_ldivmod
+ 1121              	.LVL10:
+ 1122 081c 0300     		movs	r3, r0
+ 1123 081e 0C00     		movs	r4, r1
+ 1124 0820 C022     		movs	r2, #192
+ 1125 0822 5200     		lsls	r2, r2, #1
+ 1126 0824 BA18     		adds	r2, r7, r2
+ 1127 0826 1360     		str	r3, [r2]
+ 1128 0828 5460     		str	r4, [r2, #4]
+ 1129 082a 1EE0     		b	.L28
+ 1130              	.L44:
+ 1131              		.align	2
+ 1132              	.L43:
+ 1133 082c FF1F0000 		.word	8191
+ 1134 0830 FF0F0000 		.word	4095
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 22
+
+
+ 1135 0834 FFFF0000 		.word	65535
+ 1136 0838 50C30000 		.word	50000
+ 1137 083c FFFFFF7F 		.word	2147483647
+ 1138              	.L26:
+  64:bmp180.c      ****     }
+  65:bmp180.c      ****     else
+  66:bmp180.c      ****     {
+  67:bmp180.c      ****         p = (tS64)((B7 / B4) << 1);
+ 1139              		.loc 1 67 0
+ 1140 0840 9423     		movs	r3, #148
+ 1141 0842 5B00     		lsls	r3, r3, #1
+ 1142 0844 FB18     		adds	r3, r7, r3
+ 1143 0846 1A68     		ldr	r2, [r3]
+ 1144 0848 5B68     		ldr	r3, [r3, #4]
+ 1145 084a 9021     		movs	r1, #144
+ 1146 084c 4900     		lsls	r1, r1, #1
+ 1147 084e 7918     		adds	r1, r7, r1
+ 1148 0850 0868     		ldr	r0, [r1]
+ 1149 0852 4968     		ldr	r1, [r1, #4]
+ 1150 0854 FFF7FEFF 		bl	__aeabi_uldivmod
+ 1151              	.LVL11:
+ 1152 0858 0300     		movs	r3, r0
+ 1153 085a 0C00     		movs	r4, r1
+ 1154 085c DB18     		adds	r3, r3, r3
+ 1155 085e 6441     		adcs	r4, r4, r4
+ 1156 0860 C022     		movs	r2, #192
+ 1157 0862 5200     		lsls	r2, r2, #1
+ 1158 0864 BA18     		adds	r2, r7, r2
+ 1159 0866 1360     		str	r3, [r2]
+ 1160 0868 5460     		str	r4, [r2, #4]
+ 1161              	.L28:
+  68:bmp180.c      ****     }
+  69:bmp180.c      **** 
+  70:bmp180.c      ****     X1 = (p / (tS64)((tU64)1 << 8)) * (p / (tS64)((tU64)1 << 8));
+ 1162              		.loc 1 70 0
+ 1163 086a C023     		movs	r3, #192
+ 1164 086c 5B00     		lsls	r3, r3, #1
+ 1165 086e FB18     		adds	r3, r7, r3
+ 1166 0870 5C68     		ldr	r4, [r3, #4]
+ 1167 0872 1B68     		ldr	r3, [r3]
+ 1168 0874 1900     		movs	r1, r3
+ 1169 0876 2200     		movs	r2, r4
+ 1170 0878 002A     		cmp	r2, #0
+ 1171 087a 03DA     		bge	.L29
+ 1172 087c FF23     		movs	r3, #255
+ 1173 087e 0024     		movs	r4, #0
+ 1174 0880 C918     		adds	r1, r1, r3
+ 1175 0882 6241     		adcs	r2, r2, r4
+ 1176              	.L29:
+ 1177 0884 1306     		lsls	r3, r2, #24
+ 1178 0886 080A     		lsrs	r0, r1, #8
+ 1179 0888 9824     		movs	r4, #152
+ 1180 088a 3C19     		adds	r4, r7, r4
+ 1181 088c 2060     		str	r0, [r4]
+ 1182 088e 9820     		movs	r0, #152
+ 1183 0890 3818     		adds	r0, r7, r0
+ 1184 0892 0068     		ldr	r0, [r0]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 23
+
+
+ 1185 0894 1843     		orrs	r0, r3
+ 1186 0896 9823     		movs	r3, #152
+ 1187 0898 FB18     		adds	r3, r7, r3
+ 1188 089a 1860     		str	r0, [r3]
+ 1189 089c 1312     		asrs	r3, r2, #8
+ 1190 089e 9C22     		movs	r2, #156
+ 1191 08a0 BA18     		adds	r2, r7, r2
+ 1192 08a2 1360     		str	r3, [r2]
+ 1193 08a4 9823     		movs	r3, #152
+ 1194 08a6 FB18     		adds	r3, r7, r3
+ 1195 08a8 5C68     		ldr	r4, [r3, #4]
+ 1196 08aa 1B68     		ldr	r3, [r3]
+ 1197 08ac 8422     		movs	r2, #132
+ 1198 08ae 5200     		lsls	r2, r2, #1
+ 1199 08b0 BA18     		adds	r2, r7, r2
+ 1200 08b2 1360     		str	r3, [r2]
+ 1201 08b4 5460     		str	r4, [r2, #4]
+ 1202 08b6 C023     		movs	r3, #192
+ 1203 08b8 5B00     		lsls	r3, r3, #1
+ 1204 08ba FB18     		adds	r3, r7, r3
+ 1205 08bc 5C68     		ldr	r4, [r3, #4]
+ 1206 08be 1B68     		ldr	r3, [r3]
+ 1207 08c0 1900     		movs	r1, r3
+ 1208 08c2 2200     		movs	r2, r4
+ 1209 08c4 002A     		cmp	r2, #0
+ 1210 08c6 03DA     		bge	.L31
+ 1211 08c8 FF23     		movs	r3, #255
+ 1212 08ca 0024     		movs	r4, #0
+ 1213 08cc C918     		adds	r1, r1, r3
+ 1214 08ce 6241     		adcs	r2, r2, r4
+ 1215              	.L31:
+ 1216 08d0 1306     		lsls	r3, r2, #24
+ 1217 08d2 080A     		lsrs	r0, r1, #8
+ 1218 08d4 9024     		movs	r4, #144
+ 1219 08d6 3C19     		adds	r4, r7, r4
+ 1220 08d8 2060     		str	r0, [r4]
+ 1221 08da 9020     		movs	r0, #144
+ 1222 08dc 3818     		adds	r0, r7, r0
+ 1223 08de 0068     		ldr	r0, [r0]
+ 1224 08e0 1843     		orrs	r0, r3
+ 1225 08e2 9023     		movs	r3, #144
+ 1226 08e4 FB18     		adds	r3, r7, r3
+ 1227 08e6 1860     		str	r0, [r3]
+ 1228 08e8 1312     		asrs	r3, r2, #8
+ 1229 08ea 9422     		movs	r2, #148
+ 1230 08ec BA18     		adds	r2, r7, r2
+ 1231 08ee 1360     		str	r3, [r2]
+ 1232 08f0 9023     		movs	r3, #144
+ 1233 08f2 FB18     		adds	r3, r7, r3
+ 1234 08f4 5C68     		ldr	r4, [r3, #4]
+ 1235 08f6 1B68     		ldr	r3, [r3]
+ 1236 08f8 1A00     		movs	r2, r3
+ 1237 08fa 2300     		movs	r3, r4
+ 1238 08fc 8421     		movs	r1, #132
+ 1239 08fe 4900     		lsls	r1, r1, #1
+ 1240 0900 7918     		adds	r1, r7, r1
+ 1241 0902 0868     		ldr	r0, [r1]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 24
+
+
+ 1242 0904 4968     		ldr	r1, [r1, #4]
+ 1243 0906 FFF7FEFF 		bl	__aeabi_lmul
+ 1244              	.LVL12:
+ 1245 090a 0300     		movs	r3, r0
+ 1246 090c 0C00     		movs	r4, r1
+ 1247 090e B022     		movs	r2, #176
+ 1248 0910 5200     		lsls	r2, r2, #1
+ 1249 0912 BA18     		adds	r2, r7, r2
+ 1250 0914 1360     		str	r3, [r2]
+ 1251 0916 5460     		str	r4, [r2, #4]
+  71:bmp180.c      ****     X1 = (X1 * 3038) / (tS64)((tU64)1 << 16);
+ 1252              		.loc 1 71 0
+ 1253 0918 764A     		ldr	r2, .L45
+ 1254 091a 0023     		movs	r3, #0
+ 1255 091c B021     		movs	r1, #176
+ 1256 091e 4900     		lsls	r1, r1, #1
+ 1257 0920 7918     		adds	r1, r7, r1
+ 1258 0922 0868     		ldr	r0, [r1]
+ 1259 0924 4968     		ldr	r1, [r1, #4]
+ 1260 0926 FFF7FEFF 		bl	__aeabi_lmul
+ 1261              	.LVL13:
+ 1262 092a 0300     		movs	r3, r0
+ 1263 092c 0C00     		movs	r4, r1
+ 1264 092e 1900     		movs	r1, r3
+ 1265 0930 2200     		movs	r2, r4
+ 1266 0932 002A     		cmp	r2, #0
+ 1267 0934 03DA     		bge	.L33
+ 1268 0936 704B     		ldr	r3, .L45+4
+ 1269 0938 0024     		movs	r4, #0
+ 1270 093a C918     		adds	r1, r1, r3
+ 1271 093c 6241     		adcs	r2, r2, r4
+ 1272              	.L33:
+ 1273 093e 1304     		lsls	r3, r2, #16
+ 1274 0940 080C     		lsrs	r0, r1, #16
+ 1275 0942 8824     		movs	r4, #136
+ 1276 0944 3C19     		adds	r4, r7, r4
+ 1277 0946 2060     		str	r0, [r4]
+ 1278 0948 8820     		movs	r0, #136
+ 1279 094a 3818     		adds	r0, r7, r0
+ 1280 094c 0068     		ldr	r0, [r0]
+ 1281 094e 1843     		orrs	r0, r3
+ 1282 0950 8823     		movs	r3, #136
+ 1283 0952 FB18     		adds	r3, r7, r3
+ 1284 0954 1860     		str	r0, [r3]
+ 1285 0956 1314     		asrs	r3, r2, #16
+ 1286 0958 8C22     		movs	r2, #140
+ 1287 095a BA18     		adds	r2, r7, r2
+ 1288 095c 1360     		str	r3, [r2]
+ 1289 095e 8823     		movs	r3, #136
+ 1290 0960 FB18     		adds	r3, r7, r3
+ 1291 0962 5C68     		ldr	r4, [r3, #4]
+ 1292 0964 1B68     		ldr	r3, [r3]
+ 1293 0966 B022     		movs	r2, #176
+ 1294 0968 5200     		lsls	r2, r2, #1
+ 1295 096a BA18     		adds	r2, r7, r2
+ 1296 096c 1360     		str	r3, [r2]
+ 1297 096e 5460     		str	r4, [r2, #4]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 25
+
+
+  72:bmp180.c      ****     X2 = (-7357 * p) / (tS64)((tU64)1 << 16);
+ 1298              		.loc 1 72 0
+ 1299 0970 C023     		movs	r3, #192
+ 1300 0972 5B00     		lsls	r3, r3, #1
+ 1301 0974 FB18     		adds	r3, r7, r3
+ 1302 0976 1868     		ldr	r0, [r3]
+ 1303 0978 5968     		ldr	r1, [r3, #4]
+ 1304 097a 8423     		movs	r3, #132
+ 1305 097c 5B00     		lsls	r3, r3, #1
+ 1306 097e FB18     		adds	r3, r7, r3
+ 1307 0980 1860     		str	r0, [r3]
+ 1308 0982 5960     		str	r1, [r3, #4]
+ 1309 0984 0300     		movs	r3, r0
+ 1310 0986 0C00     		movs	r4, r1
+ 1311 0988 D80B     		lsrs	r0, r3, #15
+ 1312 098a 6204     		lsls	r2, r4, #17
+ 1313 098c 8421     		movs	r1, #132
+ 1314 098e 7918     		adds	r1, r7, r1
+ 1315 0990 0A60     		str	r2, [r1]
+ 1316 0992 8422     		movs	r2, #132
+ 1317 0994 BA18     		adds	r2, r7, r2
+ 1318 0996 1268     		ldr	r2, [r2]
+ 1319 0998 0243     		orrs	r2, r0
+ 1320 099a 8421     		movs	r1, #132
+ 1321 099c 7918     		adds	r1, r7, r1
+ 1322 099e 0A60     		str	r2, [r1]
+ 1323 09a0 5B04     		lsls	r3, r3, #17
+ 1324 09a2 8022     		movs	r2, #128
+ 1325 09a4 BA18     		adds	r2, r7, r2
+ 1326 09a6 1360     		str	r3, [r2]
+ 1327 09a8 8023     		movs	r3, #128
+ 1328 09aa FB18     		adds	r3, r7, r3
+ 1329 09ac 5C68     		ldr	r4, [r3, #4]
+ 1330 09ae 1B68     		ldr	r3, [r3]
+ 1331 09b0 8422     		movs	r2, #132
+ 1332 09b2 5200     		lsls	r2, r2, #1
+ 1333 09b4 BA18     		adds	r2, r7, r2
+ 1334 09b6 1068     		ldr	r0, [r2]
+ 1335 09b8 5168     		ldr	r1, [r2, #4]
+ 1336 09ba 1B18     		adds	r3, r3, r0
+ 1337 09bc 4C41     		adcs	r4, r4, r1
+ 1338 09be D80B     		lsrs	r0, r3, #15
+ 1339 09c0 6204     		lsls	r2, r4, #17
+ 1340 09c2 FA67     		str	r2, [r7, #124]
+ 1341 09c4 FA6F     		ldr	r2, [r7, #124]
+ 1342 09c6 0243     		orrs	r2, r0
+ 1343 09c8 FA67     		str	r2, [r7, #124]
+ 1344 09ca 5B04     		lsls	r3, r3, #17
+ 1345 09cc BB67     		str	r3, [r7, #120]
+ 1346 09ce BB6F     		ldr	r3, [r7, #120]
+ 1347 09d0 FC6F     		ldr	r4, [r7, #124]
+ 1348 09d2 8422     		movs	r2, #132
+ 1349 09d4 5200     		lsls	r2, r2, #1
+ 1350 09d6 BA18     		adds	r2, r7, r2
+ 1351 09d8 1068     		ldr	r0, [r2]
+ 1352 09da 5168     		ldr	r1, [r2, #4]
+ 1353 09dc 1B18     		adds	r3, r3, r0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 26
+
+
+ 1354 09de 4C41     		adcs	r4, r4, r1
+ 1355 09e0 D80B     		lsrs	r0, r3, #15
+ 1356 09e2 6604     		lsls	r6, r4, #17
+ 1357 09e4 0643     		orrs	r6, r0
+ 1358 09e6 5D04     		lsls	r5, r3, #17
+ 1359 09e8 ED1A     		subs	r5, r5, r3
+ 1360 09ea A641     		sbcs	r6, r6, r4
+ 1361 09ec 2B0F     		lsrs	r3, r5, #28
+ 1362 09ee 3201     		lsls	r2, r6, #4
+ 1363 09f0 7A67     		str	r2, [r7, #116]
+ 1364 09f2 7A6F     		ldr	r2, [r7, #116]
+ 1365 09f4 1A43     		orrs	r2, r3
+ 1366 09f6 7A67     		str	r2, [r7, #116]
+ 1367 09f8 2B01     		lsls	r3, r5, #4
+ 1368 09fa 3B67     		str	r3, [r7, #112]
+ 1369 09fc 3D6F     		ldr	r5, [r7, #112]
+ 1370 09fe 7E6F     		ldr	r6, [r7, #116]
+ 1371 0a00 8423     		movs	r3, #132
+ 1372 0a02 5B00     		lsls	r3, r3, #1
+ 1373 0a04 FB18     		adds	r3, r7, r3
+ 1374 0a06 1868     		ldr	r0, [r3]
+ 1375 0a08 5968     		ldr	r1, [r3, #4]
+ 1376 0a0a 2D18     		adds	r5, r5, r0
+ 1377 0a0c 4E41     		adcs	r6, r6, r1
+ 1378 0a0e 2B00     		movs	r3, r5
+ 1379 0a10 3400     		movs	r4, r6
+ 1380 0a12 5B19     		adds	r3, r3, r5
+ 1381 0a14 7441     		adcs	r4, r4, r6
+ 1382 0a16 1B18     		adds	r3, r3, r0
+ 1383 0a18 4C41     		adcs	r4, r4, r1
+ 1384 0a1a 1D00     		movs	r5, r3
+ 1385 0a1c 2600     		movs	r6, r4
+ 1386 0a1e AB0F     		lsrs	r3, r5, #30
+ 1387 0a20 B200     		lsls	r2, r6, #2
+ 1388 0a22 FA66     		str	r2, [r7, #108]
+ 1389 0a24 FA6E     		ldr	r2, [r7, #108]
+ 1390 0a26 1A43     		orrs	r2, r3
+ 1391 0a28 FA66     		str	r2, [r7, #108]
+ 1392 0a2a AB00     		lsls	r3, r5, #2
+ 1393 0a2c BB66     		str	r3, [r7, #104]
+ 1394 0a2e BD6E     		ldr	r5, [r7, #104]
+ 1395 0a30 FE6E     		ldr	r6, [r7, #108]
+ 1396 0a32 2D18     		adds	r5, r5, r0
+ 1397 0a34 4E41     		adcs	r6, r6, r1
+ 1398 0a36 EB0E     		lsrs	r3, r5, #27
+ 1399 0a38 7201     		lsls	r2, r6, #5
+ 1400 0a3a 7A66     		str	r2, [r7, #100]
+ 1401 0a3c 7A6E     		ldr	r2, [r7, #100]
+ 1402 0a3e 1A43     		orrs	r2, r3
+ 1403 0a40 7A66     		str	r2, [r7, #100]
+ 1404 0a42 6B01     		lsls	r3, r5, #5
+ 1405 0a44 3B66     		str	r3, [r7, #96]
+ 1406 0a46 3D6E     		ldr	r5, [r7, #96]
+ 1407 0a48 7E6E     		ldr	r6, [r7, #100]
+ 1408 0a4a 2D18     		adds	r5, r5, r0
+ 1409 0a4c 4E41     		adcs	r6, r6, r1
+ 1410 0a4e 2B00     		movs	r3, r5
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 27
+
+
+ 1411 0a50 3400     		movs	r4, r6
+ 1412 0a52 5B19     		adds	r3, r3, r5
+ 1413 0a54 7441     		adcs	r4, r4, r6
+ 1414 0a56 1B18     		adds	r3, r3, r0
+ 1415 0a58 4C41     		adcs	r4, r4, r1
+ 1416 0a5a 002C     		cmp	r4, #0
+ 1417 0a5c 03DA     		bge	.L35
+ 1418 0a5e 2649     		ldr	r1, .L45+4
+ 1419 0a60 0022     		movs	r2, #0
+ 1420 0a62 5B18     		adds	r3, r3, r1
+ 1421 0a64 5441     		adcs	r4, r4, r2
+ 1422              	.L35:
+ 1423 0a66 2204     		lsls	r2, r4, #16
+ 1424 0a68 190C     		lsrs	r1, r3, #16
+ 1425 0a6a B965     		str	r1, [r7, #88]
+ 1426 0a6c B96D     		ldr	r1, [r7, #88]
+ 1427 0a6e 1143     		orrs	r1, r2
+ 1428 0a70 B965     		str	r1, [r7, #88]
+ 1429 0a72 2314     		asrs	r3, r4, #16
+ 1430 0a74 FB65     		str	r3, [r7, #92]
+ 1431 0a76 BB6D     		ldr	r3, [r7, #88]
+ 1432 0a78 FC6D     		ldr	r4, [r7, #92]
+ 1433 0a7a AC22     		movs	r2, #172
+ 1434 0a7c 5200     		lsls	r2, r2, #1
+ 1435 0a7e BA18     		adds	r2, r7, r2
+ 1436 0a80 1360     		str	r3, [r2]
+ 1437 0a82 5460     		str	r4, [r2, #4]
+  73:bmp180.c      **** 
+  74:bmp180.c      ****     p = (p + (tS64)((tS64)(X1 + X2 + (tS64)3791) / (tS64)((tU64)1 << 4)));
+ 1438              		.loc 1 74 0
+ 1439 0a84 B023     		movs	r3, #176
+ 1440 0a86 5B00     		lsls	r3, r3, #1
+ 1441 0a88 FB18     		adds	r3, r7, r3
+ 1442 0a8a 1968     		ldr	r1, [r3]
+ 1443 0a8c 5A68     		ldr	r2, [r3, #4]
+ 1444 0a8e AC23     		movs	r3, #172
+ 1445 0a90 5B00     		lsls	r3, r3, #1
+ 1446 0a92 FB18     		adds	r3, r7, r3
+ 1447 0a94 5C68     		ldr	r4, [r3, #4]
+ 1448 0a96 1B68     		ldr	r3, [r3]
+ 1449 0a98 5B18     		adds	r3, r3, r1
+ 1450 0a9a 5441     		adcs	r4, r4, r2
+ 1451 0a9c 1749     		ldr	r1, .L45+8
+ 1452 0a9e 0022     		movs	r2, #0
+ 1453 0aa0 5B18     		adds	r3, r3, r1
+ 1454 0aa2 5441     		adcs	r4, r4, r2
+ 1455 0aa4 002C     		cmp	r4, #0
+ 1456 0aa6 03DA     		bge	.L37
+ 1457 0aa8 0F21     		movs	r1, #15
+ 1458 0aaa 0022     		movs	r2, #0
+ 1459 0aac 5B18     		adds	r3, r3, r1
+ 1460 0aae 5441     		adcs	r4, r4, r2
+ 1461              	.L37:
+ 1462 0ab0 2207     		lsls	r2, r4, #28
+ 1463 0ab2 1909     		lsrs	r1, r3, #4
+ 1464 0ab4 3965     		str	r1, [r7, #80]
+ 1465 0ab6 396D     		ldr	r1, [r7, #80]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 28
+
+
+ 1466 0ab8 1143     		orrs	r1, r2
+ 1467 0aba 3965     		str	r1, [r7, #80]
+ 1468 0abc 2311     		asrs	r3, r4, #4
+ 1469 0abe 7B65     		str	r3, [r7, #84]
+ 1470 0ac0 396D     		ldr	r1, [r7, #80]
+ 1471 0ac2 7A6D     		ldr	r2, [r7, #84]
+ 1472 0ac4 C023     		movs	r3, #192
+ 1473 0ac6 5B00     		lsls	r3, r3, #1
+ 1474 0ac8 FB18     		adds	r3, r7, r3
+ 1475 0aca 5C68     		ldr	r4, [r3, #4]
+ 1476 0acc 1B68     		ldr	r3, [r3]
+ 1477 0ace 5B18     		adds	r3, r3, r1
+ 1478 0ad0 5441     		adcs	r4, r4, r2
+ 1479 0ad2 C022     		movs	r2, #192
+ 1480 0ad4 5200     		lsls	r2, r2, #1
+ 1481 0ad6 BA18     		adds	r2, r7, r2
+ 1482 0ad8 1360     		str	r3, [r2]
+ 1483 0ada 5460     		str	r4, [r2, #4]
+  75:bmp180.c      **** 
+  76:bmp180.c      ****     return p;
+ 1484              		.loc 1 76 0
+ 1485 0adc C023     		movs	r3, #192
+ 1486 0ade 5B00     		lsls	r3, r3, #1
+ 1487 0ae0 FB18     		adds	r3, r7, r3
+ 1488 0ae2 5C68     		ldr	r4, [r3, #4]
+ 1489 0ae4 1B68     		ldr	r3, [r3]
+  77:bmp180.c      **** }
+ 1490              		.loc 1 77 0
+ 1491 0ae6 1800     		movs	r0, r3
+ 1492 0ae8 2100     		movs	r1, r4
+ 1493 0aea BD46     		mov	sp, r7
+ 1494 0aec 63B0     		add	sp, sp, #396
+ 1495              		@ sp needed
+ 1496 0aee F0BC     		pop	{r4, r5, r6, r7}
+ 1497 0af0 04BC     		pop	{r2}
+ 1498 0af2 1047     		bx	r2
+ 1499              	.L46:
+ 1500              		.align	2
+ 1501              	.L45:
+ 1502 0af4 DE0B0000 		.word	3038
+ 1503 0af8 FFFF0000 		.word	65535
+ 1504 0afc CF0E0000 		.word	3791
+ 1505              		.cfi_endproc
+ 1506              	.LFE0:
+ 1507              		.size	calculatePressure, .-calculatePressure
+ 1508              		.align	1
+ 1509              		.global	measurePressure
+ 1510              		.syntax unified
+ 1511              		.code	16
+ 1512              		.thumb_func
+ 1513              		.fpu softvfp
+ 1514              		.type	measurePressure, %function
+ 1515              	measurePressure:
+ 1516              	.LFB1:
+  78:bmp180.c      **** 
+  79:bmp180.c      **** tS64 measurePressure(void)
+  80:bmp180.c      **** {
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 29
+
+
+ 1517              		.loc 1 80 0
+ 1518              		.cfi_startproc
+ 1519              		@ Function supports interworking.
+ 1520              		@ args = 0, pretend = 0, frame = 80
+ 1521              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1522 0b00 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1523              	.LCFI3:
+ 1524              		.cfi_def_cfa_offset 20
+ 1525              		.cfi_offset 4, -20
+ 1526              		.cfi_offset 5, -16
+ 1527              		.cfi_offset 6, -12
+ 1528              		.cfi_offset 7, -8
+ 1529              		.cfi_offset 14, -4
+ 1530 0b02 97B0     		sub	sp, sp, #92
+ 1531              	.LCFI4:
+ 1532              		.cfi_def_cfa_offset 112
+ 1533 0b04 02AF     		add	r7, sp, #8
+ 1534              	.LCFI5:
+ 1535              		.cfi_def_cfa 7, 104
+  81:bmp180.c      ****     // BMP180 read address: 7 bit address -> 1110111 and additional bit of value 1 for read operati
+  82:bmp180.c      ****     tU8 bmpReadAddress = (((tU8)0x77 << 1) | (tU8)1); // Address: 0xEF
+ 1536              		.loc 1 82 0
+ 1537 0b06 4B23     		movs	r3, #75
+ 1538 0b08 FB18     		adds	r3, r7, r3
+ 1539 0b0a EF22     		movs	r2, #239
+ 1540 0b0c 1A70     		strb	r2, [r3]
+  83:bmp180.c      ****     // BMP180 write address: 7 bit address -> 1110111 and additional bit of value 0 for write opera
+  84:bmp180.c      ****     tU8 bmpWriteAddress = ((tU8)0x77 << 1); // Address: 0xEE
+ 1541              		.loc 1 84 0
+ 1542 0b0e 4A24     		movs	r4, #74
+ 1543 0b10 3B19     		adds	r3, r7, r4
+ 1544 0b12 EE22     		movs	r2, #238
+ 1545 0b14 1A70     		strb	r2, [r3]
+  85:bmp180.c      ****     // Array of bytes used for reading compensation values.
+  86:bmp180.c      ****     tU8 registerContents[3] = {0};
+ 1546              		.loc 1 86 0
+ 1547 0b16 2423     		movs	r3, #36
+ 1548 0b18 FB18     		adds	r3, r7, r3
+ 1549 0b1a 1800     		movs	r0, r3
+ 1550 0b1c 0323     		movs	r3, #3
+ 1551 0b1e 1A00     		movs	r2, r3
+ 1552 0b20 0021     		movs	r1, #0
+ 1553 0b22 FFF7FEFF 		bl	memset
+  87:bmp180.c      **** 
+  88:bmp180.c      ****     // Array holding calibration values
+  89:bmp180.c      ****     tU16 calibrationArray[11] = {0};
+ 1554              		.loc 1 89 0
+ 1555 0b26 0C23     		movs	r3, #12
+ 1556 0b28 FB18     		adds	r3, r7, r3
+ 1557 0b2a 1800     		movs	r0, r3
+ 1558 0b2c 1623     		movs	r3, #22
+ 1559 0b2e 1A00     		movs	r2, r3
+ 1560 0b30 0021     		movs	r1, #0
+ 1561 0b32 FFF7FEFF 		bl	memset
+  90:bmp180.c      **** 
+  91:bmp180.c      ****     // Address of register, where calibration data starts.
+  92:bmp180.c      ****     tU8 staringRegister = (tU8)0xAA; // From 0xAA to 0xBF
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 30
+
+
+ 1562              		.loc 1 92 0
+ 1563 0b36 4F21     		movs	r1, #79
+ 1564 0b38 7B18     		adds	r3, r7, r1
+ 1565 0b3a AA22     		movs	r2, #170
+ 1566 0b3c 1A70     		strb	r2, [r3]
+  93:bmp180.c      **** 
+  94:bmp180.c      ****     // Reading calibration value for all coefficients
+  95:bmp180.c      ****     tU16 iterator;
+  96:bmp180.c      ****     // Making device "aware" we are going to read compenstaion data.
+  97:bmp180.c      ****     i2cWrite(bmpWriteAddress, staringRegister, 1);
+ 1567              		.loc 1 97 0
+ 1568 0b3e 3B19     		adds	r3, r7, r4
+ 1569 0b40 1878     		ldrb	r0, [r3]
+ 1570 0b42 7B18     		adds	r3, r7, r1
+ 1571 0b44 1B78     		ldrb	r3, [r3]
+ 1572 0b46 0122     		movs	r2, #1
+ 1573 0b48 1900     		movs	r1, r3
+ 1574 0b4a FFF7FEFF 		bl	i2cWrite
+  98:bmp180.c      ****     for (iterator = 0; iterator < (tU16)11; iterator = iterator + (tU16)1)
+ 1575              		.loc 1 98 0
+ 1576 0b4e 4C23     		movs	r3, #76
+ 1577 0b50 FB18     		adds	r3, r7, r3
+ 1578 0b52 0022     		movs	r2, #0
+ 1579 0b54 1A80     		strh	r2, [r3]
+ 1580 0b56 2AE0     		b	.L48
+ 1581              	.L49:
+ 1582              	.LBB2:
+  99:bmp180.c      ****     {
+ 100:bmp180.c      ****         i2cRead(bmpReadAddress, registerContents, 2);
+ 1583              		.loc 1 100 0 discriminator 3
+ 1584 0b58 4B23     		movs	r3, #75
+ 1585 0b5a FB18     		adds	r3, r7, r3
+ 1586 0b5c 1B78     		ldrb	r3, [r3]
+ 1587 0b5e 2421     		movs	r1, #36
+ 1588 0b60 0C00     		movs	r4, r1
+ 1589 0b62 7918     		adds	r1, r7, r1
+ 1590 0b64 0222     		movs	r2, #2
+ 1591 0b66 1800     		movs	r0, r3
+ 1592 0b68 FFF7FEFF 		bl	i2cRead
+ 101:bmp180.c      ****         calibrationArray[iterator] = ((registerContents[0] << 8) | registerContents[1]);
+ 1593              		.loc 1 101 0 discriminator 3
+ 1594 0b6c 2100     		movs	r1, r4
+ 1595 0b6e 7B18     		adds	r3, r7, r1
+ 1596 0b70 1B78     		ldrb	r3, [r3]
+ 1597 0b72 1B02     		lsls	r3, r3, #8
+ 1598 0b74 1A04     		lsls	r2, r3, #16
+ 1599 0b76 1214     		asrs	r2, r2, #16
+ 1600 0b78 7B18     		adds	r3, r7, r1
+ 1601 0b7a 5B78     		ldrb	r3, [r3, #1]
+ 1602 0b7c 1B04     		lsls	r3, r3, #16
+ 1603 0b7e 1B14     		asrs	r3, r3, #16
+ 1604 0b80 1343     		orrs	r3, r2
+ 1605 0b82 1B04     		lsls	r3, r3, #16
+ 1606 0b84 1B14     		asrs	r3, r3, #16
+ 1607 0b86 4C20     		movs	r0, #76
+ 1608 0b88 3A18     		adds	r2, r7, r0
+ 1609 0b8a 1288     		ldrh	r2, [r2]
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 31
+
+
+ 1610 0b8c 1B04     		lsls	r3, r3, #16
+ 1611 0b8e 190C     		lsrs	r1, r3, #16
+ 1612 0b90 0C23     		movs	r3, #12
+ 1613 0b92 FB18     		adds	r3, r7, r3
+ 1614 0b94 5200     		lsls	r2, r2, #1
+ 1615 0b96 D152     		strh	r1, [r2, r3]
+ 102:bmp180.c      ****         // We increment by 2 starting register to be able to read next calibration value.
+ 103:bmp180.c      ****         staringRegister = (staringRegister + (tU8)2);
+ 1616              		.loc 1 103 0 discriminator 3
+ 1617 0b98 4F22     		movs	r2, #79
+ 1618 0b9a BB18     		adds	r3, r7, r2
+ 1619 0b9c BA18     		adds	r2, r7, r2
+ 1620 0b9e 1278     		ldrb	r2, [r2]
+ 1621 0ba0 0232     		adds	r2, r2, #2
+ 1622 0ba2 1A70     		strb	r2, [r3]
+ 1623              	.LBE2:
+  98:bmp180.c      ****     {
+ 1624              		.loc 1 98 0 discriminator 3
+ 1625 0ba4 3B18     		adds	r3, r7, r0
+ 1626 0ba6 3A18     		adds	r2, r7, r0
+ 1627 0ba8 1288     		ldrh	r2, [r2]
+ 1628 0baa 0132     		adds	r2, r2, #1
+ 1629 0bac 1A80     		strh	r2, [r3]
+ 1630              	.L48:
+  98:bmp180.c      ****     {
+ 1631              		.loc 1 98 0 is_stmt 0 discriminator 1
+ 1632 0bae 4C23     		movs	r3, #76
+ 1633 0bb0 FB18     		adds	r3, r7, r3
+ 1634 0bb2 1B88     		ldrh	r3, [r3]
+ 1635 0bb4 0A2B     		cmp	r3, #10
+ 1636 0bb6 CFD9     		bls	.L49
+ 104:bmp180.c      ****     }
+ 105:bmp180.c      **** 
+ 106:bmp180.c      ****     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
+ 107:bmp180.c      **** 
+ 108:bmp180.c      ****     // Temperature / pressure value location registers: 0xF6 (MSB), 0xF7 (LSB), 0xF8 (XLSB)
+ 109:bmp180.c      ****     tU8 resultLocationAddress[1];
+ 110:bmp180.c      ****     resultLocationAddress[0] = 0xF6;
+ 1637              		.loc 1 110 0 is_stmt 1
+ 1638 0bb8 0824     		movs	r4, #8
+ 1639 0bba 3B19     		adds	r3, r7, r4
+ 1640 0bbc F622     		movs	r2, #246
+ 1641 0bbe 1A70     		strb	r2, [r3]
+ 111:bmp180.c      **** 
+ 112:bmp180.c      ****     // Value for pressure oversampling setting.
+ 113:bmp180.c      ****     tU8 pressureOss = 0x03;
+ 1642              		.loc 1 113 0
+ 1643 0bc0 4921     		movs	r1, #73
+ 1644 0bc2 7B18     		adds	r3, r7, r1
+ 1645 0bc4 0322     		movs	r2, #3
+ 1646 0bc6 1A70     		strb	r2, [r3]
+ 114:bmp180.c      **** 
+ 115:bmp180.c      ****     // Control register value for measuring temperature
+ 116:bmp180.c      ****     tU8 controlRegisterTemperatureValue = 0x2E;
+ 1647              		.loc 1 116 0
+ 1648 0bc8 4825     		movs	r5, #72
+ 1649 0bca 7B19     		adds	r3, r7, r5
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 32
+
+
+ 1650 0bcc 2E22     		movs	r2, #46
+ 1651 0bce 1A70     		strb	r2, [r3]
+ 117:bmp180.c      **** 
+ 118:bmp180.c      ****     // Control register value for measuring pressure
+ 119:bmp180.c      ****     tU8 controlRegisterPressureValue = ((tU8)0x34 + (pressureOss << 6));
+ 1652              		.loc 1 119 0
+ 1653 0bd0 7B18     		adds	r3, r7, r1
+ 1654 0bd2 1B78     		ldrb	r3, [r3]
+ 1655 0bd4 9B01     		lsls	r3, r3, #6
+ 1656 0bd6 1B06     		lsls	r3, r3, #24
+ 1657 0bd8 1A0E     		lsrs	r2, r3, #24
+ 1658 0bda 4723     		movs	r3, #71
+ 1659 0bdc FB18     		adds	r3, r7, r3
+ 1660 0bde 3432     		adds	r2, r2, #52
+ 1661 0be0 1A70     		strb	r2, [r3]
+ 120:bmp180.c      **** 
+ 121:bmp180.c      ****     // Measurement control register address
+ 122:bmp180.c      ****     tU8 registerAddress = (tU8)0xF4;
+ 1662              		.loc 1 122 0
+ 1663 0be2 4620     		movs	r0, #70
+ 1664 0be4 3B18     		adds	r3, r7, r0
+ 1665 0be6 F422     		movs	r2, #244
+ 1666 0be8 1A70     		strb	r2, [r3]
+ 123:bmp180.c      **** 
+ 124:bmp180.c      ****     tU8 commandArr[2] = {0};
+ 1667              		.loc 1 124 0
+ 1668 0bea 3B1D     		adds	r3, r7, #4
+ 1669 0bec 0022     		movs	r2, #0
+ 1670 0bee 1A80     		strh	r2, [r3]
+ 125:bmp180.c      **** 
+ 126:bmp180.c      ****     // Command for getting temperature value
+ 127:bmp180.c      ****     commandArr[0] = registerAddress;
+ 1671              		.loc 1 127 0
+ 1672 0bf0 3B1D     		adds	r3, r7, #4
+ 1673 0bf2 3A18     		adds	r2, r7, r0
+ 1674 0bf4 1278     		ldrb	r2, [r2]
+ 1675 0bf6 1A70     		strb	r2, [r3]
+ 128:bmp180.c      ****     commandArr[1] = controlRegisterTemperatureValue;
+ 1676              		.loc 1 128 0
+ 1677 0bf8 3B1D     		adds	r3, r7, #4
+ 1678 0bfa 7A19     		adds	r2, r7, r5
+ 1679 0bfc 1278     		ldrb	r2, [r2]
+ 1680 0bfe 5A70     		strb	r2, [r3, #1]
+ 129:bmp180.c      **** 
+ 130:bmp180.c      ****     // I2C write to BMP180 for reading temperature value.
+ 131:bmp180.c      ****     i2cWrite(bmpWriteAddress, commandArr, 2);
+ 1681              		.loc 1 131 0
+ 1682 0c00 4A25     		movs	r5, #74
+ 1683 0c02 7B19     		adds	r3, r7, r5
+ 1684 0c04 1B78     		ldrb	r3, [r3]
+ 1685 0c06 391D     		adds	r1, r7, #4
+ 1686 0c08 0222     		movs	r2, #2
+ 1687 0c0a 1800     		movs	r0, r3
+ 1688 0c0c FFF7FEFF 		bl	i2cWrite
+ 132:bmp180.c      ****     // Waiting for 5 ms to read temperature ; Minimum waiting time - 4.5 ms.
+ 133:bmp180.c      ****     mdelay(5);
+ 1689              		.loc 1 133 0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 33
+
+
+ 1690 0c10 0520     		movs	r0, #5
+ 1691 0c12 FFF7FEFF 		bl	mdelay
+ 134:bmp180.c      ****     // I2C read to retrieve temperature value from slave.
+ 135:bmp180.c      ****     i2cWrite(bmpWriteAddress, resultLocationAddress, 1);
+ 1692              		.loc 1 135 0
+ 1693 0c16 7B19     		adds	r3, r7, r5
+ 1694 0c18 1B78     		ldrb	r3, [r3]
+ 1695 0c1a 2600     		movs	r6, r4
+ 1696 0c1c 3919     		adds	r1, r7, r4
+ 1697 0c1e 0122     		movs	r2, #1
+ 1698 0c20 1800     		movs	r0, r3
+ 1699 0c22 FFF7FEFF 		bl	i2cWrite
+ 136:bmp180.c      ****     i2cRead(bmpReadAddress, registerContents, 2);
+ 1700              		.loc 1 136 0
+ 1701 0c26 4B24     		movs	r4, #75
+ 1702 0c28 3B19     		adds	r3, r7, r4
+ 1703 0c2a 1B78     		ldrb	r3, [r3]
+ 1704 0c2c 2424     		movs	r4, #36
+ 1705 0c2e 3919     		adds	r1, r7, r4
+ 1706 0c30 0222     		movs	r2, #2
+ 1707 0c32 1800     		movs	r0, r3
+ 1708 0c34 FFF7FEFF 		bl	i2cRead
+ 137:bmp180.c      ****     tU64 readTemp = ((registerContents[0] << 8) | (registerContents[1]));
+ 1709              		.loc 1 137 0
+ 1710 0c38 3B19     		adds	r3, r7, r4
+ 1711 0c3a 1B78     		ldrb	r3, [r3]
+ 1712 0c3c 1B02     		lsls	r3, r3, #8
+ 1713 0c3e 3A19     		adds	r2, r7, r4
+ 1714 0c40 5278     		ldrb	r2, [r2, #1]
+ 1715 0c42 1343     		orrs	r3, r2
+ 1716 0c44 BB63     		str	r3, [r7, #56]
+ 1717 0c46 DB17     		asrs	r3, r3, #31
+ 1718 0c48 FB63     		str	r3, [r7, #60]
+ 138:bmp180.c      **** 
+ 139:bmp180.c      ****     // Command for getting pressure value with oversampling setting equal to 1.
+ 140:bmp180.c      ****     commandArr[0] = registerAddress;
+ 1719              		.loc 1 140 0
+ 1720 0c4a 3B1D     		adds	r3, r7, #4
+ 1721 0c4c 4620     		movs	r0, #70
+ 1722 0c4e 3A18     		adds	r2, r7, r0
+ 1723 0c50 1278     		ldrb	r2, [r2]
+ 1724 0c52 1A70     		strb	r2, [r3]
+ 141:bmp180.c      ****     commandArr[1] = controlRegisterPressureValue;
+ 1725              		.loc 1 141 0
+ 1726 0c54 3B1D     		adds	r3, r7, #4
+ 1727 0c56 4722     		movs	r2, #71
+ 1728 0c58 BA18     		adds	r2, r7, r2
+ 1729 0c5a 1278     		ldrb	r2, [r2]
+ 1730 0c5c 5A70     		strb	r2, [r3, #1]
+ 142:bmp180.c      **** 
+ 143:bmp180.c      ****     // I2C write to BMP180 for reading temperature value.
+ 144:bmp180.c      ****     i2cWrite(bmpWriteAddress, commandArr, 2);
+ 1731              		.loc 1 144 0
+ 1732 0c5e 7B19     		adds	r3, r7, r5
+ 1733 0c60 1B78     		ldrb	r3, [r3]
+ 1734 0c62 391D     		adds	r1, r7, #4
+ 1735 0c64 0222     		movs	r2, #2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 34
+
+
+ 1736 0c66 1800     		movs	r0, r3
+ 1737 0c68 FFF7FEFF 		bl	i2cWrite
+ 145:bmp180.c      ****     // Waiting for 26 ms to read pressure ; Minimum waiting time = 25.5 ms
+ 146:bmp180.c      ****     mdelay(26);
+ 1738              		.loc 1 146 0
+ 1739 0c6c 1A20     		movs	r0, #26
+ 1740 0c6e FFF7FEFF 		bl	mdelay
+ 147:bmp180.c      ****     // I2C read to retrieve presssure value from slave.
+ 148:bmp180.c      ****     i2cWrite(bmpWriteAddress, resultLocationAddress, 1);
+ 1741              		.loc 1 148 0
+ 1742 0c72 7B19     		adds	r3, r7, r5
+ 1743 0c74 1B78     		ldrb	r3, [r3]
+ 1744 0c76 B919     		adds	r1, r7, r6
+ 1745 0c78 0122     		movs	r2, #1
+ 1746 0c7a 1800     		movs	r0, r3
+ 1747 0c7c FFF7FEFF 		bl	i2cWrite
+ 149:bmp180.c      ****     i2cRead(bmpReadAddress, registerContents, 3);
+ 1748              		.loc 1 149 0
+ 1749 0c80 4B23     		movs	r3, #75
+ 1750 0c82 FB18     		adds	r3, r7, r3
+ 1751 0c84 1B78     		ldrb	r3, [r3]
+ 1752 0c86 3919     		adds	r1, r7, r4
+ 1753 0c88 0322     		movs	r2, #3
+ 1754 0c8a 1800     		movs	r0, r3
+ 1755 0c8c FFF7FEFF 		bl	i2cRead
+ 150:bmp180.c      **** 
+ 151:bmp180.c      ****     tU64 readPress = ((registerContents[0] << 16) | (registerContents[1] << 8) | (registerContents[
+ 1756              		.loc 1 151 0
+ 1757 0c90 3B19     		adds	r3, r7, r4
+ 1758 0c92 1B78     		ldrb	r3, [r3]
+ 1759 0c94 1A04     		lsls	r2, r3, #16
+ 1760 0c96 3B19     		adds	r3, r7, r4
+ 1761 0c98 5B78     		ldrb	r3, [r3, #1]
+ 1762 0c9a 1B02     		lsls	r3, r3, #8
+ 1763 0c9c 1343     		orrs	r3, r2
+ 1764 0c9e 3A19     		adds	r2, r7, r4
+ 1765 0ca0 9278     		ldrb	r2, [r2, #2]
+ 1766 0ca2 1343     		orrs	r3, r2
+ 1767 0ca4 3B63     		str	r3, [r7, #48]
+ 1768 0ca6 DB17     		asrs	r3, r3, #31
+ 1769 0ca8 7B63     		str	r3, [r7, #52]
+ 152:bmp180.c      ****     readPress = (readPress >> ((tU64)8 - (tU64)pressureOss));
+ 1770              		.loc 1 152 0
+ 1771 0caa 4921     		movs	r1, #73
+ 1772 0cac 7B18     		adds	r3, r7, r1
+ 1773 0cae 1B78     		ldrb	r3, [r3]
+ 1774 0cb0 0822     		movs	r2, #8
+ 1775 0cb2 D31A     		subs	r3, r2, r3
+ 1776 0cb4 1A00     		movs	r2, r3
+ 1777 0cb6 203A     		subs	r2, r2, #32
+ 1778 0cb8 002A     		cmp	r2, #0
+ 1779 0cba 04DB     		blt	.L50
+ 1780 0cbc 796B     		ldr	r1, [r7, #52]
+ 1781 0cbe D140     		lsrs	r1, r1, r2
+ 1782 0cc0 0A00     		movs	r2, r1
+ 1783 0cc2 3A63     		str	r2, [r7, #48]
+ 1784 0cc4 08E0     		b	.L51
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 35
+
+
+ 1785              	.L50:
+ 1786 0cc6 2022     		movs	r2, #32
+ 1787 0cc8 D21A     		subs	r2, r2, r3
+ 1788 0cca 796B     		ldr	r1, [r7, #52]
+ 1789 0ccc 9140     		lsls	r1, r1, r2
+ 1790 0cce 0A00     		movs	r2, r1
+ 1791 0cd0 396B     		ldr	r1, [r7, #48]
+ 1792 0cd2 D940     		lsrs	r1, r1, r3
+ 1793 0cd4 0A43     		orrs	r2, r1
+ 1794 0cd6 3A63     		str	r2, [r7, #48]
+ 1795              	.L51:
+ 1796 0cd8 7A6B     		ldr	r2, [r7, #52]
+ 1797 0cda DA40     		lsrs	r2, r2, r3
+ 1798 0cdc 1300     		movs	r3, r2
+ 1799 0cde 7B63     		str	r3, [r7, #52]
+ 153:bmp180.c      **** 
+ 154:bmp180.c      ****     tS64 calculatedPressure = calculatePressure(readPress, readTemp, calibrationArray, pressureOss)
+ 1800              		.loc 1 154 0
+ 1801 0ce0 BB6B     		ldr	r3, [r7, #56]
+ 1802 0ce2 FC6B     		ldr	r4, [r7, #60]
+ 1803 0ce4 386B     		ldr	r0, [r7, #48]
+ 1804 0ce6 796B     		ldr	r1, [r7, #52]
+ 1805 0ce8 4922     		movs	r2, #73
+ 1806 0cea BA18     		adds	r2, r7, r2
+ 1807 0cec 1278     		ldrb	r2, [r2]
+ 1808 0cee 0192     		str	r2, [sp, #4]
+ 1809 0cf0 0C22     		movs	r2, #12
+ 1810 0cf2 BA18     		adds	r2, r7, r2
+ 1811 0cf4 0092     		str	r2, [sp]
+ 1812 0cf6 1A00     		movs	r2, r3
+ 1813 0cf8 2300     		movs	r3, r4
+ 1814 0cfa FFF7FEFF 		bl	calculatePressure
+ 1815 0cfe 0300     		movs	r3, r0
+ 1816 0d00 0C00     		movs	r4, r1
+ 1817 0d02 BB62     		str	r3, [r7, #40]
+ 1818 0d04 FC62     		str	r4, [r7, #44]
+ 155:bmp180.c      **** 
+ 156:bmp180.c      ****     return calculatedPressure;
+ 1819              		.loc 1 156 0
+ 1820 0d06 BB6A     		ldr	r3, [r7, #40]
+ 1821 0d08 FC6A     		ldr	r4, [r7, #44]
+ 157:bmp180.c      **** }
+ 1822              		.loc 1 157 0
+ 1823 0d0a 1800     		movs	r0, r3
+ 1824 0d0c 2100     		movs	r1, r4
+ 1825 0d0e BD46     		mov	sp, r7
+ 1826 0d10 15B0     		add	sp, sp, #84
+ 1827              		@ sp needed
+ 1828 0d12 F0BC     		pop	{r4, r5, r6, r7}
+ 1829 0d14 04BC     		pop	{r2}
+ 1830 0d16 1047     		bx	r2
+ 1831              		.cfi_endproc
+ 1832              	.LFE1:
+ 1833              		.size	measurePressure, .-measurePressure
+ 1834              	.Letext0:
+ 1835              		.file 2 "general.h"
+ 1836              		.section	.debug_info,"",%progbits
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 36
+
+
+ 1837              	.Ldebug_info0:
+ 1838 0000 81030000 		.4byte	0x381
+ 1839 0004 0200     		.2byte	0x2
+ 1840 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1841 000a 04       		.byte	0x4
+ 1842 000b 01       		.uleb128 0x1
+ 1843 000c 46000000 		.4byte	.LASF30
+ 1844 0010 0C       		.byte	0xc
+ 1845 0011 8C010000 		.4byte	.LASF31
+ 1846 0015 6E010000 		.4byte	.LASF32
+ 1847 0019 00000000 		.4byte	.Ltext0
+ 1848 001d 180D0000 		.4byte	.Letext0
+ 1849 0021 00000000 		.4byte	.Ldebug_line0
+ 1850 0025 02       		.uleb128 0x2
+ 1851 0026 74553800 		.ascii	"tU8\000"
+ 1852 002a 02       		.byte	0x2
+ 1853 002b 18       		.byte	0x18
+ 1854 002c 30000000 		.4byte	0x30
+ 1855 0030 03       		.uleb128 0x3
+ 1856 0031 01       		.byte	0x1
+ 1857 0032 08       		.byte	0x8
+ 1858 0033 16010000 		.4byte	.LASF1
+ 1859 0037 04       		.uleb128 0x4
+ 1860 0038 DA010000 		.4byte	.LASF0
+ 1861 003c 02       		.byte	0x2
+ 1862 003d 19       		.byte	0x19
+ 1863 003e 42000000 		.4byte	0x42
+ 1864 0042 03       		.uleb128 0x3
+ 1865 0043 02       		.byte	0x2
+ 1866 0044 07       		.byte	0x7
+ 1867 0045 32010000 		.4byte	.LASF2
+ 1868 0049 03       		.uleb128 0x3
+ 1869 004a 04       		.byte	0x4
+ 1870 004b 07       		.byte	0x7
+ 1871 004c A5010000 		.4byte	.LASF3
+ 1872 0050 04       		.uleb128 0x4
+ 1873 0051 2D010000 		.4byte	.LASF4
+ 1874 0055 02       		.byte	0x2
+ 1875 0056 1B       		.byte	0x1b
+ 1876 0057 5B000000 		.4byte	0x5b
+ 1877 005b 03       		.uleb128 0x3
+ 1878 005c 08       		.byte	0x8
+ 1879 005d 07       		.byte	0x7
+ 1880 005e B2010000 		.4byte	.LASF5
+ 1881 0062 03       		.uleb128 0x3
+ 1882 0063 01       		.byte	0x1
+ 1883 0064 06       		.byte	0x6
+ 1884 0065 34020000 		.4byte	.LASF6
+ 1885 0069 04       		.uleb128 0x4
+ 1886 006a 0F000000 		.4byte	.LASF7
+ 1887 006e 02       		.byte	0x2
+ 1888 006f 1D       		.byte	0x1d
+ 1889 0070 74000000 		.4byte	0x74
+ 1890 0074 03       		.uleb128 0x3
+ 1891 0075 02       		.byte	0x2
+ 1892 0076 05       		.byte	0x5
+ 1893 0077 FE010000 		.4byte	.LASF8
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 37
+
+
+ 1894 007b 05       		.uleb128 0x5
+ 1895 007c 04       		.byte	0x4
+ 1896 007d 05       		.byte	0x5
+ 1897 007e 696E7400 		.ascii	"int\000"
+ 1898 0082 04       		.uleb128 0x4
+ 1899 0083 D5010000 		.4byte	.LASF9
+ 1900 0087 02       		.byte	0x2
+ 1901 0088 1F       		.byte	0x1f
+ 1902 0089 8D000000 		.4byte	0x8d
+ 1903 008d 03       		.uleb128 0x3
+ 1904 008e 08       		.byte	0x8
+ 1905 008f 05       		.byte	0x5
+ 1906 0090 DF010000 		.4byte	.LASF10
+ 1907 0094 06       		.uleb128 0x6
+ 1908 0095 01       		.byte	0x1
+ 1909 0096 08020000 		.4byte	.LASF28
+ 1910 009a 01       		.byte	0x1
+ 1911 009b 4F       		.byte	0x4f
+ 1912 009c 01       		.byte	0x1
+ 1913 009d 82000000 		.4byte	0x82
+ 1914 00a1 000B0000 		.4byte	.LFB1
+ 1915 00a5 180D0000 		.4byte	.LFE1
+ 1916 00a9 00000000 		.4byte	.LLST1
+ 1917 00ad 01       		.byte	0x1
+ 1918 00ae C8010000 		.4byte	0x1c8
+ 1919 00b2 07       		.uleb128 0x7
+ 1920 00b3 00000000 		.4byte	.LASF11
+ 1921 00b7 01       		.byte	0x1
+ 1922 00b8 52       		.byte	0x52
+ 1923 00b9 25000000 		.4byte	0x25
+ 1924 00bd 02       		.byte	0x2
+ 1925 00be 91       		.byte	0x91
+ 1926 00bf 63       		.sleb128 -29
+ 1927 00c0 07       		.uleb128 0x7
+ 1928 00c1 95010000 		.4byte	.LASF12
+ 1929 00c5 01       		.byte	0x1
+ 1930 00c6 54       		.byte	0x54
+ 1931 00c7 25000000 		.4byte	0x25
+ 1932 00cb 02       		.byte	0x2
+ 1933 00cc 91       		.byte	0x91
+ 1934 00cd 62       		.sleb128 -30
+ 1935 00ce 07       		.uleb128 0x7
+ 1936 00cf ED010000 		.4byte	.LASF13
+ 1937 00d3 01       		.byte	0x1
+ 1938 00d4 56       		.byte	0x56
+ 1939 00d5 C8010000 		.4byte	0x1c8
+ 1940 00d9 03       		.byte	0x3
+ 1941 00da 91       		.byte	0x91
+ 1942 00db BC7F     		.sleb128 -68
+ 1943 00dd 07       		.uleb128 0x7
+ 1944 00de 40020000 		.4byte	.LASF14
+ 1945 00e2 01       		.byte	0x1
+ 1946 00e3 59       		.byte	0x59
+ 1947 00e4 D8010000 		.4byte	0x1d8
+ 1948 00e8 03       		.byte	0x3
+ 1949 00e9 91       		.byte	0x91
+ 1950 00ea A47F     		.sleb128 -92
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 38
+
+
+ 1951 00ec 07       		.uleb128 0x7
+ 1952 00ed 14000000 		.4byte	.LASF15
+ 1953 00f1 01       		.byte	0x1
+ 1954 00f2 5C       		.byte	0x5c
+ 1955 00f3 25000000 		.4byte	0x25
+ 1956 00f7 02       		.byte	0x2
+ 1957 00f8 91       		.byte	0x91
+ 1958 00f9 67       		.sleb128 -25
+ 1959 00fa 07       		.uleb128 0x7
+ 1960 00fb 20020000 		.4byte	.LASF16
+ 1961 00ff 01       		.byte	0x1
+ 1962 0100 5F       		.byte	0x5f
+ 1963 0101 37000000 		.4byte	0x37
+ 1964 0105 02       		.byte	0x2
+ 1965 0106 91       		.byte	0x91
+ 1966 0107 64       		.sleb128 -28
+ 1967 0108 08       		.uleb128 0x8
+ 1968 0109 01       		.byte	0x1
+ 1969 010a 24010000 		.4byte	.LASF23
+ 1970 010e 01       		.byte	0x1
+ 1971 010f 61       		.byte	0x61
+ 1972 0110 7B000000 		.4byte	0x7b
+ 1973 0114 01       		.byte	0x1
+ 1974 0115 1B010000 		.4byte	0x11b
+ 1975 0119 09       		.uleb128 0x9
+ 1976 011a 00       		.byte	0
+ 1977 011b 07       		.uleb128 0x7
+ 1978 011c 58010000 		.4byte	.LASF17
+ 1979 0120 01       		.byte	0x1
+ 1980 0121 6D       		.byte	0x6d
+ 1981 0122 E8010000 		.4byte	0x1e8
+ 1982 0126 03       		.byte	0x3
+ 1983 0127 91       		.byte	0x91
+ 1984 0128 A07F     		.sleb128 -96
+ 1985 012a 07       		.uleb128 0x7
+ 1986 012b C9010000 		.4byte	.LASF18
+ 1987 012f 01       		.byte	0x1
+ 1988 0130 71       		.byte	0x71
+ 1989 0131 25000000 		.4byte	0x25
+ 1990 0135 02       		.byte	0x2
+ 1991 0136 91       		.byte	0x91
+ 1992 0137 61       		.sleb128 -31
+ 1993 0138 07       		.uleb128 0x7
+ 1994 0139 CF000000 		.4byte	.LASF19
+ 1995 013d 01       		.byte	0x1
+ 1996 013e 74       		.byte	0x74
+ 1997 013f 25000000 		.4byte	0x25
+ 1998 0143 02       		.byte	0x2
+ 1999 0144 91       		.byte	0x91
+ 2000 0145 60       		.sleb128 -32
+ 2001 0146 07       		.uleb128 0x7
+ 2002 0147 EF000000 		.4byte	.LASF20
+ 2003 014b 01       		.byte	0x1
+ 2004 014c 77       		.byte	0x77
+ 2005 014d 25000000 		.4byte	0x25
+ 2006 0151 02       		.byte	0x2
+ 2007 0152 91       		.byte	0x91
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 39
+
+
+ 2008 0153 5F       		.sleb128 -33
+ 2009 0154 07       		.uleb128 0x7
+ 2010 0155 24000000 		.4byte	.LASF21
+ 2011 0159 01       		.byte	0x1
+ 2012 015a 7A       		.byte	0x7a
+ 2013 015b 25000000 		.4byte	0x25
+ 2014 015f 02       		.byte	0x2
+ 2015 0160 91       		.byte	0x91
+ 2016 0161 5E       		.sleb128 -34
+ 2017 0162 07       		.uleb128 0x7
+ 2018 0163 29020000 		.4byte	.LASF22
+ 2019 0167 01       		.byte	0x1
+ 2020 0168 7C       		.byte	0x7c
+ 2021 0169 F8010000 		.4byte	0x1f8
+ 2022 016d 03       		.byte	0x3
+ 2023 016e 91       		.byte	0x91
+ 2024 016f 9C7F     		.sleb128 -100
+ 2025 0171 08       		.uleb128 0x8
+ 2026 0172 01       		.byte	0x1
+ 2027 0173 18020000 		.4byte	.LASF24
+ 2028 0177 01       		.byte	0x1
+ 2029 0178 64       		.byte	0x64
+ 2030 0179 7B000000 		.4byte	0x7b
+ 2031 017d 01       		.byte	0x1
+ 2032 017e 84010000 		.4byte	0x184
+ 2033 0182 09       		.uleb128 0x9
+ 2034 0183 00       		.byte	0
+ 2035 0184 07       		.uleb128 0x7
+ 2036 0185 C6000000 		.4byte	.LASF25
+ 2037 0189 01       		.byte	0x1
+ 2038 018a 89       		.byte	0x89
+ 2039 018b 50000000 		.4byte	0x50
+ 2040 018f 02       		.byte	0x2
+ 2041 0190 91       		.byte	0x91
+ 2042 0191 50       		.sleb128 -48
+ 2043 0192 07       		.uleb128 0x7
+ 2044 0193 0C010000 		.4byte	.LASF26
+ 2045 0197 01       		.byte	0x1
+ 2046 0198 97       		.byte	0x97
+ 2047 0199 50000000 		.4byte	0x50
+ 2048 019d 02       		.byte	0x2
+ 2049 019e 91       		.byte	0x91
+ 2050 019f 48       		.sleb128 -56
+ 2051 01a0 07       		.uleb128 0x7
+ 2052 01a1 45010000 		.4byte	.LASF27
+ 2053 01a5 01       		.byte	0x1
+ 2054 01a6 9A       		.byte	0x9a
+ 2055 01a7 82000000 		.4byte	0x82
+ 2056 01ab 02       		.byte	0x2
+ 2057 01ac 91       		.byte	0x91
+ 2058 01ad 40       		.sleb128 -64
+ 2059 01ae 0A       		.uleb128 0xa
+ 2060 01af 580B0000 		.4byte	.LBB2
+ 2061 01b3 A40B0000 		.4byte	.LBE2
+ 2062 01b7 0B       		.uleb128 0xb
+ 2063 01b8 01       		.byte	0x1
+ 2064 01b9 18020000 		.4byte	.LASF24
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 40
+
+
+ 2065 01bd 01       		.byte	0x1
+ 2066 01be 64       		.byte	0x64
+ 2067 01bf 7B000000 		.4byte	0x7b
+ 2068 01c3 01       		.byte	0x1
+ 2069 01c4 09       		.uleb128 0x9
+ 2070 01c5 00       		.byte	0
+ 2071 01c6 00       		.byte	0
+ 2072 01c7 00       		.byte	0
+ 2073 01c8 0C       		.uleb128 0xc
+ 2074 01c9 25000000 		.4byte	0x25
+ 2075 01cd D8010000 		.4byte	0x1d8
+ 2076 01d1 0D       		.uleb128 0xd
+ 2077 01d2 49000000 		.4byte	0x49
+ 2078 01d6 02       		.byte	0x2
+ 2079 01d7 00       		.byte	0
+ 2080 01d8 0C       		.uleb128 0xc
+ 2081 01d9 37000000 		.4byte	0x37
+ 2082 01dd E8010000 		.4byte	0x1e8
+ 2083 01e1 0D       		.uleb128 0xd
+ 2084 01e2 49000000 		.4byte	0x49
+ 2085 01e6 0A       		.byte	0xa
+ 2086 01e7 00       		.byte	0
+ 2087 01e8 0C       		.uleb128 0xc
+ 2088 01e9 25000000 		.4byte	0x25
+ 2089 01ed F8010000 		.4byte	0x1f8
+ 2090 01f1 0D       		.uleb128 0xd
+ 2091 01f2 49000000 		.4byte	0x49
+ 2092 01f6 00       		.byte	0
+ 2093 01f7 00       		.byte	0
+ 2094 01f8 0C       		.uleb128 0xc
+ 2095 01f9 25000000 		.4byte	0x25
+ 2096 01fd 08020000 		.4byte	0x208
+ 2097 0201 0D       		.uleb128 0xd
+ 2098 0202 49000000 		.4byte	0x49
+ 2099 0206 01       		.byte	0x1
+ 2100 0207 00       		.byte	0
+ 2101 0208 06       		.uleb128 0x6
+ 2102 0209 01       		.byte	0x1
+ 2103 020a 34000000 		.4byte	.LASF29
+ 2104 020e 01       		.byte	0x1
+ 2105 020f 08       		.byte	0x8
+ 2106 0210 01       		.byte	0x1
+ 2107 0211 82000000 		.4byte	0x82
+ 2108 0215 00000000 		.4byte	.LFB0
+ 2109 0219 000B0000 		.4byte	.LFE0
+ 2110 021d 3A000000 		.4byte	.LLST0
+ 2111 0221 01       		.byte	0x1
+ 2112 0222 7E030000 		.4byte	0x37e
+ 2113 0226 0E       		.uleb128 0xe
+ 2114 0227 0C010000 		.4byte	.LASF26
+ 2115 022b 01       		.byte	0x1
+ 2116 022c 08       		.byte	0x8
+ 2117 022d 50000000 		.4byte	0x50
+ 2118 0231 03       		.byte	0x3
+ 2119 0232 91       		.byte	0x91
+ 2120 0233 F87E     		.sleb128 -136
+ 2121 0235 0E       		.uleb128 0xe
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 41
+
+
+ 2122 0236 C6000000 		.4byte	.LASF25
+ 2123 023a 01       		.byte	0x1
+ 2124 023b 08       		.byte	0x8
+ 2125 023c 50000000 		.4byte	0x50
+ 2126 0240 03       		.byte	0x3
+ 2127 0241 91       		.byte	0x91
+ 2128 0242 F07E     		.sleb128 -144
+ 2129 0244 0E       		.uleb128 0xe
+ 2130 0245 40020000 		.4byte	.LASF14
+ 2131 0249 01       		.byte	0x1
+ 2132 024a 08       		.byte	0x8
+ 2133 024b 7E030000 		.4byte	0x37e
+ 2134 024f 02       		.byte	0x2
+ 2135 0250 91       		.byte	0x91
+ 2136 0251 00       		.sleb128 0
+ 2137 0252 0E       		.uleb128 0xe
+ 2138 0253 C9010000 		.4byte	.LASF18
+ 2139 0257 01       		.byte	0x1
+ 2140 0258 08       		.byte	0x8
+ 2141 0259 25000000 		.4byte	0x25
+ 2142 025d 02       		.byte	0x2
+ 2143 025e 91       		.byte	0x91
+ 2144 025f 04       		.sleb128 4
+ 2145 0260 0F       		.uleb128 0xf
+ 2146 0261 41433100 		.ascii	"AC1\000"
+ 2147 0265 01       		.byte	0x1
+ 2148 0266 0B       		.byte	0xb
+ 2149 0267 69000000 		.4byte	0x69
+ 2150 026b 02       		.byte	0x2
+ 2151 026c 91       		.byte	0x91
+ 2152 026d 5E       		.sleb128 -34
+ 2153 026e 0F       		.uleb128 0xf
+ 2154 026f 41433200 		.ascii	"AC2\000"
+ 2155 0273 01       		.byte	0x1
+ 2156 0274 0C       		.byte	0xc
+ 2157 0275 69000000 		.4byte	0x69
+ 2158 0279 02       		.byte	0x2
+ 2159 027a 91       		.byte	0x91
+ 2160 027b 5C       		.sleb128 -36
+ 2161 027c 0F       		.uleb128 0xf
+ 2162 027d 41433300 		.ascii	"AC3\000"
+ 2163 0281 01       		.byte	0x1
+ 2164 0282 0D       		.byte	0xd
+ 2165 0283 69000000 		.4byte	0x69
+ 2166 0287 02       		.byte	0x2
+ 2167 0288 91       		.byte	0x91
+ 2168 0289 5A       		.sleb128 -38
+ 2169 028a 0F       		.uleb128 0xf
+ 2170 028b 423100   		.ascii	"B1\000"
+ 2171 028e 01       		.byte	0x1
+ 2172 028f 0E       		.byte	0xe
+ 2173 0290 69000000 		.4byte	0x69
+ 2174 0294 02       		.byte	0x2
+ 2175 0295 91       		.byte	0x91
+ 2176 0296 52       		.sleb128 -46
+ 2177 0297 0F       		.uleb128 0xf
+ 2178 0298 423200   		.ascii	"B2\000"
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 42
+
+
+ 2179 029b 01       		.byte	0x1
+ 2180 029c 0F       		.byte	0xf
+ 2181 029d 69000000 		.4byte	0x69
+ 2182 02a1 02       		.byte	0x2
+ 2183 02a2 91       		.byte	0x91
+ 2184 02a3 50       		.sleb128 -48
+ 2185 02a4 0F       		.uleb128 0xf
+ 2186 02a5 4D4200   		.ascii	"MB\000"
+ 2187 02a8 01       		.byte	0x1
+ 2188 02a9 10       		.byte	0x10
+ 2189 02aa 69000000 		.4byte	0x69
+ 2190 02ae 02       		.byte	0x2
+ 2191 02af 91       		.byte	0x91
+ 2192 02b0 4E       		.sleb128 -50
+ 2193 02b1 0F       		.uleb128 0xf
+ 2194 02b2 4D4300   		.ascii	"MC\000"
+ 2195 02b5 01       		.byte	0x1
+ 2196 02b6 11       		.byte	0x11
+ 2197 02b7 69000000 		.4byte	0x69
+ 2198 02bb 02       		.byte	0x2
+ 2199 02bc 91       		.byte	0x91
+ 2200 02bd 4C       		.sleb128 -52
+ 2201 02be 0F       		.uleb128 0xf
+ 2202 02bf 4D4400   		.ascii	"MD\000"
+ 2203 02c2 01       		.byte	0x1
+ 2204 02c3 12       		.byte	0x12
+ 2205 02c4 69000000 		.4byte	0x69
+ 2206 02c8 02       		.byte	0x2
+ 2207 02c9 91       		.byte	0x91
+ 2208 02ca 4A       		.sleb128 -54
+ 2209 02cb 0F       		.uleb128 0xf
+ 2210 02cc 41433400 		.ascii	"AC4\000"
+ 2211 02d0 01       		.byte	0x1
+ 2212 02d1 13       		.byte	0x13
+ 2213 02d2 37000000 		.4byte	0x37
+ 2214 02d6 02       		.byte	0x2
+ 2215 02d7 91       		.byte	0x91
+ 2216 02d8 58       		.sleb128 -40
+ 2217 02d9 0F       		.uleb128 0xf
+ 2218 02da 41433500 		.ascii	"AC5\000"
+ 2219 02de 01       		.byte	0x1
+ 2220 02df 14       		.byte	0x14
+ 2221 02e0 37000000 		.4byte	0x37
+ 2222 02e4 02       		.byte	0x2
+ 2223 02e5 91       		.byte	0x91
+ 2224 02e6 56       		.sleb128 -42
+ 2225 02e7 0F       		.uleb128 0xf
+ 2226 02e8 41433600 		.ascii	"AC6\000"
+ 2227 02ec 01       		.byte	0x1
+ 2228 02ed 15       		.byte	0x15
+ 2229 02ee 37000000 		.4byte	0x37
+ 2230 02f2 02       		.byte	0x2
+ 2231 02f3 91       		.byte	0x91
+ 2232 02f4 54       		.sleb128 -44
+ 2233 02f5 0F       		.uleb128 0xf
+ 2234 02f6 583100   		.ascii	"X1\000"
+ 2235 02f9 01       		.byte	0x1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 43
+
+
+ 2236 02fa 27       		.byte	0x27
+ 2237 02fb 82000000 		.4byte	0x82
+ 2238 02ff 02       		.byte	0x2
+ 2239 0300 91       		.byte	0x91
+ 2240 0301 40       		.sleb128 -64
+ 2241 0302 0F       		.uleb128 0xf
+ 2242 0303 583200   		.ascii	"X2\000"
+ 2243 0306 01       		.byte	0x1
+ 2244 0307 29       		.byte	0x29
+ 2245 0308 82000000 		.4byte	0x82
+ 2246 030c 03       		.byte	0x3
+ 2247 030d 91       		.byte	0x91
+ 2248 030e B87F     		.sleb128 -72
+ 2249 0310 0F       		.uleb128 0xf
+ 2250 0311 423500   		.ascii	"B5\000"
+ 2251 0314 01       		.byte	0x1
+ 2252 0315 2A       		.byte	0x2a
+ 2253 0316 82000000 		.4byte	0x82
+ 2254 031a 03       		.byte	0x3
+ 2255 031b 91       		.byte	0x91
+ 2256 031c B07F     		.sleb128 -80
+ 2257 031e 0F       		.uleb128 0xf
+ 2258 031f 5400     		.ascii	"T\000"
+ 2259 0321 01       		.byte	0x1
+ 2260 0322 2B       		.byte	0x2b
+ 2261 0323 82000000 		.4byte	0x82
+ 2262 0327 03       		.byte	0x3
+ 2263 0328 91       		.byte	0x91
+ 2264 0329 A87F     		.sleb128 -88
+ 2265 032b 0F       		.uleb128 0xf
+ 2266 032c 423600   		.ascii	"B6\000"
+ 2267 032f 01       		.byte	0x1
+ 2268 0330 2F       		.byte	0x2f
+ 2269 0331 82000000 		.4byte	0x82
+ 2270 0335 03       		.byte	0x3
+ 2271 0336 91       		.byte	0x91
+ 2272 0337 A07F     		.sleb128 -96
+ 2273 0339 0F       		.uleb128 0xf
+ 2274 033a 583300   		.ascii	"X3\000"
+ 2275 033d 01       		.byte	0x1
+ 2276 033e 32       		.byte	0x32
+ 2277 033f 82000000 		.4byte	0x82
+ 2278 0343 03       		.byte	0x3
+ 2279 0344 91       		.byte	0x91
+ 2280 0345 987F     		.sleb128 -104
+ 2281 0347 0F       		.uleb128 0xf
+ 2282 0348 423300   		.ascii	"B3\000"
+ 2283 034b 01       		.byte	0x1
+ 2284 034c 34       		.byte	0x34
+ 2285 034d 82000000 		.4byte	0x82
+ 2286 0351 03       		.byte	0x3
+ 2287 0352 91       		.byte	0x91
+ 2288 0353 907F     		.sleb128 -112
+ 2289 0355 0F       		.uleb128 0xf
+ 2290 0356 423400   		.ascii	"B4\000"
+ 2291 0359 01       		.byte	0x1
+ 2292 035a 39       		.byte	0x39
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 44
+
+
+ 2293 035b 50000000 		.4byte	0x50
+ 2294 035f 03       		.byte	0x3
+ 2295 0360 91       		.byte	0x91
+ 2296 0361 887F     		.sleb128 -120
+ 2297 0363 0F       		.uleb128 0xf
+ 2298 0364 423700   		.ascii	"B7\000"
+ 2299 0367 01       		.byte	0x1
+ 2300 0368 3A       		.byte	0x3a
+ 2301 0369 50000000 		.4byte	0x50
+ 2302 036d 03       		.byte	0x3
+ 2303 036e 91       		.byte	0x91
+ 2304 036f 807F     		.sleb128 -128
+ 2305 0371 0F       		.uleb128 0xf
+ 2306 0372 7000     		.ascii	"p\000"
+ 2307 0374 01       		.byte	0x1
+ 2308 0375 3C       		.byte	0x3c
+ 2309 0376 82000000 		.4byte	0x82
+ 2310 037a 02       		.byte	0x2
+ 2311 037b 91       		.byte	0x91
+ 2312 037c 60       		.sleb128 -32
+ 2313 037d 00       		.byte	0
+ 2314 037e 10       		.uleb128 0x10
+ 2315 037f 04       		.byte	0x4
+ 2316 0380 37000000 		.4byte	0x37
+ 2317 0384 00       		.byte	0
+ 2318              		.section	.debug_abbrev,"",%progbits
+ 2319              	.Ldebug_abbrev0:
+ 2320 0000 01       		.uleb128 0x1
+ 2321 0001 11       		.uleb128 0x11
+ 2322 0002 01       		.byte	0x1
+ 2323 0003 25       		.uleb128 0x25
+ 2324 0004 0E       		.uleb128 0xe
+ 2325 0005 13       		.uleb128 0x13
+ 2326 0006 0B       		.uleb128 0xb
+ 2327 0007 03       		.uleb128 0x3
+ 2328 0008 0E       		.uleb128 0xe
+ 2329 0009 1B       		.uleb128 0x1b
+ 2330 000a 0E       		.uleb128 0xe
+ 2331 000b 11       		.uleb128 0x11
+ 2332 000c 01       		.uleb128 0x1
+ 2333 000d 12       		.uleb128 0x12
+ 2334 000e 01       		.uleb128 0x1
+ 2335 000f 10       		.uleb128 0x10
+ 2336 0010 06       		.uleb128 0x6
+ 2337 0011 00       		.byte	0
+ 2338 0012 00       		.byte	0
+ 2339 0013 02       		.uleb128 0x2
+ 2340 0014 16       		.uleb128 0x16
+ 2341 0015 00       		.byte	0
+ 2342 0016 03       		.uleb128 0x3
+ 2343 0017 08       		.uleb128 0x8
+ 2344 0018 3A       		.uleb128 0x3a
+ 2345 0019 0B       		.uleb128 0xb
+ 2346 001a 3B       		.uleb128 0x3b
+ 2347 001b 0B       		.uleb128 0xb
+ 2348 001c 49       		.uleb128 0x49
+ 2349 001d 13       		.uleb128 0x13
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 45
+
+
+ 2350 001e 00       		.byte	0
+ 2351 001f 00       		.byte	0
+ 2352 0020 03       		.uleb128 0x3
+ 2353 0021 24       		.uleb128 0x24
+ 2354 0022 00       		.byte	0
+ 2355 0023 0B       		.uleb128 0xb
+ 2356 0024 0B       		.uleb128 0xb
+ 2357 0025 3E       		.uleb128 0x3e
+ 2358 0026 0B       		.uleb128 0xb
+ 2359 0027 03       		.uleb128 0x3
+ 2360 0028 0E       		.uleb128 0xe
+ 2361 0029 00       		.byte	0
+ 2362 002a 00       		.byte	0
+ 2363 002b 04       		.uleb128 0x4
+ 2364 002c 16       		.uleb128 0x16
+ 2365 002d 00       		.byte	0
+ 2366 002e 03       		.uleb128 0x3
+ 2367 002f 0E       		.uleb128 0xe
+ 2368 0030 3A       		.uleb128 0x3a
+ 2369 0031 0B       		.uleb128 0xb
+ 2370 0032 3B       		.uleb128 0x3b
+ 2371 0033 0B       		.uleb128 0xb
+ 2372 0034 49       		.uleb128 0x49
+ 2373 0035 13       		.uleb128 0x13
+ 2374 0036 00       		.byte	0
+ 2375 0037 00       		.byte	0
+ 2376 0038 05       		.uleb128 0x5
+ 2377 0039 24       		.uleb128 0x24
+ 2378 003a 00       		.byte	0
+ 2379 003b 0B       		.uleb128 0xb
+ 2380 003c 0B       		.uleb128 0xb
+ 2381 003d 3E       		.uleb128 0x3e
+ 2382 003e 0B       		.uleb128 0xb
+ 2383 003f 03       		.uleb128 0x3
+ 2384 0040 08       		.uleb128 0x8
+ 2385 0041 00       		.byte	0
+ 2386 0042 00       		.byte	0
+ 2387 0043 06       		.uleb128 0x6
+ 2388 0044 2E       		.uleb128 0x2e
+ 2389 0045 01       		.byte	0x1
+ 2390 0046 3F       		.uleb128 0x3f
+ 2391 0047 0C       		.uleb128 0xc
+ 2392 0048 03       		.uleb128 0x3
+ 2393 0049 0E       		.uleb128 0xe
+ 2394 004a 3A       		.uleb128 0x3a
+ 2395 004b 0B       		.uleb128 0xb
+ 2396 004c 3B       		.uleb128 0x3b
+ 2397 004d 0B       		.uleb128 0xb
+ 2398 004e 27       		.uleb128 0x27
+ 2399 004f 0C       		.uleb128 0xc
+ 2400 0050 49       		.uleb128 0x49
+ 2401 0051 13       		.uleb128 0x13
+ 2402 0052 11       		.uleb128 0x11
+ 2403 0053 01       		.uleb128 0x1
+ 2404 0054 12       		.uleb128 0x12
+ 2405 0055 01       		.uleb128 0x1
+ 2406 0056 40       		.uleb128 0x40
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 46
+
+
+ 2407 0057 06       		.uleb128 0x6
+ 2408 0058 9642     		.uleb128 0x2116
+ 2409 005a 0C       		.uleb128 0xc
+ 2410 005b 01       		.uleb128 0x1
+ 2411 005c 13       		.uleb128 0x13
+ 2412 005d 00       		.byte	0
+ 2413 005e 00       		.byte	0
+ 2414 005f 07       		.uleb128 0x7
+ 2415 0060 34       		.uleb128 0x34
+ 2416 0061 00       		.byte	0
+ 2417 0062 03       		.uleb128 0x3
+ 2418 0063 0E       		.uleb128 0xe
+ 2419 0064 3A       		.uleb128 0x3a
+ 2420 0065 0B       		.uleb128 0xb
+ 2421 0066 3B       		.uleb128 0x3b
+ 2422 0067 0B       		.uleb128 0xb
+ 2423 0068 49       		.uleb128 0x49
+ 2424 0069 13       		.uleb128 0x13
+ 2425 006a 02       		.uleb128 0x2
+ 2426 006b 0A       		.uleb128 0xa
+ 2427 006c 00       		.byte	0
+ 2428 006d 00       		.byte	0
+ 2429 006e 08       		.uleb128 0x8
+ 2430 006f 2E       		.uleb128 0x2e
+ 2431 0070 01       		.byte	0x1
+ 2432 0071 3F       		.uleb128 0x3f
+ 2433 0072 0C       		.uleb128 0xc
+ 2434 0073 03       		.uleb128 0x3
+ 2435 0074 0E       		.uleb128 0xe
+ 2436 0075 3A       		.uleb128 0x3a
+ 2437 0076 0B       		.uleb128 0xb
+ 2438 0077 3B       		.uleb128 0x3b
+ 2439 0078 0B       		.uleb128 0xb
+ 2440 0079 49       		.uleb128 0x49
+ 2441 007a 13       		.uleb128 0x13
+ 2442 007b 3C       		.uleb128 0x3c
+ 2443 007c 0C       		.uleb128 0xc
+ 2444 007d 01       		.uleb128 0x1
+ 2445 007e 13       		.uleb128 0x13
+ 2446 007f 00       		.byte	0
+ 2447 0080 00       		.byte	0
+ 2448 0081 09       		.uleb128 0x9
+ 2449 0082 18       		.uleb128 0x18
+ 2450 0083 00       		.byte	0
+ 2451 0084 00       		.byte	0
+ 2452 0085 00       		.byte	0
+ 2453 0086 0A       		.uleb128 0xa
+ 2454 0087 0B       		.uleb128 0xb
+ 2455 0088 01       		.byte	0x1
+ 2456 0089 11       		.uleb128 0x11
+ 2457 008a 01       		.uleb128 0x1
+ 2458 008b 12       		.uleb128 0x12
+ 2459 008c 01       		.uleb128 0x1
+ 2460 008d 00       		.byte	0
+ 2461 008e 00       		.byte	0
+ 2462 008f 0B       		.uleb128 0xb
+ 2463 0090 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 47
+
+
+ 2464 0091 01       		.byte	0x1
+ 2465 0092 3F       		.uleb128 0x3f
+ 2466 0093 0C       		.uleb128 0xc
+ 2467 0094 03       		.uleb128 0x3
+ 2468 0095 0E       		.uleb128 0xe
+ 2469 0096 3A       		.uleb128 0x3a
+ 2470 0097 0B       		.uleb128 0xb
+ 2471 0098 3B       		.uleb128 0x3b
+ 2472 0099 0B       		.uleb128 0xb
+ 2473 009a 49       		.uleb128 0x49
+ 2474 009b 13       		.uleb128 0x13
+ 2475 009c 3C       		.uleb128 0x3c
+ 2476 009d 0C       		.uleb128 0xc
+ 2477 009e 00       		.byte	0
+ 2478 009f 00       		.byte	0
+ 2479 00a0 0C       		.uleb128 0xc
+ 2480 00a1 01       		.uleb128 0x1
+ 2481 00a2 01       		.byte	0x1
+ 2482 00a3 49       		.uleb128 0x49
+ 2483 00a4 13       		.uleb128 0x13
+ 2484 00a5 01       		.uleb128 0x1
+ 2485 00a6 13       		.uleb128 0x13
+ 2486 00a7 00       		.byte	0
+ 2487 00a8 00       		.byte	0
+ 2488 00a9 0D       		.uleb128 0xd
+ 2489 00aa 21       		.uleb128 0x21
+ 2490 00ab 00       		.byte	0
+ 2491 00ac 49       		.uleb128 0x49
+ 2492 00ad 13       		.uleb128 0x13
+ 2493 00ae 2F       		.uleb128 0x2f
+ 2494 00af 0B       		.uleb128 0xb
+ 2495 00b0 00       		.byte	0
+ 2496 00b1 00       		.byte	0
+ 2497 00b2 0E       		.uleb128 0xe
+ 2498 00b3 05       		.uleb128 0x5
+ 2499 00b4 00       		.byte	0
+ 2500 00b5 03       		.uleb128 0x3
+ 2501 00b6 0E       		.uleb128 0xe
+ 2502 00b7 3A       		.uleb128 0x3a
+ 2503 00b8 0B       		.uleb128 0xb
+ 2504 00b9 3B       		.uleb128 0x3b
+ 2505 00ba 0B       		.uleb128 0xb
+ 2506 00bb 49       		.uleb128 0x49
+ 2507 00bc 13       		.uleb128 0x13
+ 2508 00bd 02       		.uleb128 0x2
+ 2509 00be 0A       		.uleb128 0xa
+ 2510 00bf 00       		.byte	0
+ 2511 00c0 00       		.byte	0
+ 2512 00c1 0F       		.uleb128 0xf
+ 2513 00c2 34       		.uleb128 0x34
+ 2514 00c3 00       		.byte	0
+ 2515 00c4 03       		.uleb128 0x3
+ 2516 00c5 08       		.uleb128 0x8
+ 2517 00c6 3A       		.uleb128 0x3a
+ 2518 00c7 0B       		.uleb128 0xb
+ 2519 00c8 3B       		.uleb128 0x3b
+ 2520 00c9 0B       		.uleb128 0xb
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 48
+
+
+ 2521 00ca 49       		.uleb128 0x49
+ 2522 00cb 13       		.uleb128 0x13
+ 2523 00cc 02       		.uleb128 0x2
+ 2524 00cd 0A       		.uleb128 0xa
+ 2525 00ce 00       		.byte	0
+ 2526 00cf 00       		.byte	0
+ 2527 00d0 10       		.uleb128 0x10
+ 2528 00d1 0F       		.uleb128 0xf
+ 2529 00d2 00       		.byte	0
+ 2530 00d3 0B       		.uleb128 0xb
+ 2531 00d4 0B       		.uleb128 0xb
+ 2532 00d5 49       		.uleb128 0x49
+ 2533 00d6 13       		.uleb128 0x13
+ 2534 00d7 00       		.byte	0
+ 2535 00d8 00       		.byte	0
+ 2536 00d9 00       		.byte	0
+ 2537              		.section	.debug_loc,"",%progbits
+ 2538              	.Ldebug_loc0:
+ 2539              	.LLST1:
+ 2540 0000 000B0000 		.4byte	.LFB1-.Ltext0
+ 2541 0004 020B0000 		.4byte	.LCFI3-.Ltext0
+ 2542 0008 0200     		.2byte	0x2
+ 2543 000a 7D       		.byte	0x7d
+ 2544 000b 00       		.sleb128 0
+ 2545 000c 020B0000 		.4byte	.LCFI3-.Ltext0
+ 2546 0010 040B0000 		.4byte	.LCFI4-.Ltext0
+ 2547 0014 0200     		.2byte	0x2
+ 2548 0016 7D       		.byte	0x7d
+ 2549 0017 14       		.sleb128 20
+ 2550 0018 040B0000 		.4byte	.LCFI4-.Ltext0
+ 2551 001c 060B0000 		.4byte	.LCFI5-.Ltext0
+ 2552 0020 0300     		.2byte	0x3
+ 2553 0022 7D       		.byte	0x7d
+ 2554 0023 F000     		.sleb128 112
+ 2555 0025 060B0000 		.4byte	.LCFI5-.Ltext0
+ 2556 0029 180D0000 		.4byte	.LFE1-.Ltext0
+ 2557 002d 0300     		.2byte	0x3
+ 2558 002f 77       		.byte	0x77
+ 2559 0030 E800     		.sleb128 104
+ 2560 0032 00000000 		.4byte	0
+ 2561 0036 00000000 		.4byte	0
+ 2562              	.LLST0:
+ 2563 003a 00000000 		.4byte	.LFB0-.Ltext0
+ 2564 003e 02000000 		.4byte	.LCFI0-.Ltext0
+ 2565 0042 0200     		.2byte	0x2
+ 2566 0044 7D       		.byte	0x7d
+ 2567 0045 00       		.sleb128 0
+ 2568 0046 02000000 		.4byte	.LCFI0-.Ltext0
+ 2569 004a 04000000 		.4byte	.LCFI1-.Ltext0
+ 2570 004e 0200     		.2byte	0x2
+ 2571 0050 7D       		.byte	0x7d
+ 2572 0051 14       		.sleb128 20
+ 2573 0052 04000000 		.4byte	.LCFI1-.Ltext0
+ 2574 0056 06000000 		.4byte	.LCFI2-.Ltext0
+ 2575 005a 0300     		.2byte	0x3
+ 2576 005c 7D       		.byte	0x7d
+ 2577 005d A003     		.sleb128 416
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 49
+
+
+ 2578 005f 06000000 		.4byte	.LCFI2-.Ltext0
+ 2579 0063 000B0000 		.4byte	.LFE0-.Ltext0
+ 2580 0067 0300     		.2byte	0x3
+ 2581 0069 77       		.byte	0x77
+ 2582 006a A003     		.sleb128 416
+ 2583 006c 00000000 		.4byte	0
+ 2584 0070 00000000 		.4byte	0
+ 2585              		.section	.debug_aranges,"",%progbits
+ 2586 0000 1C000000 		.4byte	0x1c
+ 2587 0004 0200     		.2byte	0x2
+ 2588 0006 00000000 		.4byte	.Ldebug_info0
+ 2589 000a 04       		.byte	0x4
+ 2590 000b 00       		.byte	0
+ 2591 000c 0000     		.2byte	0
+ 2592 000e 0000     		.2byte	0
+ 2593 0010 00000000 		.4byte	.Ltext0
+ 2594 0014 180D0000 		.4byte	.Letext0-.Ltext0
+ 2595 0018 00000000 		.4byte	0
+ 2596 001c 00000000 		.4byte	0
+ 2597              		.section	.debug_line,"",%progbits
+ 2598              	.Ldebug_line0:
+ 2599 0000 C9000000 		.section	.debug_str,"MS",%progbits,1
+ 2599      02002C00 
+ 2599      00000201 
+ 2599      FB0E0D00 
+ 2599      01010101 
+ 2600              	.LASF11:
+ 2601 0000 626D7052 		.ascii	"bmpReadAddress\000"
+ 2601      65616441 
+ 2601      64647265 
+ 2601      737300
+ 2602              	.LASF7:
+ 2603 000f 74533136 		.ascii	"tS16\000"
+ 2603      00
+ 2604              	.LASF15:
+ 2605 0014 73746172 		.ascii	"staringRegister\000"
+ 2605      696E6752 
+ 2605      65676973 
+ 2605      74657200 
+ 2606              	.LASF21:
+ 2607 0024 72656769 		.ascii	"registerAddress\000"
+ 2607      73746572 
+ 2607      41646472 
+ 2607      65737300 
+ 2608              	.LASF29:
+ 2609 0034 63616C63 		.ascii	"calculatePressure\000"
+ 2609      756C6174 
+ 2609      65507265 
+ 2609      73737572 
+ 2609      6500
+ 2610              	.LASF30:
+ 2611 0046 474E5520 		.ascii	"GNU C11 7.3.1 20180622 (release) [ARM/embedded-7-br"
+ 2611      43313120 
+ 2611      372E332E 
+ 2611      31203230 
+ 2611      31383036 
+ 2612 0079 616E6368 		.ascii	"anch revision 261907] -mcpu=arm7tdmi -mthumb -mthum"
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 50
+
+
+ 2612      20726576 
+ 2612      6973696F 
+ 2612      6E203236 
+ 2612      31393037 
+ 2613 00ac 622D696E 		.ascii	"b-interwork -gdwarf-2 -O0\000"
+ 2613      74657277 
+ 2613      6F726B20 
+ 2613      2D676477 
+ 2613      6172662D 
+ 2614              	.LASF25:
+ 2615 00c6 72656164 		.ascii	"readTemp\000"
+ 2615      54656D70 
+ 2615      00
+ 2616              	.LASF19:
+ 2617 00cf 636F6E74 		.ascii	"controlRegisterTemperatureValue\000"
+ 2617      726F6C52 
+ 2617      65676973 
+ 2617      74657254 
+ 2617      656D7065 
+ 2618              	.LASF20:
+ 2619 00ef 636F6E74 		.ascii	"controlRegisterPressureValue\000"
+ 2619      726F6C52 
+ 2619      65676973 
+ 2619      74657250 
+ 2619      72657373 
+ 2620              	.LASF26:
+ 2621 010c 72656164 		.ascii	"readPress\000"
+ 2621      50726573 
+ 2621      7300
+ 2622              	.LASF1:
+ 2623 0116 756E7369 		.ascii	"unsigned char\000"
+ 2623      676E6564 
+ 2623      20636861 
+ 2623      7200
+ 2624              	.LASF23:
+ 2625 0124 69326357 		.ascii	"i2cWrite\000"
+ 2625      72697465 
+ 2625      00
+ 2626              	.LASF4:
+ 2627 012d 74553634 		.ascii	"tU64\000"
+ 2627      00
+ 2628              	.LASF2:
+ 2629 0132 73686F72 		.ascii	"short unsigned int\000"
+ 2629      7420756E 
+ 2629      7369676E 
+ 2629      65642069 
+ 2629      6E7400
+ 2630              	.LASF27:
+ 2631 0145 63616C63 		.ascii	"calculatedPressure\000"
+ 2631      756C6174 
+ 2631      65645072 
+ 2631      65737375 
+ 2631      726500
+ 2632              	.LASF17:
+ 2633 0158 72657375 		.ascii	"resultLocationAddress\000"
+ 2633      6C744C6F 
+ 2633      63617469 
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 51
+
+
+ 2633      6F6E4164 
+ 2633      64726573 
+ 2634              	.LASF32:
+ 2635 016e 433A5C45 		.ascii	"C:\\Embedded\\2138MiniDemo\\2138\000"
+ 2635      6D626564 
+ 2635      6465645C 
+ 2635      32313338 
+ 2635      4D696E69 
+ 2636              	.LASF31:
+ 2637 018c 626D7031 		.ascii	"bmp180.c\000"
+ 2637      38302E63 
+ 2637      00
+ 2638              	.LASF12:
+ 2639 0195 626D7057 		.ascii	"bmpWriteAddress\000"
+ 2639      72697465 
+ 2639      41646472 
+ 2639      65737300 
+ 2640              	.LASF3:
+ 2641 01a5 756E7369 		.ascii	"unsigned int\000"
+ 2641      676E6564 
+ 2641      20696E74 
+ 2641      00
+ 2642              	.LASF5:
+ 2643 01b2 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2643      206C6F6E 
+ 2643      6720756E 
+ 2643      7369676E 
+ 2643      65642069 
+ 2644              	.LASF18:
+ 2645 01c9 70726573 		.ascii	"pressureOss\000"
+ 2645      73757265 
+ 2645      4F737300 
+ 2646              	.LASF9:
+ 2647 01d5 74533634 		.ascii	"tS64\000"
+ 2647      00
+ 2648              	.LASF0:
+ 2649 01da 74553136 		.ascii	"tU16\000"
+ 2649      00
+ 2650              	.LASF10:
+ 2651 01df 6C6F6E67 		.ascii	"long long int\000"
+ 2651      206C6F6E 
+ 2651      6720696E 
+ 2651      7400
+ 2652              	.LASF13:
+ 2653 01ed 72656769 		.ascii	"registerContents\000"
+ 2653      73746572 
+ 2653      436F6E74 
+ 2653      656E7473 
+ 2653      00
+ 2654              	.LASF8:
+ 2655 01fe 73686F72 		.ascii	"short int\000"
+ 2655      7420696E 
+ 2655      7400
+ 2656              	.LASF28:
+ 2657 0208 6D656173 		.ascii	"measurePressure\000"
+ 2657      75726550 
+ 2657      72657373 
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 52
+
+
+ 2657      75726500 
+ 2658              	.LASF24:
+ 2659 0218 69326352 		.ascii	"i2cRead\000"
+ 2659      65616400 
+ 2660              	.LASF16:
+ 2661 0220 69746572 		.ascii	"iterator\000"
+ 2661      61746F72 
+ 2661      00
+ 2662              	.LASF22:
+ 2663 0229 636F6D6D 		.ascii	"commandArr\000"
+ 2663      616E6441 
+ 2663      727200
+ 2664              	.LASF6:
+ 2665 0234 7369676E 		.ascii	"signed char\000"
+ 2665      65642063 
+ 2665      68617200 
+ 2666              	.LASF14:
+ 2667 0240 63616C69 		.ascii	"calibrationArray\000"
+ 2667      62726174 
+ 2667      696F6E41 
+ 2667      72726179 
+ 2667      00
+ 2668              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2018-q2-update) 7.3.1 20180622 (release) [AR
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s 			page 53
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bmp180.c
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:25     .text:00000000 calculatePressure
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:33     .text:00000000 $t
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:679    .text:000004c0 $d
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:684    .text:000004d0 $t
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:1133   .text:0000082c $d
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:1140   .text:00000840 $t
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:1502   .text:00000af4 $d
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:1508   .text:00000b00 $t
+C:\Users\embedded\AppData\Local\Temp\ccYS9jMd.s:1515   .text:00000b00 measurePressure
+
+UNDEFINED SYMBOLS
+__aeabi_lmul
+__aeabi_ldivmod
+__aeabi_uldivmod
+memset
+i2cWrite
+i2cRead
+mdelay
