@@ -269,6 +269,26 @@ int main(void)
 			    setPca9532Pin(14, 1);
 			    setPca9532Pin(15, 1);
 		      keys = ~getPca9532Pin();
+
+				// TUTAJ TEORETYCZNIE POWINNA GRAC MUZYKA ALE JA ZA CHINY LUDOWE NIE OGARNIAM TEGO REJESTRU
+			  
+				//Initialize DAC: AOUT = P0.25
+
+				
+				//set analogue output
+				/*Bity 0:5 sa zarezerowwane
+				* Bity 15:6 to VALUE
+				* Bit 16 to BIAS
+				* Bity 31-17 sa zarezerwowane
+				* */
+				/*
+				tU16 buffer = 0;
+				PINSEL1 &= ~0x000C0000;
+				PINSEL1 |=  0x00080000;
+			  DACR = (buffer << 6) |  //actual value to output
+               (1 << 16);         //BIAS = 1, 2.5uS settling time
+			   */
+			   
 			  }
 			  lcdGotoxy(0, 0);
 				//messagePointer = strcpy(messageHolder, "Pomiar \temperatury: \n");
