@@ -1,10 +1,9 @@
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 1
 
 
    1              	# 1 "startup.S"
-   2              	# 1 "/cygdrive/c/Embedded/eclipse/Demo/2138/startup//"
    1              	#
-   1              	...
+   0              	
    0              	
    0              	
    2              	# *** Startup Code (executed after Reset) ***
@@ -12,11 +11,6 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
    4              	
    5              	#include "config.h"
    1              	/******************************************************************************
-   2              	 *
-   3              	 * Copyright:
-   4              	 *    (C) 2000 - 2005 Embedded Artists AB
-   5              	 *
-   6              	 * Description:
    6              	
    7              	# Standard definitions of Mode bits and Interrupt (I & F) flags in PSRs
    8              	
@@ -58,15 +52,15 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
   44              	        .equ    PLLCON_PLLC,    (1<<1)      /* PLL Connect */
   45              	        .equ    PLLSTAT_PLOCK,  (1<<10)     /* PLL Lock Status */
   46              	
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 2
-
-
   47              	#define HANDLER(HandlerLabel,HandleLabel) \
   48              	HandlerLabel:                   ;\
   49              	        sub   sp, sp, #4        ;\
   50              	        stmfd sp!, {r0}         ;\
   51              	        ldr   r0, =HandleLabel  ;\
   52              	        ldr   r0, [r0]          ;\
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 2
+
+
   53              	        str   r0, [sp,#4]       ;\
   54              	        ldmfd sp!, {r0,pc}
   55              	
@@ -98,9 +92,9 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
   81:startup.S     ****                 B HandlerDabort             /* handlerDAbort                   */
   82:startup.S     ****                 NOP                         /* Reserved Vector                 */
   83              	#if (IRQ_HANDLER == 0)
-  84:startup.S     ****                 B HandlerIRQ                /* handlerIRQ                      */
+  84              	                B HandlerIRQ                /* handlerIRQ                      */
   85              	#else
-  86              	                LDR PC,[PC,#-0xFF0]         /* jump to address supplied by VIC */
+  86:startup.S     ****                 LDR PC,[PC,#-0xFF0]         /* jump to address supplied by VIC */
   87              	#endif
   88:startup.S     ****                 B HandlerFIQ                /* handlerFIQ                      */
   89              	
@@ -110,7 +104,7 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
   93:startup.S     **** HANDLER(HandlerPabort, HandlePabort)
   94:startup.S     **** HANDLER(HandlerDabort, HandleDabort)
   95              	#if (IRQ_HANDLER == 0)
-  96:startup.S     **** HANDLER(HandlerIRQ,    HandleIRQ)
+  96              	HANDLER(HandlerIRQ,    HandleIRQ)
   97              	#endif
   98:startup.S     **** HANDLER(HandlerFIQ,    HandleFIQ)
   99              	
@@ -118,15 +112,15 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
  101              	#else
  102              	                LDR PC,[PC,#resetHandlerAddress - . - 8]    /* handle reset                      */
  103              	                LDR PC,[PC,#undefHandlerAddress - . - 8]    /* handlerUndef                      */
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 3
-
-
  104              	                LDR PC,[PC,#swiHandlerAddress - . - 8]      /* SWI interrupt handler             */
  105              	                LDR PC,[PC,#pabortHandlerAddress - . - 8]   /* handlerPAbort                     */
  106              	                LDR PC,[PC,#dabortHandlerAddress - . - 8]   /* handlerDAbort                     */
  107              	                NOP                                         /* Reserved Vector                   */
  108              	#if (IRQ_HANDLER == 0)
  109              	                LDR PC,[PC,#irqHandlerAddress - . - 8]      /* jump to common irq handler        */
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 3
+
+
  110              	#else
  111              	                LDR PC,[PC,#-0xFF0]                         /* jump to address supplied from VIC */
  112              	#endif
@@ -178,15 +172,15 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
  158:startup.S     ****                 STR     R1, [R0, #PLLFEED_OFS]
  159:startup.S     ****                 STR     R2, [R0, #PLLFEED_OFS]
  160              	
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 4
-
-
  161              	# Wait until PLL Locked
  162:startup.S     **** PLL_Loop:       LDR     R3, [R0, #PLLSTAT_OFS]
  163:startup.S     ****                 ANDS    R3, R3, #PLLSTAT_PLOCK
  164:startup.S     ****                 BEQ     PLL_Loop
  165              	
  166              	# Switch to PLL Clock
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 4
+
+
  167:startup.S     ****                 MOV     R3, #(PLLCON_PLLE | PLLCON_PLLC)
  168:startup.S     ****                 STR     R3, [R0, #PLLCON_OFS]
  169:startup.S     ****                 STR     R1, [R0, #PLLFEED_OFS]
@@ -238,15 +232,15 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
  215              	                STMIA   R8!, {R0-R7}
  216              	#               Move addresses belonging to exception vectors (7 addresses)
  217              	                LDMIA   R9!, {R0-R6}
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 5
-
-
  218              	                STMIA   R8!, {R0-R6}
  219              	#endif
  220              	
  221              	#  Call low-level initialization
  222:startup.S     ****                 BL      lowLevelInit
  223              	
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 5
+
+
  224              	# Relocate .data section (Copy from ROM to RAM)
  225:startup.S     ****                 LDR     R1, =_etext
  226:startup.S     ****                 LDR     R2, =_data
@@ -285,16 +279,15 @@ ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 1
  259              	#
  260              	# Reserve memory for exception handlers
  261              	#
- 262 01a0 24000040 	        .struct SRAM_SADDR + 0x20
+ 262 0188 24000040 	        .struct SRAM_SADDR + 0x20
  262      28000040 
  262      2C000040 
  262      30000040 
- 262      34000040 
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 6
+ 262      38000040 
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 6
 
 
 DEFINED SYMBOLS
-                            *ABS*:00000000 startup.S
            startup.S:9      *ABS*:00000010 Mode_USR
            startup.S:10     *ABS*:00000011 Mode_FIQ
            startup.S:11     *ABS*:00000012 Mode_IRQ
@@ -315,46 +308,45 @@ DEFINED SYMBOLS
            startup.S:43     *ABS*:00000001 PLLCON_PLLE
            startup.S:44     *ABS*:00000002 PLLCON_PLLC
            startup.S:45     *ABS*:00000400 PLLSTAT_PLOCK
-           startup.S:59     .text:00000000 $a
            startup.S:68     .text:00000000 _startup
            startup.S:73     .text:00000000 Vectors
            startup.S:74     .text:00000000 _vectors
-           startup.S:139    .text:000000b0 handleReset
+           startup.S:139    .text:00000098 handleReset
+           startup.S:77     .text:00000000 $a
            startup.S:91     .text:00000020 HandlerUndef
            startup.S:92     .text:00000038 HandlerSWI
            startup.S:93     .text:00000050 HandlerPabort
            startup.S:94     .text:00000068 HandlerDabort
-           startup.S:96     .text:00000080 HandlerIRQ
-           startup.S:98     .text:00000098 HandlerFIQ
+           startup.S:98     .text:00000080 HandlerFIQ
                             *ABS*:40000024 HandleUndef
                             *ABS*:40000028 HandleSWI
                             *ABS*:4000002c HandlePabort
                             *ABS*:40000030 HandleDabort
-                            *ABS*:40000034 HandleIRQ
                             *ABS*:40000038 HandleFIQ
-           startup.S:162    .text:000000e4 PLL_Loop
-           startup.S:228    .text:0000015c LoopRel
-           startup.S:237    .text:00000178 LoopZI
-           startup.S:245    .text:00000188 Jump_To_Main
-           startup.S:252    .text:0000019c __Return_from_Main
+           startup.S:162    .text:000000cc PLL_Loop
+           startup.S:228    .text:00000144 LoopRel
+           startup.S:237    .text:00000160 LoopZI
+           startup.S:245    .text:00000170 Jump_To_Main
+           startup.S:252    .text:00000184 __Return_from_Main
                             *ABS*:40000020 HandleReset
-                            *ABS*:400078a8 UserStack
-                            *ABS*:40007b00 SYSStack
-                            *ABS*:40007b40 SVCStack
-                            *ABS*:40007b80 UndefStack
-                            *ABS*:40007bc0 AbortStack
+                            *ABS*:40000034 HandleIRQ
+                            *ABS*:400074a8 UserStack
+                            *ABS*:40007700 SYSStack
+                            *ABS*:40007740 SVCStack
+                            *ABS*:40007780 UndefStack
+                            *ABS*:400077c0 AbortStack
                             *ABS*:40007fc0 IRQStack
                             *ABS*:40008000 FIQStack
-           startup.S:262    .text:000001a0 $d
+           startup.S:262    .text:00000188 $d
 
 UNDEFINED SYMBOLS
 lowLevelInit
 _etext
-ARM GAS  /cygdrive/c/Users/embedded/AppData/Local/Temp/ccSSYOi9.s 			page 7
-
-
 _data
 _edata
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\cc6tnMTN.s 			page 7
+
+
 __bss_start__
 __bss_end__
 exceptionHandlerInit

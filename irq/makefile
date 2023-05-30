@@ -39,7 +39,7 @@ DEBUG   = 1
 
 # Optimization setting
 # (-Os for small code size, -O2 for speed)
-OFLAGS  = -Os
+OFLAGS  = -O0
 
 # Extra general flags
 # For example, compile for ARM / THUMB interworking (EFLAGS = -mthumb-interwork)

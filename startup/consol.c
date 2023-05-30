@@ -128,11 +128,20 @@ reswitch:
     case 's':
       p = va_arg(ap, char *);
       while ((ch = *p++) != 0)
-        outputFnk(ch);
+	    {
+          outputFnk(ch);
+		}
       break;
 
     case 'd':
-      ul = lflag ? va_arg(ap, long) : va_arg(ap, unsigned int);
+      if (lflag)
+	    {
+		  ul = va_arg(ap, int);
+        }
+		else
+		{
+			ul = va_arg(ap, unsigned int);
+		};
       if ((long)ul < 0)
       {
         outputFnk('-');

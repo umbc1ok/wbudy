@@ -25,7 +25,7 @@ NAME      = libea_startup_thumb
 #                 LPC2290, LPC2292, LPC2294
 # If you have a new version not specified above, just select one of the old
 # versions with the same memory map.
-CPU_VARIANT = LPC2138
+CPU_VARIANT = LPC2148
 
 # It is possible to override the automatic linker file selection with the variable below.
 # No not use this opion unless you have very specific needs.
@@ -39,7 +39,7 @@ DEBUG   = 1
 
 # Optimization setting
 # (-Os for small code size, -O2 for speed)
-OFLAGS  = -Os
+OFLAGS  = -O0
 
 # Extra general flags
 # For example, compile for ARM / THUMB interworking (EFLAGS = -mthumb-interwork)
