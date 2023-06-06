@@ -30,6 +30,27 @@
 #define KEY_LEFT   0x0080
 #define KEY_RIGHT  0x0100
 
+
+
+
+/* VREF start-up time */
+#define VREF_STARTUP_TIME       (50)
+/* Mask needed to get the 2 LSb for DAC Data Register */
+#define LSB_MASK                (0x03)
+/* Number of samples for a sine wave period */
+#define SINE_PERIOD_STEPS       (100)
+/* Sine wave amplitude */
+#define SINE_AMPLITUDE          (511)
+/* Sine wave DC offset */
+#define SINE_DC_OFFSET          (512)
+/* Frequency of the sine wave */
+#define SINE_FREQ               (100)
+/* Step delay for the loop */
+#define STEP_DELAY_TIME         ((1000000 / SINE_FREQ) / SINE_PERIOD_STEPS)
+
+
+#define M_PI 3.14159265358979323846
+
 /*!
  *  @brief    Uruchomienie obsługi przerwań
  *  @param period
@@ -102,12 +123,56 @@ void showTime(tU32 sec,tU32 min,tU32 hour){
     lcdGotoxy(90, 50);
     lcdPuts(tabS);
 }
+
+void blink(void){
+	tU16 keys;
+	tU8 pca9532Present = FALSE;
+	pca9532Present = pca9532Init();
+	  if (TRUE == pca9532Present)
+	  {
+		/*
+		if (!(keys & KEY_LEFT))  setPca9532Pin(0, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(8, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(1, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(9, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(2, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(10, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(3, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(11, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(4, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(12, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(5, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(13, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(6, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(14, 0);
+		if (!(keys & KEY_LEFT))  setPca9532Pin(7, 0);
+		if (!(keys & KEY_RIGHT)) setPca9532Pin(15, 0);*/
+		setPca9532Pin(0, 1);
+		setPca9532Pin(1, 1);
+		setPca9532Pin(2, 1);
+		setPca9532Pin(3, 1);
+		setPca9532Pin(4, 1);
+		setPca9532Pin(5, 1);
+		setPca9532Pin(6, 1);
+		setPca9532Pin(7, 1);
+		setPca9532Pin(8, 1);
+		setPca9532Pin(9, 1);
+		setPca9532Pin(10, 1);
+		setPca9532Pin(11, 1);
+		setPca9532Pin(12, 1);
+		setPca9532Pin(13, 1);
+		setPca9532Pin(14, 1);
+		setPca9532Pin(15, 1);
+	  	//keys = ~getPca9532Pin();
+	  }
+}
+
 int main(void)
 {
-	tU8 pca9532Present = FALSE;
+
 	// I2C initalization
 	i2cInit();
-	pca9532Present = pca9532Init();
+
 	tU8 lm75address = (((tU8)0x48 << 1) | (tU8)1);
 	printf_init();
 	// LCD display initialization
@@ -116,21 +181,6 @@ int main(void)
 	lcdColor(0xff, 0x00);
 	lcdClrscr();
 
-	/*
-		Main loop containg enitre program logic. With every iteration, joystick position is checked
-		and based on that, appropriate measurement value.
-	*/
-	/*
-	tU8 *charPtr;
-	tS8 returnedValue = 0;
-	tU8 charArray[10] = {0};
-	// Variables for holding messages to display with lcdPuts
-	tU8 *messagePointer;
-	tU8 messageHolder[128];
-
-	tS8 humidityValue;
-	tU16 brightnessValue;
-	tS64 pressureValue; */
 
 	tU8 isTimeBeingSet = FALSE;
 	tU16 currentType = 0;
@@ -151,7 +201,7 @@ int main(void)
 	RTC_MIN = 59;
 	RTC_HOUR = 23;
 	RTC_CCR = 0x00000011;
-	tU32 temp_SEC = RTC_SEC;
+	tU32 temp_SEC = RTC_SEC; //to jednak nie sa dobre typy, adresy sa w tU32, powinno tu byc prawdopodobnie tU8, bo te wartosci sa 5-6 bitowe
     tU32 temp_MIN = RTC_MIN;
     tU32 temp_HOUR = RTC_HOUR;
 
@@ -168,6 +218,13 @@ int main(void)
 	IOCLR1 = 0x00090000;
 	IOSET1 = 0x000F0000;
 	IODIR1 &= ~0x00F00000; //Keys
+
+	tU16 sineWave[SINE_PERIOD_STEPS];
+	tU8 i;
+    for(i = 0; i < SINE_PERIOD_STEPS; i++)
+    {
+        sineWave[i] = SINE_DC_OFFSET + SINE_AMPLITUDE * sin(2 * M_PI * i / SINE_PERIOD_STEPS);
+    }
 
 	while (TRUE) {
 		showTime(RTC_SEC, RTC_MIN,RTC_HOUR);
@@ -233,88 +290,54 @@ int main(void)
 			sdelay(1);
 			lcdClrscr();
 		}
-		tU16 keys;
-			  if (TRUE == pca9532Present)
-			  {
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(0, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(8, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(1, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(9, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(2, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(10, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(3, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(11, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(4, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(12, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(5, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(13, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(6, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(14, 0);
-			    if (!(keys & KEY_LEFT))  setPca9532Pin(7, 0);
-			    if (!(keys & KEY_RIGHT)) setPca9532Pin(15, 0);
-			    setPca9532Pin(0, 1);
-			    setPca9532Pin(1, 1);
-			    setPca9532Pin(2, 1);
-			    setPca9532Pin(3, 1);
-			    setPca9532Pin(4, 1);
-			    setPca9532Pin(5, 1);
-			    setPca9532Pin(6, 1);
-			    setPca9532Pin(7, 1);
-			    setPca9532Pin(8, 1);
-			    setPca9532Pin(9, 1);
-			    setPca9532Pin(10, 1);
-			    setPca9532Pin(11, 1);
-			    setPca9532Pin(12, 1);
-			    setPca9532Pin(13, 1);
-			    setPca9532Pin(14, 1);
-			    setPca9532Pin(15, 1);
-		      keys = ~getPca9532Pin();
 
-				// TUTAJ TEORETYCZNIE POWINNA GRAC MUZYKA ALE JA ZA CHINY LUDOWE NIE OGARNIAM TEGO REJESTRU
-			  
-				//Initialize DAC: AOUT = P0.25
 
-				
-				//set analogue output
-				/*Bity 0:5 sa zarezerowwane
-				* Bity 15:6 to VALUE
-				* Bit 16 to BIAS
-				* Bity 31-17 sa zarezerwowane
-				* */
-				/*
-				tU16 buffer = 0;
-				PINSEL1 &= ~0x000C0000;
-				PINSEL1 |=  0x00080000;
-			  DACR = (buffer << 6) |  //actual value to output
-               (1 << 16);         //BIAS = 1, 2.5uS settling time
-			   */
-			   
-			  }
-			  lcdGotoxy(0, 0);
-				//messagePointer = strcpy(messageHolder, "Pomiar \temperatury: \n");
-				lcdGotoxy(0, 30);
-				measureTemperature(lm75address, readTemperature);
-				lcdGotoxy(0, 0);
-				lcdPuts("Pomiar\ntemperatury: ");
-				lcdGotoxy(0, 30);
-				calculateTemperatureValue(readTemperature);
+		// TUTAJ TEORETYCZNIE POWINNA GRAC MUZYKA ALE JA ZA CHINY LUDOWE NIE OGARNIAM TEGO REJESTRU
+
+		//Initialize DAC: AOUT = P0.25
+
+
+		//set analogue output
+		/*Bity 0:5 sa zarezerowwane
+		* Bity 15:6 to VALUE
+		* Bit 16 to BIAS
+		* Bity 31-17 sa zarezerwowane
+		* */
+		tU8 it = 0;
+		// to powinno grac sinusoidalny dzwiek (czy cos w ten desen) w nieskonczonosc
+		while(TRUE){
+			if(it == SINE_PERIOD_STEPS) it = 0;
+			tU16 buffer = sineWave[it];
+			PINSEL1 &= ~0x000C0000;
+			PINSEL1 |=  0x00080000;
+			DACR = (buffer << 6) |  //actual value to output
+			(0 << 16);         //BIAS = 0, 1uS settling time
+			it++;
+			udelay(100);			// this function might not work yet (idk)
+		}
+
+		lcdGotoxy(0, 0);
+		//messagePointer = strcpy(messageHolder, "Pomiar \temperatury: \n");
+		lcdGotoxy(0, 30);
+		measureTemperature(lm75address, readTemperature);
+		lcdGotoxy(0, 0);
+		lcdPuts("Pomiar\ntemperatury: ");
+		lcdGotoxy(0, 30);
+		calculateTemperatureValue(readTemperature);
+
+		tU8 charArrray[10] = {0};
+		tU16 humidity = measureHumidity();
+		sprintf(charArray,"%d",humidity);
+		lcdGotoxy(0,100);
+		tU8 percent[2] = "%\0";
+		lcdPuts(charArray);
+		lcdGotoxy(20,100);
+		lcdPuts(percent);
+
+
+		// bez sensu jest ustawianie tych diod co chwile na 1, bo one i tak beda wlaczone
+		// potrzebujemy funkcji ktora wlacza miganie i funkcje ktora wylacza
+		blink();
     }
 }
 
-
-/******************************************************************************
- *
- * Copyright:
- *    (C) 2008 Embedded Artists AB
- *
- * Description:
- *    Main program for I2C_LEDs_KEYs demo
- *
- *****************************************************************************/
-
-/*
-#include <printf_P.h>
-#include <lpc2xxx.h>
-#include <consol.h>
-#include "i2c.h"
-#include "pca9532.h"*/
