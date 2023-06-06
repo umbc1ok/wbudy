@@ -60,8 +60,6 @@ CSRCS   = main.c \
 		  pca9532.c	\
 		  eeprom.c \
 		  htu21df.c \
-		  tsl2561.c \
-		  bmp180.c
  
 # List C source files here.
 CPPSRCS   = 

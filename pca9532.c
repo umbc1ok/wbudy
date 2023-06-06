@@ -48,7 +48,7 @@
 tBool
 pca9532Init(void)
 {
-  tU8 initCommand[] = {0x12, 0x97, 0x80, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
+  tU8 initCommand[] = {0x12, 0x46, 0x80, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
   //                                                         04 = LCD_RST# low
   //                                                         10 = BT_RST# low
 
@@ -99,11 +99,13 @@ setPca9532Pin(tU8 pinNum, tU8 value)
   
   if (value == (tU8)0)
   {
-    command[1] = 0x01;
+    command[1] = 0x00;
   }
   else
   {
-    command[1] = 0x00;
+	//tU8 eh[]  = {0x02,0x97};
+	//pca9532(eh, sizeof(eh), NULL, 0);
+    command[1] = 0x02; //bylo 00
   }
     
   command[1] = (command[1] << ((tU8)2 * (pinNum % (tU8)4)));

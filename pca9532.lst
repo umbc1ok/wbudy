@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 1
 
 
    1              		.cpu arm7tdmi
@@ -19,7 +19,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
   16              		.align	2
   17              	.LC0:
   18 0000 12       		.byte	18
-  19 0001 97       		.byte	-105
+  19 0001 46       		.byte	70
   20 0002 80       		.byte	-128
   21 0003 00       		.byte	0
   22 0004 40       		.byte	64
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
   18:pca9532.c     **** #include <lpc2xxx.h>
   19:pca9532.c     **** #include <printf_P.h>
   20:pca9532.c     **** #include "i2c.h"
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 2
 
 
   21:pca9532.c     **** #include "pca9532.h"
@@ -107,7 +107,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
   51 0004 00AF     		add	r7, sp, #0
   52              	.LCFI2:
   53              		.cfi_def_cfa_register 7
-  51:pca9532.c     ****   tU8 initCommand[] = {0x12, 0x97, 0x80, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
+  51:pca9532.c     ****   tU8 initCommand[] = {0x12, 0x46, 0x80, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
   54              		.loc 1 51 0
   55 0006 3B1D     		adds	r3, r7, #4
   56 0008 0F4A     		ldr	r2, .L4
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
   52:pca9532.c     ****   //                                                         04 = LCD_RST# low
   53:pca9532.c     ****   //                                                         10 = BT_RST# low
   54:pca9532.c     **** 
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 3
 
 
   55:pca9532.c     ****   //initialize PCA9532
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  107              	setPca9532Pin:
  108              	.LFB1:
   63:pca9532.c     **** 
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 4
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 4
 
 
   64:pca9532.c     **** 
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  147 0076 FB18     		adds	r3, r7, r3
  148 0078 0622     		movs	r2, #6
  149 007a 1A70     		strb	r2, [r3]
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 5
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 5
 
 
  150 007c 15E0     		b	.L8
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  189 00b6 FFF7FEFF 		bl	pca9532
   95:pca9532.c     ****   
   96:pca9532.c     ****   mask = ((tU8)3 << ((tU8)2 * (tU8)(pinNum % (tU8)4)));
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 6
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 6
 
 
  190              		.loc 1 96 0
@@ -341,31 +341,33 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  223 00f6 002B     		cmp	r3, #0
  224 00f8 04D1     		bne	.L11
  101:pca9532.c     ****   {
- 102:pca9532.c     ****     command[1] = 0x01;
+ 102:pca9532.c     ****     command[1] = 0x00;
  225              		.loc 1 102 0
  226 00fa 0C23     		movs	r3, #12
  227 00fc FB18     		adds	r3, r7, r3
- 228 00fe 0122     		movs	r2, #1
+ 228 00fe 0022     		movs	r2, #0
  229 0100 5A70     		strb	r2, [r3, #1]
  230 0102 03E0     		b	.L12
  231              	.L11:
  103:pca9532.c     ****   }
  104:pca9532.c     ****   else
  105:pca9532.c     ****   {
- 106:pca9532.c     ****     command[1] = 0x00;
- 232              		.loc 1 106 0
+ 106:pca9532.c     **** 	//tU8 eh[]  = {0x02,0x97};
+ 107:pca9532.c     **** 	//pca9532(eh, sizeof(eh), NULL, 0);
+ 108:pca9532.c     ****     command[1] = 0x02; //bylo 00
+ 232              		.loc 1 108 0
  233 0104 0C23     		movs	r3, #12
  234 0106 FB18     		adds	r3, r7, r3
- 235 0108 0022     		movs	r2, #0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 7
+
+
+ 235 0108 0222     		movs	r2, #2
  236 010a 5A70     		strb	r2, [r3, #1]
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 7
-
-
  237              	.L12:
- 107:pca9532.c     ****   }
- 108:pca9532.c     ****     
- 109:pca9532.c     ****   command[1] = (command[1] << ((tU8)2 * (pinNum % (tU8)4)));
- 238              		.loc 1 109 0
+ 109:pca9532.c     ****   }
+ 110:pca9532.c     ****     
+ 111:pca9532.c     ****   command[1] = (command[1] << ((tU8)2 * (pinNum % (tU8)4)));
+ 238              		.loc 1 111 0
  239 010c 0C20     		movs	r0, #12
  240 010e 3B18     		adds	r3, r7, r0
  241 0110 5B78     		ldrb	r3, [r3, #1]
@@ -381,9 +383,9 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  251 0124 1A0E     		lsrs	r2, r3, #24
  252 0126 3B18     		adds	r3, r7, r0
  253 0128 5A70     		strb	r2, [r3, #1]
- 110:pca9532.c     ****   
- 111:pca9532.c     ****   command[1] |= regValue;
- 254              		.loc 1 111 0
+ 112:pca9532.c     ****   
+ 113:pca9532.c     ****   command[1] |= regValue;
+ 254              		.loc 1 113 0
  255 012a 3B18     		adds	r3, r7, r0
  256 012c 5A78     		ldrb	r2, [r3, #1]
  257 012e 0B23     		movs	r3, #11
@@ -394,16 +396,16 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  262 0138 1A0E     		lsrs	r2, r3, #24
  263 013a 3B18     		adds	r3, r7, r0
  264 013c 5A70     		strb	r2, [r3, #1]
- 112:pca9532.c     **** 
- 113:pca9532.c     ****   pca9532(command, sizeof(command), NULL, 0);
- 265              		.loc 1 113 0
+ 114:pca9532.c     **** 
+ 115:pca9532.c     ****   pca9532(command, sizeof(command), NULL, 0);
+ 265              		.loc 1 115 0
  266 013e 3818     		adds	r0, r7, r0
  267 0140 0023     		movs	r3, #0
  268 0142 0022     		movs	r2, #0
  269 0144 0221     		movs	r1, #2
  270 0146 FFF7FEFF 		bl	pca9532
- 114:pca9532.c     **** }
- 271              		.loc 1 114 0
+ 116:pca9532.c     **** }
+ 271              		.loc 1 116 0
  272 014a C046     		nop
  273 014c BD46     		mov	sp, r7
  274 014e 05B0     		add	sp, sp, #20
@@ -416,27 +418,27 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  281              		.size	setPca9532Pin, .-setPca9532Pin
  282              		.align	1
  283              		.global	getPca9532Pin
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 8
+
+
  284              		.syntax unified
  285              		.code	16
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 8
-
-
  286              		.thumb_func
  287              		.fpu softvfp
  288              		.type	getPca9532Pin, %function
  289              	getPca9532Pin:
  290              	.LFB2:
- 115:pca9532.c     **** 
- 116:pca9532.c     **** 
- 117:pca9532.c     **** /*****************************************************************************
- 118:pca9532.c     ****  *
- 119:pca9532.c     ****  * Description:
+ 117:pca9532.c     **** 
+ 118:pca9532.c     **** 
+ 119:pca9532.c     **** /*****************************************************************************
  120:pca9532.c     ****  *
- 121:pca9532.c     ****  ****************************************************************************/
- 122:pca9532.c     **** tU16
- 123:pca9532.c     **** getPca9532Pin(void)
- 124:pca9532.c     **** {
- 291              		.loc 1 124 0
+ 121:pca9532.c     ****  * Description:
+ 122:pca9532.c     ****  *
+ 123:pca9532.c     ****  ****************************************************************************/
+ 124:pca9532.c     **** tU16
+ 125:pca9532.c     **** getPca9532Pin(void)
+ 126:pca9532.c     **** {
+ 291              		.loc 1 126 0
  292              		.cfi_startproc
  293              		@ Function supports interworking.
  294              		@ args = 0, pretend = 0, frame = 8
@@ -452,23 +454,23 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  304 015a 00AF     		add	r7, sp, #0
  305              	.LCFI8:
  306              		.cfi_def_cfa_register 7
- 125:pca9532.c     ****   tU8 command[] = {0x19};
- 307              		.loc 1 125 0
+ 127:pca9532.c     ****   tU8 command[] = {0x19};
+ 307              		.loc 1 127 0
  308 015c 3B1D     		adds	r3, r7, #4
  309 015e 1922     		movs	r2, #25
  310 0160 1A70     		strb	r2, [r3]
- 126:pca9532.c     ****   tU8 regValue[3];
- 127:pca9532.c     ****   
- 128:pca9532.c     ****   pca9532(command, 1, regValue, 3);
- 311              		.loc 1 128 0
+ 128:pca9532.c     ****   tU8 regValue[3];
+ 129:pca9532.c     ****   
+ 130:pca9532.c     ****   pca9532(command, 1, regValue, 3);
+ 311              		.loc 1 130 0
  312 0162 3A00     		movs	r2, r7
  313 0164 381D     		adds	r0, r7, #4
  314 0166 0323     		movs	r3, #3
  315 0168 0121     		movs	r1, #1
  316 016a FFF7FEFF 		bl	pca9532
- 129:pca9532.c     ****   
- 130:pca9532.c     ****   return (tU16)regValue[1] | ((tU16)regValue[2] << 8);
- 317              		.loc 1 130 0
+ 131:pca9532.c     ****   
+ 132:pca9532.c     ****   return (tU16)regValue[1] | ((tU16)regValue[2] << 8);
+ 317              		.loc 1 132 0
  318 016e 3B00     		movs	r3, r7
  319 0170 5B78     		ldrb	r3, [r3, #1]
  320 0172 1A04     		lsls	r2, r3, #16
@@ -476,18 +478,18 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  322 0176 3B00     		movs	r3, r7
  323 0178 9B78     		ldrb	r3, [r3, #2]
  324 017a 1B02     		lsls	r3, r3, #8
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 9
+
+
  325 017c 1B04     		lsls	r3, r3, #16
  326 017e 1B14     		asrs	r3, r3, #16
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 9
-
-
  327 0180 1343     		orrs	r3, r2
  328 0182 1B04     		lsls	r3, r3, #16
  329 0184 1B14     		asrs	r3, r3, #16
  330 0186 1B04     		lsls	r3, r3, #16
  331 0188 1B0C     		lsrs	r3, r3, #16
- 131:pca9532.c     **** }
- 332              		.loc 1 131 0
+ 133:pca9532.c     **** }
+ 332              		.loc 1 133 0
  333 018a 1800     		movs	r0, r3
  334 018c BD46     		mov	sp, r7
  335 018e 02B0     		add	sp, sp, #8
@@ -536,11 +538,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  378 004a 04       		.byte	0x4
  379 004b 07       		.byte	0x7
  380 004c 14000000 		.4byte	.LASF3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 10
+
+
  381 0050 03       		.uleb128 0x3
  382 0051 08       		.byte	0x8
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 10
-
-
  383 0052 07       		.byte	0x7
  384 0053 3B000000 		.4byte	.LASF4
  385 0057 03       		.uleb128 0x3
@@ -582,7 +584,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  421 0099 01       		.byte	0x1
  422 009a 21000000 		.4byte	.LASF16
  423 009e 01       		.byte	0x1
- 424 009f 7B       		.byte	0x7b
+ 424 009f 7D       		.byte	0x7d
  425 00a0 01       		.byte	0x1
  426 00a1 37000000 		.4byte	0x37
  427 00a5 56010000 		.4byte	.LFB2
@@ -593,18 +595,18 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  432 00b6 09       		.uleb128 0x9
  433 00b7 0B010000 		.4byte	.LASF11
  434 00bb 01       		.byte	0x1
- 435 00bc 7D       		.byte	0x7d
+ 435 00bc 7F       		.byte	0x7f
  436 00bd D3000000 		.4byte	0xd3
  437 00c1 02       		.byte	0x2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 11
+
+
  438 00c2 91       		.byte	0x91
  439 00c3 74       		.sleb128 -12
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 11
-
-
  440 00c4 09       		.uleb128 0x9
  441 00c5 5C010000 		.4byte	.LASF12
  442 00c9 01       		.byte	0x1
- 443 00ca 7E       		.byte	0x7e
+ 443 00ca 80       		.byte	0x80
  444 00cb E3000000 		.4byte	0xe3
  445 00cf 02       		.byte	0x2
  446 00d0 91       		.byte	0x91
@@ -656,11 +658,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  492 012e 01       		.byte	0x1
  493 012f 49       		.byte	0x49
  494 0130 54010000 		.4byte	0x154
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 12
+
+
  495 0134 02       		.byte	0x2
  496 0135 91       		.byte	0x91
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 12
-
-
  497 0136 6C       		.sleb128 -20
  498 0137 09       		.uleb128 0x9
  499 0138 5C010000 		.4byte	.LASF12
@@ -716,11 +718,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  549 019d 77       		.sleb128 -9
  550 019e 00       		.byte	0
  551 019f 0E       		.uleb128 0xe
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 13
+
+
  552 01a0 25000000 		.4byte	0x25
  553 01a4 0B       		.uleb128 0xb
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 13
-
-
  554 01a5 49000000 		.4byte	0x49
  555 01a9 08       		.byte	0x8
  556 01aa 00       		.byte	0
@@ -776,11 +778,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  606 002e 03       		.uleb128 0x3
  607 002f 0E       		.uleb128 0xe
  608 0030 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 14
+
+
  609 0031 0B       		.uleb128 0xb
  610 0032 3B       		.uleb128 0x3b
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 14
-
-
  611 0033 0B       		.uleb128 0xb
  612 0034 49       		.uleb128 0x49
  613 0035 13       		.uleb128 0x13
@@ -836,11 +838,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  663 0067 0B       		.uleb128 0xb
  664 0068 27       		.uleb128 0x27
  665 0069 0C       		.uleb128 0xc
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 15
+
+
  666 006a 49       		.uleb128 0x49
  667 006b 13       		.uleb128 0x13
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 15
-
-
  668 006c 11       		.uleb128 0x11
  669 006d 01       		.uleb128 0x1
  670 006e 12       		.uleb128 0x12
@@ -896,11 +898,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  720 00a1 3A       		.uleb128 0x3a
  721 00a2 0B       		.uleb128 0xb
  722 00a3 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 16
+
+
  723 00a4 0B       		.uleb128 0xb
  724 00a5 27       		.uleb128 0x27
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 16
-
-
  725 00a6 0C       		.uleb128 0xc
  726 00a7 11       		.uleb128 0x11
  727 00a8 01       		.uleb128 0x1
@@ -956,11 +958,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  777 0022 7D       		.byte	0x7d
  778 0023 10       		.sleb128 16
  779 0024 5C010000 		.4byte	.LCFI8-.Ltext0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 17
+
+
  780 0028 96010000 		.4byte	.LFE2-.Ltext0
  781 002c 0200     		.2byte	0x2
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 17
-
-
  782 002e 77       		.byte	0x77
  783 002f 10       		.sleb128 16
  784 0030 00000000 		.4byte	0
@@ -1016,11 +1018,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  834 0004 0200     		.2byte	0x2
  835 0006 00000000 		.4byte	.Ldebug_info0
  836 000a 04       		.byte	0x4
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 18
+
+
  837 000b 00       		.byte	0
  838 000c 0000     		.2byte	0
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 18
-
-
  839 000e 0000     		.2byte	0
  840 0010 00000000 		.4byte	.Ltext0
  841 0014 96010000 		.4byte	.Letext0-.Ltext0
@@ -1076,11 +1078,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  865              	.LASF1:
  866 0071 756E7369 		.ascii	"unsigned char\000"
  866      676E6564 
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 19
+
+
  866      20636861 
  866      7200
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 19
-
-
  867              	.LASF9:
  868 007f 54525545 		.ascii	"TRUE\000"
  868      00
@@ -1136,11 +1138,11 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  888      00
  889              	.LASF10:
  890 016a 74426F6F 		.ascii	"tBool\000"
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 20
+
+
  890      6C00
  891              	.LASF6:
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 20
-
-
  892 0170 73686F72 		.ascii	"short int\000"
  892      7420696E 
  892      7400
@@ -1152,18 +1154,18 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 1
  896      65642063 
  896      68617200 
  897              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2018-q2-update) 7.3.1 20180622 (release) [AR
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s 			page 21
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s 			page 21
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 pca9532.c
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:16     .rodata:00000000 $d
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:35     .text:00000000 pca9532Init
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:43     .text:00000000 $t
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:96     .text:00000048 $d
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:100    .text:0000004c $t
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:107    .text:0000004c setPca9532Pin
-C:\Users\embedded\AppData\Local\Temp\ccWxIqiQ.s:289    .text:00000156 getPca9532Pin
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:16     .rodata:00000000 $d
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:35     .text:00000000 pca9532Init
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:43     .text:00000000 $t
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:96     .text:00000048 $d
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:100    .text:0000004c $t
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:107    .text:0000004c setPca9532Pin
+C:\Users\embedded\AppData\Local\Temp\ccSbEgSZ.s:289    .text:00000156 getPca9532Pin
 
 UNDEFINED SYMBOLS
 pca9532
