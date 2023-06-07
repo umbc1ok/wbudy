@@ -48,7 +48,7 @@
 tBool
 pca9532Init(void)
 {
-  tU8 initCommand[] = {0x12, 0x46, 0x80, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
+  tU8 initCommand[] = {0x12, 0x97, 0x80, 0x4B, 0xC0, 0x00, 0x00, 0x00, 0x00};
   //                                                         04 = LCD_RST# low
   //                                                         10 = BT_RST# low
 
@@ -99,13 +99,23 @@ setPca9532Pin(tU8 pinNum, tU8 value)
   
   if (value == (tU8)0)
   {
+    // gdy wartość = 0 - wyłączamy diodę
     command[1] = 0x00;
+  }
+  else if (value == (tU8)1)
+  {
+    // gdy wartość = 1 - włączamy diodę, która używa szybkość mrugania PWM0 
+    command[1] = 0x02;
+  }
+    else if (value == (tU8)2)
+  {
+    //gdy wartość = 2 - włączamy diodę, która używa szybkość mrugania PWM1 
+    command[1] = 0x03;
   }
   else
   {
-	//tU8 eh[]  = {0x02,0x97};
-	//pca9532(eh, sizeof(eh), NULL, 0);
-    command[1] = 0x02; //bylo 00
+    // gdy inna wartość =  włączamy diodę, która po prostu się świeci
+    command[1] = 0x01; 
   }
     
   command[1] = (command[1] << ((tU8)2 * (pinNum % (tU8)4)));
@@ -131,4 +141,66 @@ getPca9532Pin(void)
   
   return (tU16)regValue[1] | ((tU16)regValue[2] << 8);
 }
+
+
+/*
+ * @brief   Funckja blinkLeds wykorzystywana jest do kontrolwoania 16 LED-ów o numerach 0-15. Działanie tej funckji
+ *			przy wartości parametru value == 1 polega na ustawieniu zewnętrznych LED-ów, tj. LED numer 0, 7, 8 oraz 15
+ *			na mruganie z szybkością PWM0 - diody te mrugają co 1 sekunde z mniejszą jasnością niż pozostałe LEDy,
+ *			 które mrugają z szybkością PWM1 i okresem 0.5 sekund. Gdy parametr value == 0, wyłączamy wszystkie LEDy.
+ *
+ * @param   value 
+ *          Zmienna mówiąca czy włączyć czy wyłączyc diody
+ * 
+ * @param   pca9532Present 
+ *          Zmienna sprawdzająca czy PCA9532 zostało zainicjalizowane.
+ * @returns
+ *          void
+ * 
+ * @side effects: 
+ *          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+void 
+blinkLeds(tU8 value, tU8 pca9532Present)
+{
+  // IODIR |= 0x00260000; //RGB           NIE wiadomo czy to potrzebne w ogole
+	// IOSET = 0x00260000;
+
+	// IODIR1 |= 0x000F0000; //LEDs
+	// IOSET1 = 0x000F0000;
+	// IOCLR1 = 0x00030000;
+	// IOCLR1 = 0x00050000;
+	// IOCLR1 = 0x000c0000;
+	// IOCLR1 = 0x00090000;
+	// IOSET1 = 0x000F0000;
+	// IODIR1 &= ~0x00F00000; //Keys
+  if ((tU8)TRUE == pca9532Present)
+  {
+	tU8 i = 0;
+    tU8 j = 0;
+    if (value == (tU8)1)
+    {
+    	for (i = (tU8)0; i < (tU8)16; i = i + (tU8)1)
+    	{
+			if(i == (tU8)0 || i == (tU8)7 || i == (tU8)8 || i == (tU8)15 ||)
+			{
+			setPca9532Pin(i, 1);
+			}
+			else 
+			{
+			setPca9532Pin(i, 2);
+			}
+    	}
+    }
+    else 
+    {
+		for (i = (tU8)0; i < (tU8)16; i = i + (tU8)1)
+		{
+			setPca9532Pin(i, 0);
+		}
+    }
+  }
+}
+
+
 

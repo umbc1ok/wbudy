@@ -661,8 +661,7 @@ void showTime(tU32 sec,tU32 min,tU32 hour){
 }
 
 void blink(tU8 test){
-	tU16 keys;
-	tU8 pca9532Present = FALSE;
+
 	pca9532Present = pca9532Init();
 	  if (TRUE == pca9532Present)
 	  {
@@ -729,7 +728,8 @@ void beep(tU16 repetitions){
 
 int main(void)
 {
-
+	tU8 pca9532Present;
+	pca9532Present = pca9532Init();
 	// I2C initalization
 	i2cInit();
 
