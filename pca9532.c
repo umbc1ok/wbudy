@@ -147,7 +147,7 @@ getPca9532Pin(void)
  * @brief   Funckja blinkLeds wykorzystywana jest do kontrolwoania 16 LED-ów o numerach 0-15. Działanie tej funckji
  *			przy wartości parametru value == 1 polega na ustawieniu zewnętrznych LED-ów, tj. LED numer 0, 7, 8 oraz 15
  *			na mruganie z szybkością PWM0 - diody te mrugają co 1 sekunde z mniejszą jasnością niż pozostałe LEDy,
- *			 które mrugają z szybkością PWM1 i okresem 0.5 sekund. Gdy parametr value == 0, wyłączamy wszystkie LEDy.
+ *			które mrugają z szybkością PWM1 co 0.5 sekundy. Gdy parametr value == 0, wyłączamy wszystkie LEDy.
  *
  * @param   value 
  *          Zmienna mówiąca czy włączyć czy wyłączyc diody
