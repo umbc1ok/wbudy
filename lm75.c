@@ -15,7 +15,7 @@ void calculateTemperatureValue(tU8 *byteArray)
 {
     // Variable for holding result of sprintf
     tU8 *resultPtr;
-
+    
     // Char array used for storing temperature to be shown to the user.
     tU8 charArray[10] = {0};
 
