@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 1
 
 
    1              		.cpu arm7tdmi
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
   11:lm75.c        ****     return i2cRead(addr, pBuf, 2);
   45              		.loc 1 11 0
   46 000e 3968     		ldr	r1, [r7]
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 2
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 2
 
 
   47 0010 FB1D     		adds	r3, r7, #7
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
   18:lm75.c        **** 
   19:lm75.c        ****     // Char array used for storing temperature to be shown to the user.
   20:lm75.c        ****     tU8 charArray[10] = {0};
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 3
 
 
   95              		.loc 1 20 0
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
   40:lm75.c        ****     } else if ((isNegative == (tU8)0) && ((byteArray[1] & (tU8)0x80) == (tU8)1)) {
   41:lm75.c        ****         // Case for temperature that is non negative and most significant bit in LSB (that is for 0
   42:lm75.c        ****     	appendHalf = 1;
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 4
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 4
 
 
   43:lm75.c        ****     } else {
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  168 00aa 1F23     		movs	r3, #31
  169 00ac FB18     		adds	r3, r7, r3
  170 00ae 1B78     		ldrb	r3, [r3]
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 5
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 5
 
 
  171 00b0 0C22     		movs	r2, #12
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  217              	.L10:
  218 00fc 00000000 		.word	.LC0
  219              		.cfi_endproc
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 6
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 6
 
 
  220              	.LFE1:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  274 0066 04       		.byte	0x4
  275 0067 05       		.byte	0x5
  276 0068 696E7400 		.ascii	"int\000"
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 7
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 7
 
 
  277 006c 03       		.uleb128 0x3
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  331 00d2 75       		.sleb128 -11
  332 00d3 07       		.uleb128 0x7
  333 00d4 23010000 		.4byte	.LASF11
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 8
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 8
 
 
  334 00d8 01       		.byte	0x1
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  388 013c 01       		.byte	0x1
  389 013d 09       		.byte	0x9
  390 013e 01       		.byte	0x1
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 9
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 9
 
 
  391 013f 4C000000 		.4byte	0x4c
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  445 001d 13       		.uleb128 0x13
  446 001e 00       		.byte	0
  447 001f 00       		.byte	0
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 10
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 10
 
 
  448 0020 03       		.uleb128 0x3
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  502 0057 3B       		.uleb128 0x3b
  503 0058 0B       		.uleb128 0xb
  504 0059 49       		.uleb128 0x49
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 11
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 11
 
 
  505 005a 13       		.uleb128 0x13
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  559 0090 0A       		.uleb128 0xa
  560 0091 05       		.uleb128 0x5
  561 0092 00       		.byte	0
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 12
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 12
 
 
  562 0093 49       		.uleb128 0x49
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  616 00c9 27       		.uleb128 0x27
  617 00ca 0C       		.uleb128 0xc
  618 00cb 49       		.uleb128 0x49
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 13
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 13
 
 
  619 00cc 13       		.uleb128 0x13
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  673 0060 2A000000 		.4byte	.LFE0-.Ltext0
  674 0064 0200     		.2byte	0x2
  675 0066 77       		.byte	0x77
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 14
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 14
 
 
  676 0067 10       		.sleb128 16
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  707      65642069 
  708              	.LASF16:
  709 0062 61646472 		.ascii	"addr\000"
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 15
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 15
 
 
  709      00
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  730              	.LASF4:
  731 015f 7369676E 		.ascii	"signed char\000"
  731      65642063 
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 16
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 16
 
 
  731      68617200 
@@ -919,16 +919,16 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 1
  739      65645661 
  739      6C756500 
  740              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2018-q2-update) 7.3.1 20180622 (release) [AR
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\cciNODxu.s 			page 17
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 lm75.c
-C:\Users\embedded\AppData\Local\Temp\cciNODxu.s:22     .text:00000000 measureTemperature
-C:\Users\embedded\AppData\Local\Temp\cciNODxu.s:30     .text:00000000 $t
-C:\Users\embedded\AppData\Local\Temp\cciNODxu.s:65     .rodata:00000000 $d
-C:\Users\embedded\AppData\Local\Temp\cciNODxu.s:76     .text:0000002a calculateTemperatureValue
-C:\Users\embedded\AppData\Local\Temp\cciNODxu.s:218    .text:000000fc $d
+C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s:22     .text:00000000 measureTemperature
+C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s:30     .text:00000000 $t
+C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s:65     .rodata:00000000 $d
+C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s:76     .text:0000002a calculateTemperatureValue
+C:\Users\embedded\AppData\Local\Temp\ccsO0TBv.s:218    .text:000000fc $d
 
 UNDEFINED SYMBOLS
 i2cRead
