@@ -28,7 +28,7 @@ void calculateTemperatureValue(tU8 *byteArray)
 
     // Flag indicating whether it is required to add 0.5 Celsius degree to measured temperature.
     tU8 appendHalf = 0;
-
+    
     if (calculatedValue < 0) {
     	// Case for negative temperature - if temperature is in fact below zero, then adding 0.5 degree will work different way.
         isNegative = 1;

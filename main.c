@@ -25,34 +25,27 @@
 
 tU8 init(void);
 
-
 /*!
  *  @brief    Logika programu budzika.
  *  @returns  W praktyce nic, zawiera petle nieskonczona zawierajaca algorytm. 
- *  @side effects:
- *            efekty uboczne
  */
 int main(void)
 {
 	tU8 pca9532Present;
 	pca9532Present = init();
-	// I2C initalization
+
 	tU8 lm75address = (((tU8)0x48 << 1) | (tU8)1);
-	//printf_init();
-	// LCD display initialization
-
-
 
 	tU8 isTimeBeingSet = FALSE;
 	tU8 currentType = 0;
 	tU8 humidityString[10] = {0};
 	tU8 temperature[2] = {0};
-
-
+	
 	tU8 temp_SEC = RTC_SEC;
 	tU8 temp_MIN = RTC_MIN;
 	tU8 temp_HOUR = RTC_HOUR;
 
+	// Ponizsze linijki sa po to, zeby spelnic wymaganie MISRA.
 	const tU8 tempPrompt[] = "Temperatura: \0";
 	const tU8 tempUnitPrompt[] = "st. C \0";
 	const tU8 humidityPrompt[] = "Wilgotnosc:\0";
@@ -64,10 +57,10 @@ int main(void)
 	const tU8 RPrompt[] = "R - zatwierdz\0";
 
 
-	while (TRUE == TRUE) {
+	while (TRUE == TRUE) { //TRUE == TRUE bo MISRA nie pozwala na while(TRUE)
 		showTime(RTC_SEC, RTC_MIN,RTC_HOUR,5);
         //check if right key is pressed
-        if ((IOPIN & 0x00000800) == 0)//bylo 100
+        if ((IOPIN & 0x00000800) == 0)
         {
         	lcdClrscr();
             isTimeBeingSet = TRUE;
@@ -78,8 +71,12 @@ int main(void)
 			showTime(temp_SEC,temp_MIN,temp_HOUR,5);
 			sdelay(1);
 			while(isTimeBeingSet == (tU8)TRUE){
-				//check if P0.8 center-key is pressed
-				if ((IOPIN & 0x00000800) == 0) //bylo 100
+				/* check if right key is pressed
+				*  Jesli wybieramy godziny, przechodzimy od ustawiania minut
+				*  Jesli minuty to przechodzimy do sekund
+				*  Jesli sekundy - ustawiamy alarm i wychodzimy z petli.
+				*/
+				if ((IOPIN & 0x00000800) == 0)
 				{
 					currentType++;
 					if((currentType< (tU8)0) || (currentType > (tU8)2)){
@@ -92,7 +89,9 @@ int main(void)
 						sdelay(1);
 					}
 				}
-				//check if P0.10 up-key is pressed
+				/* check if up-key is pressed
+				*  Zwiekszanie wartosci godzin/minut/sekund
+				*/
 				else if((IOPIN & 0x0000400) == 0){
 					switch(currentType){
 						case 0:
@@ -114,7 +113,9 @@ int main(void)
 							break;
 					}
 				}
-				//check if P0.12 down-key is pressed
+				/* check if P0.12 down-key is pressed
+				*  Zmniejszanie wartosci godzin/minut/sekund
+				*/
 				else if((IOPIN & 0x00001000) == 0){
 					switch(currentType){
 						case 0:
@@ -170,7 +171,7 @@ int main(void)
 
 		lcdGotoxy(0, 0);
 		tS8 i2cCode;
-		i2cCode = measureTemperature(lm75address, temperature);
+		i2cCode = measureTemperature(lm75address, temperature); // MISRA wymaga aby funkcje zwracajace jakas wartosc nie zwracaly jej w eter
 		lcdGotoxy(0, 0);
 		lcdPuts(tempPrompt);
 		lcdGotoxy(0, 15);
@@ -178,7 +179,6 @@ int main(void)
 		lcdGotoxy(40,15);
 		lcdPuts(tempUnitPrompt);
 
-		tU8 charArrray[10] = {0};
 		tU16 humidity = measureHumidity();
 		tU8 sprintfHolder;
 		sprintfHolder = sprintf(humidityString,"%d",humidity);
@@ -190,7 +190,6 @@ int main(void)
 		lcdPuts(percentPrompt);
 		lcdGotoxy(0,105);
 		lcdPuts(setAlarmPrompt);
-
     }
 }
 /*!
