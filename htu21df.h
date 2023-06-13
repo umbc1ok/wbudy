@@ -14,7 +14,7 @@ tS8 calculateHumidity(tU8 *readData);
 
 tS8 measureHumidity(void);
 
-void printHumidity();
+void printHumidity(void);
 
 #endif
 
