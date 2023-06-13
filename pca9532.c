@@ -144,8 +144,8 @@ getPca9532Pin(void)
 
 
 /*
- * @brief   Funckja blinkLeds wykorzystywana jest do kontrolwoania 16 LED-ów o numerach 0-15. Działanie tej funckji
- *			przy wartości parametru value == 1 polega na ustawieniu zewnętrznych LED-ów, tj. LED numer 0, 7, 8 oraz 15
+ * @brief   Funckja blinkLeds wykorzystywana jest do kontrolwoania 16 LED-ów 0 - 15 (o numerach od 1 do 16). Działanie tej funckji
+ *			przy wartości parametru value == 1 polega na ustawieniu zewnętrznych LED-ów, tj. LED numer 1, 8, 9 oraz 16
  *			na mruganie z szybkością PWM0 - diody te mrugają co 1 sekunde z mniejszą jasnością niż pozostałe LEDy,
  *			które mrugają z szybkością PWM1 co 0.5 sekundy. Gdy parametr value == 0, wyłączamy wszystkie LEDy.
  *
@@ -163,17 +163,6 @@ getPca9532Pin(void)
 void 
 blinkLeds(tU8 value, tU8 pca9532Present)
 {
-	 IODIR |= 0x00260000; //RGB           NIE wiadomo czy to potrzebne w ogole
-	 IOSET = 0x00260000;
-
-	 IODIR1 |= 0x000F0000; //LEDs
-	 IOSET1 = 0x000F0000;
-	 IOCLR1 = 0x00030000;
-	 IOCLR1 = 0x00050000;
-	 IOCLR1 = 0x000c0000;
-	 IOCLR1 = 0x00090000;
-	 IOSET1 = 0x000F0000;
-	 IODIR1 &= ~0x00F00000; //Keys
   if ((tU8)TRUE == pca9532Present)
   {
 	tU8 i = 0;

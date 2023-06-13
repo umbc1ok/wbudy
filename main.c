@@ -23,47 +23,46 @@
 
 
 
-
+tU8 init(void);
 
 int main(void)
 {
-	// I2C initalization
-	i2cInit();
 	tU8 pca9532Present;
-	pca9532Present = pca9532Init();
+	pca9532Present = init();
+	// I2C initalization
 	tU8 lm75address = (((tU8)0x48 << 1) | (tU8)1);
-	printf_init();
+	//printf_init();
 	// LCD display initialization
-	lcdInit();
-	// Setting colors for background and text.
-	lcdColor(0xff, 0x00);
-	lcdClrscr();
+
 
 
 	tU8 isTimeBeingSet = FALSE;
-	tU16 currentType = 0;
-	tU8 charArray[10] = {0};
-	tU8 *messagePointer;
+	tU8 currentType = 0;
+	tU8 humidityString[10] = {0};
 	tU8 temperature[2] = {0};
 
 
-	RTC_SEC = 0;
-	RTC_MIN = 0;
-	RTC_HOUR = 0;
 	tU8 temp_SEC = RTC_SEC;
 	tU8 temp_MIN = RTC_MIN;
 	tU8 temp_HOUR = RTC_HOUR;
 
-	//IODIR |= 0x00008000; //P0.15
+	const tU8 tempPrompt[] = "Temperatura: \0";
+	const tU8 tempUnitPrompt[] = "st. C \0";
+	const tU8 humidityPrompt[] = "Wilgotnosc:\0";
+	const tU8 percentPrompt[] = "%\0";
+	const tU8 setAlarmPrompt[] = "R - ustaw budzik \0";
+	const tU8 wakeUpPrompt[] = "Wake up!\0";
+	const tU8 UPrompt[] = "U - zwieksz\0";
+	const tU8 DPrompt[] = "D - zmniejsz\0";
+	const tU8 RPrompt[] = "R - zatwierdz\0";
 
 
-
-
-	while (TRUE) {
+	while (TRUE == TRUE) {
 		showTime(RTC_SEC, RTC_MIN,RTC_HOUR,5);
-        //check if P0.8 center-key is pressed
-        if ((IOPIN & 0x00000800) == 0 && !isTimeBeingSet)//bylo 100
+        //check if right key is pressed
+        if ((IOPIN & 0x00000800) == 0)//bylo 100
         {
+        	lcdClrscr();
             isTimeBeingSet = TRUE;
 			temp_SEC = RTC_SEC;
 			temp_MIN = RTC_MIN;
@@ -71,12 +70,12 @@ int main(void)
 
 			showTime(temp_SEC,temp_MIN,temp_HOUR,5);
 			sdelay(1);
-			while(isTimeBeingSet){
+			while(isTimeBeingSet == (tU8)TRUE){
 				//check if P0.8 center-key is pressed
 				if ((IOPIN & 0x00000800) == 0) //bylo 100
 				{
 					currentType++;
-					if(currentType<0 || currentType > 2){
+					if((currentType< (tU8)0) || (currentType > (tU8)2)){
 						isTimeBeingSet = FALSE;
 						setAlarm(temp_SEC,temp_MIN,temp_HOUR);
 						currentType = 0;
@@ -90,19 +89,21 @@ int main(void)
 				else if((IOPIN & 0x0000400) == 0){
 					switch(currentType){
 						case 0:
-							if(temp_HOUR<23){
+							if(temp_HOUR<(tU8)23){
 								temp_HOUR++;
 							}
 							break;
 						case 1:
-							if(temp_MIN < 60){
+							if(temp_MIN < (tU8)59){
 								temp_MIN++;
 							}
 							break;
 						case 2:
-							if(temp_SEC < 60){
+							if(temp_SEC < (tU8)59){
 								temp_SEC++;
 							}
+							break;
+						default:
 							break;
 					}
 				}
@@ -110,31 +111,47 @@ int main(void)
 				else if((IOPIN & 0x00001000) == 0){
 					switch(currentType){
 						case 0:
-							if(temp_HOUR >0){
+							if(temp_HOUR > (tU8)0){
 								temp_HOUR--;
 							}
 							break;
 						case 1:
-							if(temp_MIN > 0){
+							if(temp_MIN > (tU8)0){
 								temp_MIN--;
 							}
 							break;
 						case 2:
-							if(temp_SEC > 0){
+							if(temp_SEC > (tU8)0){
 								temp_SEC--;
 							}
 							break;
+						default:
+							break;
 					}
 				}
+				else{
+					// do nothing
+				}
 				showTime(temp_SEC,temp_MIN,temp_HOUR,currentType);
+
+				lcdGotoxy(0,0);
+				lcdPuts(UPrompt);
+
+				lcdGotoxy(0,15);
+				lcdPuts(DPrompt);
+
+				lcdGotoxy(0,30);
+				lcdPuts(RPrompt);
+
 				mdelay(100);
 			}
+			lcdClrscr();
         }
         if((RTC_ILR & 0x2) == 0x2)
         {
 			showTime(RTC_SEC,RTC_MIN,RTC_HOUR,5);
 			lcdGotoxy(50, 90);
-			lcdPuts("Wake up!\0");
+			lcdPuts(wakeUpPrompt);
 			sdelay(1);
 			blinkLeds(1, pca9532Present);
 			beep(5);
@@ -145,24 +162,50 @@ int main(void)
 		}
 
 		lcdGotoxy(0, 0);
-		measureTemperature(lm75address, temperature);
+		tS8 i2cCode;
+		i2cCode = measureTemperature(lm75address, temperature);
 		lcdGotoxy(0, 0);
-		lcdPuts("Temperatura: \0");
+		lcdPuts(tempPrompt);
 		lcdGotoxy(0, 15);
 		calculateTemperatureValue(temperature);
+		lcdGotoxy(40,15);
+		lcdPuts(tempUnitPrompt);
 
 		tU8 charArrray[10] = {0};
 		tU16 humidity = measureHumidity();
-		sprintf(charArray,"%d",humidity);
+		tU8 sprintfHolder;
+		sprintfHolder = sprintf(humidityString,"%d",humidity);
 		lcdGotoxy(0,30);
-		lcdPuts("Wilgotnosc:");
+		lcdPuts(humidityPrompt);
 		lcdGotoxy(0,45);
-		tU8 percent[2] = "%\0";
-		lcdPuts(charArray);
+		lcdPuts(humidityString);
 		lcdGotoxy(20,45);
-		lcdPuts(percent);
-
+		lcdPuts(percentPrompt);
+		lcdGotoxy(0,105);
+		lcdPuts(setAlarmPrompt);
 
     }
+}
+tU8 init(void){
+	i2cInit();
+	tU8 pca9532Present;
+	pca9532Present = pca9532Init();
+
+	lcdInit();
+	// Setting colors for background and text.
+	lcdColor(0xff, 0x00);
+	lcdClrscr();
+
+	RTC_SEC = 0;
+	RTC_MIN = 0;
+	RTC_HOUR = 0;
+
+	RTC_CCR  = 0x00000011;
+	PINSEL0&=~0x3FF0000; //init GPIO for joystick
+
+	RTC_ILR = 0x2;
+	RTC_AMR = 0xFF;
+
+	return pca9532Present;
 }
 
