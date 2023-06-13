@@ -6,16 +6,31 @@
 
 #include "lm75.h"
 
+/*!
+* @brief Funkcja pobierajaca wartosc temperatury z I2C
+* @param addr
+*			Adres termometru.
+* @param addr
+*			Bufor do ktorego przkeazywany jest odczyt
+* @returns Wynik wykonania operacji I2C.
+*/ 
 tS8 measureTemperature(tU8 addr, tU8 *pBuf)
 {
     return i2cRead(addr, pBuf, 2);
 }
 
+
+/*!
+* @brief Funkcja wypisujaca na ekran wartosc temperatury pobrana z I2C.
+* @param byteArray
+*			Tablica tU8 pobrana z I2C
+* @returns void
+*/ 
 void calculateTemperatureValue(tU8 *byteArray)
 {
     // Variable for holding result of sprintf
     tU8 resultHolder;
-
+    
     // Char array used for storing temperature to be shown to the user.
     tU8 charArray[10] = {0};
 

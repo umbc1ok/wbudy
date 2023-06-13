@@ -206,7 +206,7 @@ tU8 init(void){
 	// Setting colors for background and text.
 	lcdColor(0xff, 0x00);
 	lcdClrscr();
-
+	
 	RTC_SEC = 0;
 	RTC_MIN = 0;
 	RTC_HOUR = 0;
