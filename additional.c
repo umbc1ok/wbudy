@@ -5,71 +5,91 @@
 
 #include "additional.h"
 
-
-void udelay(tU32 delayInUs ) //bigdemo
+/*
+ * @brief   Funkcja udelay() służy do odmierzania podanego w mikrosekundach okresu czasu, po 
+ *          upłynięciu którego funkcja zakończy działanie.           
+ * @param   delayInUs  
+ *          Długość okresu oczekiwania, podana w mikrosekundach. 
+ * @returns void
+ * 
+ * @side effects: 
+ *          Brak
+ */
+void udelay(tU32 delayInUs)
 {
-  /*
-   * setup timer #1 for delay
-   */
-  T1TCR = 0x02;          //stop and reset timer
-  T1PR  = (CORE_FREQ / PBSD / 1000000) -1;          //set prescaler to zero
+
+  T1TCR = 0x02; // zatrzymanie i restart zegara
+  T1PR  = (CORE_FREQ / 1000000) -1; //57
+
   T1MR0 = delayInUs;
-  T1IR  = 0xff;          //reset all interrrupt flags
-  T1MCR = 0x04;          //stop timer on match
-  T1TCR = 0x01;          //start timer
+  T1IR  = 0xff; // zresetowanie wszystkich flag przerwań       
+  T1MCR = 0x04; // zatrzyma inkrementowanie TC i PC oraz wyłączy timer1, gdy wartość rejestru MR0 == TC             
+  T1TCR = 0x01; // start timera       
   
-  //wait until delay time has elapsed
+  // czekaj dopóki zadany czas nie upłynie
   while ((T1TCR & 0x01) == 1)
   {
     ;
   }
-  T1TCR = 0x00;
+  T1TCR = 0x00; // zresetowanie wartości w rejestrze T1TCR, timer1 zostaje wyłączony
 }
-/******************************************************************************
-** Function name:		mdelay
-**
-** Descriptions:
-**
-** parameters:			delay length
-** Returned value:		None
-**
-******************************************************************************/
+
+
+/*
+ * @brief   Funkcja mdelay() służy do odmierzania podanego w milisekundach okresu czasu, po 
+ *          upłynięciu którego funkcja zakończy działanie   
+ * @param   delayInMs  
+ *          Długość okresu oczekiwania, podana w milisekundach.
+ * @returns void
+ * 
+ * @side effects: 
+ *          Brak
+ */
 
 void mdelay(tU32 delayInMs)
 {
 
-  T1TCR = 0x02;                            
-  T1PR  = (PERIPHERAL_CLOCK / 1000) - 1;   
+  T1TCR = 0x02; // zatrzymanie i restart zegara                         
+  T1PR  = (PERIPHERAL_CLOCK / 1000) - 1; //58 981
   T1MR0 = delayInMs;
-  T1IR  = 0xFF;          
-  T1MCR = 0x04;          
-  T1TCR = 0x01;          
+  T1IR  = 0xFF; // zresetowanie wszystkich flag przerwań       
+  T1MCR = 0x04; // zatrzyma inkrementowanie TC i PC oraz wyłączy timer1, gdy wartość rejestru MR0 == TC    
+  T1TCR = 0x01; // start timera
+
+  // czekaj dopóki zadany czas nie upłynie         
   while ((T1TCR & 0x01) == 1)
   {
     ;
   }
-  T1TCR = 0x00;         
+  T1TCR = 0x00; // zresetowanie wartości w rejestrze T1TCR, timer1 zostaje wyłączony        
 }
 
 
-
+/*
+ * @brief   Funkcja sdelay() służy do odmierzania podanego w sekundach okresu czasu, po 
+ *          upłynięciu którego funkcja zakończy działanie.     
+ * @param   delayInS 
+ *          Długość okresu oczekiwania, podana w sekundach.
+ * @returns void    
+ * 
+ * @side effects: 
+ *          Brak
+ */
 
 void sdelay(tU32 delayInS)
 {
-  /*
-   * setup timer #1 for delay
-   */
-  T1TCR = 0x02; // stop and reset timer
-  T1PR = PERIPHERAL_CLOCK -1;  // set prescaler to zero
-  T1MR0 = delayInS;
-  T1IR = 0xff;  // reset all interrrupt flags
-  T1MCR = 0x04; // stop timer on match
-  T1TCR = 0x01; // start timer
 
-  // wait until delay time has elapsed
+  T1TCR = 0x02; // zatrzymanie i restart zegara
+  T1PR  = PERIPHERAL_CLOCK - 1; //58 982 399    
+  T1MR0 = delayInS;
+  T1IR = 0xff;  // zresetowanie wszystkich flag przerwań
+  T1MCR = 0x04; // zatrzyma inkrementowanie TC i PC oraz wyłączy timer1, gdy wartość rejestru MR0 == TC
+  T1TCR = 0x01; // start timera
+
+  // czekaj dopóki zadany czas nie upłynie
   while ((T1TCR & 0x01) == 1)
   {
     ;
   }
-  T1TCR = 0x00;
+  T1TCR = 0x00; // zresetowanie wartości w rejestrze T1TCR, timer1 zostaje wyłączony
 }
