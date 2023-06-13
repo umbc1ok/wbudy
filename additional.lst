@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 1
 
 
    1              		.cpu arm7tdmi
@@ -57,739 +57,753 @@ ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 1
   13:additional.c  ****    */
   14:additional.c  ****   T1TCR = 0x02;          //stop and reset timer
   42              		.loc 1 14 0
-  43 0008 0E4B     		ldr	r3, .L3
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 2
+  43 0008 104B     		ldr	r3, .L3
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 2
 
 
   44 000a 0222     		movs	r2, #2
   45 000c 1A60     		str	r2, [r3]
   15:additional.c  ****   T1PR  = (CORE_FREQ / PBSD / 1000000) -1;          //set prescaler to zero
   46              		.loc 1 15 0
-  47 000e 0E4B     		ldr	r3, .L3+4
+  47 000e 104B     		ldr	r3, .L3+4
   48 0010 3922     		movs	r2, #57
   49 0012 1A60     		str	r2, [r3]
   16:additional.c  ****   T1MR0 = delayInUs;
   50              		.loc 1 16 0
-  51 0014 0D4B     		ldr	r3, .L3+8
+  51 0014 0F4B     		ldr	r3, .L3+8
   52 0016 7A68     		ldr	r2, [r7, #4]
   53 0018 1A60     		str	r2, [r3]
   17:additional.c  ****   T1IR  = 0xff;          //reset all interrrupt flags
   54              		.loc 1 17 0
-  55 001a 0D4B     		ldr	r3, .L3+12
+  55 001a 0F4B     		ldr	r3, .L3+12
   56 001c FF22     		movs	r2, #255
   57 001e 1A60     		str	r2, [r3]
   18:additional.c  ****   T1MCR = 0x04;          //stop timer on match
   58              		.loc 1 18 0
-  59 0020 0C4B     		ldr	r3, .L3+16
+  59 0020 0E4B     		ldr	r3, .L3+16
   60 0022 0422     		movs	r2, #4
   61 0024 1A60     		str	r2, [r3]
   19:additional.c  ****   T1TCR = 0x01;          //start timer
   62              		.loc 1 19 0
-  63 0026 074B     		ldr	r3, .L3
+  63 0026 094B     		ldr	r3, .L3
   64 0028 0122     		movs	r2, #1
   65 002a 1A60     		str	r2, [r3]
   20:additional.c  ****   
   21:additional.c  ****   //wait until delay time has elapsed
-  22:additional.c  ****   while (T1TCR & 0x01)
+  22:additional.c  ****   while ((T1TCR & 0x01) == 1)
   66              		.loc 1 22 0
   67 002c C046     		nop
   68              	.L2:
   69              		.loc 1 22 0 is_stmt 0 discriminator 1
-  70 002e 054B     		ldr	r3, .L3
+  70 002e 074B     		ldr	r3, .L3
   71 0030 1B68     		ldr	r3, [r3]
   72 0032 0122     		movs	r2, #1
   73 0034 1340     		ands	r3, r2
-  74 0036 FAD1     		bne	.L2
-  23:additional.c  ****     ;
-  24:additional.c  **** }
-  75              		.loc 1 24 0 is_stmt 1
-  76 0038 C046     		nop
-  77 003a BD46     		mov	sp, r7
-  78 003c 02B0     		add	sp, sp, #8
-  79              		@ sp needed
-  80 003e 80BC     		pop	{r7}
-  81 0040 01BC     		pop	{r0}
-  82 0042 0047     		bx	r0
-  83              	.L4:
-  84              		.align	2
-  85              	.L3:
-  86 0044 048000E0 		.word	-536838140
-  87 0048 0C8000E0 		.word	-536838132
-  88 004c 188000E0 		.word	-536838120
-  89 0050 008000E0 		.word	-536838144
-  90 0054 148000E0 		.word	-536838124
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 3
+  74 0036 012B     		cmp	r3, #1
+  75 0038 F9D0     		beq	.L2
+  23:additional.c  ****   {
+  24:additional.c  ****     ;
+  25:additional.c  ****   }
+  26:additional.c  ****   T1TCR = 0x00;
+  76              		.loc 1 26 0 is_stmt 1
+  77 003a 044B     		ldr	r3, .L3
+  78 003c 0022     		movs	r2, #0
+  79 003e 1A60     		str	r2, [r3]
+  27:additional.c  **** }
+  80              		.loc 1 27 0
+  81 0040 C046     		nop
+  82 0042 BD46     		mov	sp, r7
+  83 0044 02B0     		add	sp, sp, #8
+  84              		@ sp needed
+  85 0046 80BC     		pop	{r7}
+  86 0048 01BC     		pop	{r0}
+  87 004a 0047     		bx	r0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 3
 
 
-  91              		.cfi_endproc
-  92              	.LFE0:
-  93              		.size	udelay, .-udelay
-  94              		.align	1
-  95              		.global	mdelay
-  96              		.syntax unified
-  97              		.code	16
-  98              		.thumb_func
-  99              		.fpu softvfp
- 100              		.type	mdelay, %function
- 101              	mdelay:
- 102              	.LFB1:
-  25:additional.c  **** /******************************************************************************
-  26:additional.c  **** ** Function name:		mdelay
-  27:additional.c  **** **
-  28:additional.c  **** ** Descriptions:
-  29:additional.c  **** **
-  30:additional.c  **** ** parameters:			delay length
-  31:additional.c  **** ** Returned value:		None
+  88              	.L4:
+  89              		.align	2
+  90              	.L3:
+  91 004c 048000E0 		.word	-536838140
+  92 0050 0C8000E0 		.word	-536838132
+  93 0054 188000E0 		.word	-536838120
+  94 0058 008000E0 		.word	-536838144
+  95 005c 148000E0 		.word	-536838124
+  96              		.cfi_endproc
+  97              	.LFE0:
+  98              		.size	udelay, .-udelay
+  99              		.align	1
+ 100              		.global	mdelay
+ 101              		.syntax unified
+ 102              		.code	16
+ 103              		.thumb_func
+ 104              		.fpu softvfp
+ 105              		.type	mdelay, %function
+ 106              	mdelay:
+ 107              	.LFB1:
+  28:additional.c  **** /******************************************************************************
+  29:additional.c  **** ** Function name:		mdelay
+  30:additional.c  **** **
+  31:additional.c  **** ** Descriptions:
   32:additional.c  **** **
-  33:additional.c  **** ******************************************************************************/
-  34:additional.c  **** 
-  35:additional.c  **** void mdelay(tU32 delayInMs)
-  36:additional.c  **** {
- 103              		.loc 1 36 0
- 104              		.cfi_startproc
- 105              		@ Function supports interworking.
- 106              		@ args = 0, pretend = 0, frame = 8
- 107              		@ frame_needed = 1, uses_anonymous_args = 0
- 108 0058 80B5     		push	{r7, lr}
- 109              	.LCFI3:
- 110              		.cfi_def_cfa_offset 8
- 111              		.cfi_offset 7, -8
- 112              		.cfi_offset 14, -4
- 113 005a 82B0     		sub	sp, sp, #8
- 114              	.LCFI4:
- 115              		.cfi_def_cfa_offset 16
- 116 005c 00AF     		add	r7, sp, #0
- 117              	.LCFI5:
- 118              		.cfi_def_cfa_register 7
- 119 005e 7860     		str	r0, [r7, #4]
+  33:additional.c  **** ** parameters:			delay length
+  34:additional.c  **** ** Returned value:		None
+  35:additional.c  **** **
+  36:additional.c  **** ******************************************************************************/
   37:additional.c  **** 
-  38:additional.c  ****   T1TCR = 0x02;                            
- 120              		.loc 1 38 0
- 121 0060 104B     		ldr	r3, .L7
- 122 0062 0222     		movs	r2, #2
- 123 0064 1A60     		str	r2, [r3]
-  39:additional.c  ****   T1PR  = (PERIPHERAL_CLOCK / 1000) - 1;   
- 124              		.loc 1 39 0
- 125 0066 104B     		ldr	r3, .L7+4
- 126 0068 104A     		ldr	r2, .L7+8
- 127 006a 1A60     		str	r2, [r3]
-  40:additional.c  ****   T1MR0 = delayInMs;
- 128              		.loc 1 40 0
- 129 006c 104B     		ldr	r3, .L7+12
- 130 006e 7A68     		ldr	r2, [r7, #4]
- 131 0070 1A60     		str	r2, [r3]
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 4
+  38:additional.c  **** void mdelay(tU32 delayInMs)
+  39:additional.c  **** {
+ 108              		.loc 1 39 0
+ 109              		.cfi_startproc
+ 110              		@ Function supports interworking.
+ 111              		@ args = 0, pretend = 0, frame = 8
+ 112              		@ frame_needed = 1, uses_anonymous_args = 0
+ 113 0060 80B5     		push	{r7, lr}
+ 114              	.LCFI3:
+ 115              		.cfi_def_cfa_offset 8
+ 116              		.cfi_offset 7, -8
+ 117              		.cfi_offset 14, -4
+ 118 0062 82B0     		sub	sp, sp, #8
+ 119              	.LCFI4:
+ 120              		.cfi_def_cfa_offset 16
+ 121 0064 00AF     		add	r7, sp, #0
+ 122              	.LCFI5:
+ 123              		.cfi_def_cfa_register 7
+ 124 0066 7860     		str	r0, [r7, #4]
+  40:additional.c  **** 
+  41:additional.c  ****   T1TCR = 0x02;                            
+ 125              		.loc 1 41 0
+ 126 0068 104B     		ldr	r3, .L7
+ 127 006a 0222     		movs	r2, #2
+ 128 006c 1A60     		str	r2, [r3]
+  42:additional.c  ****   T1PR  = (PERIPHERAL_CLOCK / 1000) - 1;   
+ 129              		.loc 1 42 0
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 4
 
 
-  41:additional.c  ****   T1IR  = 0xFF;          
- 132              		.loc 1 41 0
- 133 0072 104B     		ldr	r3, .L7+16
- 134 0074 FF22     		movs	r2, #255
- 135 0076 1A60     		str	r2, [r3]
-  42:additional.c  ****   T1MCR = 0x04;          
- 136              		.loc 1 42 0
- 137 0078 0F4B     		ldr	r3, .L7+20
- 138 007a 0422     		movs	r2, #4
- 139 007c 1A60     		str	r2, [r3]
-  43:additional.c  ****   T1TCR = 0x01;          
- 140              		.loc 1 43 0
- 141 007e 094B     		ldr	r3, .L7
- 142 0080 0122     		movs	r2, #1
- 143 0082 1A60     		str	r2, [r3]
-  44:additional.c  ****   while ((T1TCR & 0x01) == 1)
- 144              		.loc 1 44 0
- 145 0084 C046     		nop
- 146              	.L6:
- 147              		.loc 1 44 0 is_stmt 0 discriminator 1
- 148 0086 074B     		ldr	r3, .L7
- 149 0088 1B68     		ldr	r3, [r3]
- 150 008a 0122     		movs	r2, #1
- 151 008c 1340     		ands	r3, r2
- 152 008e 012B     		cmp	r3, #1
- 153 0090 F9D0     		beq	.L6
-  45:additional.c  ****   {
-  46:additional.c  ****     ;
-  47:additional.c  ****   }
-  48:additional.c  ****   T1TCR = 0x00;         
- 154              		.loc 1 48 0 is_stmt 1
- 155 0092 044B     		ldr	r3, .L7
- 156 0094 0022     		movs	r2, #0
- 157 0096 1A60     		str	r2, [r3]
-  49:additional.c  **** }
- 158              		.loc 1 49 0
- 159 0098 C046     		nop
- 160 009a BD46     		mov	sp, r7
- 161 009c 02B0     		add	sp, sp, #8
- 162              		@ sp needed
- 163 009e 80BC     		pop	{r7}
- 164 00a0 01BC     		pop	{r0}
- 165 00a2 0047     		bx	r0
- 166              	.L8:
- 167              		.align	2
- 168              	.L7:
- 169 00a4 048000E0 		.word	-536838140
- 170 00a8 0C8000E0 		.word	-536838132
- 171 00ac 65E60000 		.word	58981
- 172 00b0 188000E0 		.word	-536838120
- 173 00b4 008000E0 		.word	-536838144
- 174 00b8 148000E0 		.word	-536838124
- 175              		.cfi_endproc
- 176              	.LFE1:
- 177              		.size	mdelay, .-mdelay
- 178              		.align	1
- 179              		.global	sdelay
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 5
+ 130 006e 104B     		ldr	r3, .L7+4
+ 131 0070 104A     		ldr	r2, .L7+8
+ 132 0072 1A60     		str	r2, [r3]
+  43:additional.c  ****   T1MR0 = delayInMs;
+ 133              		.loc 1 43 0
+ 134 0074 104B     		ldr	r3, .L7+12
+ 135 0076 7A68     		ldr	r2, [r7, #4]
+ 136 0078 1A60     		str	r2, [r3]
+  44:additional.c  ****   T1IR  = 0xFF;          
+ 137              		.loc 1 44 0
+ 138 007a 104B     		ldr	r3, .L7+16
+ 139 007c FF22     		movs	r2, #255
+ 140 007e 1A60     		str	r2, [r3]
+  45:additional.c  ****   T1MCR = 0x04;          
+ 141              		.loc 1 45 0
+ 142 0080 0F4B     		ldr	r3, .L7+20
+ 143 0082 0422     		movs	r2, #4
+ 144 0084 1A60     		str	r2, [r3]
+  46:additional.c  ****   T1TCR = 0x01;          
+ 145              		.loc 1 46 0
+ 146 0086 094B     		ldr	r3, .L7
+ 147 0088 0122     		movs	r2, #1
+ 148 008a 1A60     		str	r2, [r3]
+  47:additional.c  ****   while ((T1TCR & 0x01) == 1)
+ 149              		.loc 1 47 0
+ 150 008c C046     		nop
+ 151              	.L6:
+ 152              		.loc 1 47 0 is_stmt 0 discriminator 1
+ 153 008e 074B     		ldr	r3, .L7
+ 154 0090 1B68     		ldr	r3, [r3]
+ 155 0092 0122     		movs	r2, #1
+ 156 0094 1340     		ands	r3, r2
+ 157 0096 012B     		cmp	r3, #1
+ 158 0098 F9D0     		beq	.L6
+  48:additional.c  ****   {
+  49:additional.c  ****     ;
+  50:additional.c  ****   }
+  51:additional.c  ****   T1TCR = 0x00;         
+ 159              		.loc 1 51 0 is_stmt 1
+ 160 009a 044B     		ldr	r3, .L7
+ 161 009c 0022     		movs	r2, #0
+ 162 009e 1A60     		str	r2, [r3]
+  52:additional.c  **** }
+ 163              		.loc 1 52 0
+ 164 00a0 C046     		nop
+ 165 00a2 BD46     		mov	sp, r7
+ 166 00a4 02B0     		add	sp, sp, #8
+ 167              		@ sp needed
+ 168 00a6 80BC     		pop	{r7}
+ 169 00a8 01BC     		pop	{r0}
+ 170 00aa 0047     		bx	r0
+ 171              	.L8:
+ 172              		.align	2
+ 173              	.L7:
+ 174 00ac 048000E0 		.word	-536838140
+ 175 00b0 0C8000E0 		.word	-536838132
+ 176 00b4 65E60000 		.word	58981
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 5
 
 
- 180              		.syntax unified
- 181              		.code	16
- 182              		.thumb_func
- 183              		.fpu softvfp
- 184              		.type	sdelay, %function
- 185              	sdelay:
- 186              	.LFB2:
-  50:additional.c  **** 
-  51:additional.c  **** void sdelay(unsigned int delayInS)
-  52:additional.c  **** {
- 187              		.loc 1 52 0
- 188              		.cfi_startproc
- 189              		@ Function supports interworking.
- 190              		@ args = 0, pretend = 0, frame = 8
- 191              		@ frame_needed = 1, uses_anonymous_args = 0
- 192 00bc 80B5     		push	{r7, lr}
- 193              	.LCFI6:
- 194              		.cfi_def_cfa_offset 8
- 195              		.cfi_offset 7, -8
- 196              		.cfi_offset 14, -4
- 197 00be 82B0     		sub	sp, sp, #8
- 198              	.LCFI7:
- 199              		.cfi_def_cfa_offset 16
- 200 00c0 00AF     		add	r7, sp, #0
- 201              	.LCFI8:
- 202              		.cfi_def_cfa_register 7
- 203 00c2 7860     		str	r0, [r7, #4]
-  53:additional.c  ****   /*
-  54:additional.c  ****    * setup timer #1 for delay
-  55:additional.c  ****    */
-  56:additional.c  ****   T1TCR = 0x02; // stop and reset timer
- 204              		.loc 1 56 0
- 205 00c4 124B     		ldr	r3, .L11
- 206 00c6 0222     		movs	r2, #2
- 207 00c8 1A60     		str	r2, [r3]
-  57:additional.c  ****   T1PR = 0x00;  // set prescaler to zero
- 208              		.loc 1 57 0
- 209 00ca 124B     		ldr	r3, .L11+4
- 210 00cc 0022     		movs	r2, #0
- 211 00ce 1A60     		str	r2, [r3]
-  58:additional.c  ****   T1MR0 = (((long)delayInS) * (long)CORE_FREQ);
- 212              		.loc 1 58 0
- 213 00d0 7A68     		ldr	r2, [r7, #4]
- 214 00d2 1300     		movs	r3, r2
- 215 00d4 1B01     		lsls	r3, r3, #4
- 216 00d6 9B1A     		subs	r3, r3, r2
- 217 00d8 1A01     		lsls	r2, r3, #4
- 218 00da D21A     		subs	r2, r2, r3
- 219 00dc 9304     		lsls	r3, r2, #18
- 220 00de 1A00     		movs	r2, r3
- 221 00e0 0D4B     		ldr	r3, .L11+8
- 222 00e2 1A60     		str	r2, [r3]
-  59:additional.c  ****   T1IR = 0xff;  // reset all interrrupt flags
- 223              		.loc 1 59 0
- 224 00e4 0D4B     		ldr	r3, .L11+12
- 225 00e6 FF22     		movs	r2, #255
- 226 00e8 1A60     		str	r2, [r3]
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 6
+ 177 00b8 188000E0 		.word	-536838120
+ 178 00bc 008000E0 		.word	-536838144
+ 179 00c0 148000E0 		.word	-536838124
+ 180              		.cfi_endproc
+ 181              	.LFE1:
+ 182              		.size	mdelay, .-mdelay
+ 183              		.align	1
+ 184              		.global	sdelay
+ 185              		.syntax unified
+ 186              		.code	16
+ 187              		.thumb_func
+ 188              		.fpu softvfp
+ 189              		.type	sdelay, %function
+ 190              	sdelay:
+ 191              	.LFB2:
+  53:additional.c  **** 
+  54:additional.c  **** 
+  55:additional.c  **** 
+  56:additional.c  **** 
+  57:additional.c  **** void sdelay(tU32 delayInS)
+  58:additional.c  **** {
+ 192              		.loc 1 58 0
+ 193              		.cfi_startproc
+ 194              		@ Function supports interworking.
+ 195              		@ args = 0, pretend = 0, frame = 8
+ 196              		@ frame_needed = 1, uses_anonymous_args = 0
+ 197 00c4 80B5     		push	{r7, lr}
+ 198              	.LCFI6:
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 7, -8
+ 201              		.cfi_offset 14, -4
+ 202 00c6 82B0     		sub	sp, sp, #8
+ 203              	.LCFI7:
+ 204              		.cfi_def_cfa_offset 16
+ 205 00c8 00AF     		add	r7, sp, #0
+ 206              	.LCFI8:
+ 207              		.cfi_def_cfa_register 7
+ 208 00ca 7860     		str	r0, [r7, #4]
+  59:additional.c  ****   /*
+  60:additional.c  ****    * setup timer #1 for delay
+  61:additional.c  ****    */
+  62:additional.c  ****   T1TCR = 0x02; // stop and reset timer
+ 209              		.loc 1 62 0
+ 210 00cc 104B     		ldr	r3, .L11
+ 211 00ce 0222     		movs	r2, #2
+ 212 00d0 1A60     		str	r2, [r3]
+  63:additional.c  ****   T1PR = PERIPHERAL_CLOCK -1;  // set prescaler to zero
+ 213              		.loc 1 63 0
+ 214 00d2 104B     		ldr	r3, .L11+4
+ 215 00d4 104A     		ldr	r2, .L11+8
+ 216 00d6 1A60     		str	r2, [r3]
+  64:additional.c  ****   T1MR0 = delayInS;
+ 217              		.loc 1 64 0
+ 218 00d8 104B     		ldr	r3, .L11+12
+ 219 00da 7A68     		ldr	r2, [r7, #4]
+ 220 00dc 1A60     		str	r2, [r3]
+  65:additional.c  ****   T1IR = 0xff;  // reset all interrrupt flags
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 6
 
 
-  60:additional.c  ****   T1MCR = 0x04; // stop timer on match
- 227              		.loc 1 60 0
- 228 00ea 0D4B     		ldr	r3, .L11+16
- 229 00ec 0422     		movs	r2, #4
- 230 00ee 1A60     		str	r2, [r3]
-  61:additional.c  ****   T1TCR = 0x01; // start timer
- 231              		.loc 1 61 0
- 232 00f0 074B     		ldr	r3, .L11
- 233 00f2 0122     		movs	r2, #1
- 234 00f4 1A60     		str	r2, [r3]
-  62:additional.c  **** 
-  63:additional.c  ****   // wait until delay time has elapsed
-  64:additional.c  ****   while ((T1TCR & 0x01) != 0)
- 235              		.loc 1 64 0
- 236 00f6 C046     		nop
- 237              	.L10:
- 238              		.loc 1 64 0 is_stmt 0 discriminator 1
- 239 00f8 054B     		ldr	r3, .L11
- 240 00fa 1B68     		ldr	r3, [r3]
- 241 00fc 0122     		movs	r2, #1
- 242 00fe 1340     		ands	r3, r2
- 243 0100 FAD1     		bne	.L10
-  65:additional.c  ****   {
-  66:additional.c  ****     ;
-  67:additional.c  ****   }
-  68:additional.c  **** }
- 244              		.loc 1 68 0 is_stmt 1
- 245 0102 C046     		nop
- 246 0104 BD46     		mov	sp, r7
- 247 0106 02B0     		add	sp, sp, #8
- 248              		@ sp needed
- 249 0108 80BC     		pop	{r7}
- 250 010a 01BC     		pop	{r0}
- 251 010c 0047     		bx	r0
- 252              	.L12:
- 253 010e C046     		.align	2
- 254              	.L11:
- 255 0110 048000E0 		.word	-536838140
- 256 0114 0C8000E0 		.word	-536838132
- 257 0118 188000E0 		.word	-536838120
- 258 011c 008000E0 		.word	-536838144
- 259 0120 148000E0 		.word	-536838124
- 260              		.cfi_endproc
- 261              	.LFE2:
- 262              		.size	sdelay, .-sdelay
- 263              	.Letext0:
- 264              		.file 2 "general.h"
- 265              		.section	.debug_info,"",%progbits
- 266              	.Ldebug_info0:
- 267 0000 DC000000 		.4byte	0xdc
- 268 0004 0200     		.2byte	0x2
- 269 0006 00000000 		.4byte	.Ldebug_abbrev0
- 270 000a 04       		.byte	0x4
- 271 000b 01       		.uleb128 0x1
- 272 000c 78000000 		.4byte	.LASF12
- 273 0010 0C       		.byte	0xc
- 274 0011 64000000 		.4byte	.LASF13
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 7
+ 221              		.loc 1 65 0
+ 222 00de 104B     		ldr	r3, .L11+16
+ 223 00e0 FF22     		movs	r2, #255
+ 224 00e2 1A60     		str	r2, [r3]
+  66:additional.c  ****   T1MCR = 0x04; // stop timer on match
+ 225              		.loc 1 66 0
+ 226 00e4 0F4B     		ldr	r3, .L11+20
+ 227 00e6 0422     		movs	r2, #4
+ 228 00e8 1A60     		str	r2, [r3]
+  67:additional.c  ****   T1TCR = 0x01; // start timer
+ 229              		.loc 1 67 0
+ 230 00ea 094B     		ldr	r3, .L11
+ 231 00ec 0122     		movs	r2, #1
+ 232 00ee 1A60     		str	r2, [r3]
+  68:additional.c  **** 
+  69:additional.c  ****   // wait until delay time has elapsed
+  70:additional.c  ****   while ((T1TCR & 0x01) == 1)
+ 233              		.loc 1 70 0
+ 234 00f0 C046     		nop
+ 235              	.L10:
+ 236              		.loc 1 70 0 is_stmt 0 discriminator 1
+ 237 00f2 074B     		ldr	r3, .L11
+ 238 00f4 1B68     		ldr	r3, [r3]
+ 239 00f6 0122     		movs	r2, #1
+ 240 00f8 1340     		ands	r3, r2
+ 241 00fa 012B     		cmp	r3, #1
+ 242 00fc F9D0     		beq	.L10
+  71:additional.c  ****   {
+  72:additional.c  ****     ;
+  73:additional.c  ****   }
+  74:additional.c  ****   T1TCR = 0x00;
+ 243              		.loc 1 74 0 is_stmt 1
+ 244 00fe 044B     		ldr	r3, .L11
+ 245 0100 0022     		movs	r2, #0
+ 246 0102 1A60     		str	r2, [r3]
+  75:additional.c  **** }
+ 247              		.loc 1 75 0
+ 248 0104 C046     		nop
+ 249 0106 BD46     		mov	sp, r7
+ 250 0108 02B0     		add	sp, sp, #8
+ 251              		@ sp needed
+ 252 010a 80BC     		pop	{r7}
+ 253 010c 01BC     		pop	{r0}
+ 254 010e 0047     		bx	r0
+ 255              	.L12:
+ 256              		.align	2
+ 257              	.L11:
+ 258 0110 048000E0 		.word	-536838140
+ 259 0114 0C8000E0 		.word	-536838132
+ 260 0118 FFFF8303 		.word	58982399
+ 261 011c 188000E0 		.word	-536838120
+ 262 0120 008000E0 		.word	-536838144
+ 263 0124 148000E0 		.word	-536838124
+ 264              		.cfi_endproc
+ 265              	.LFE2:
+ 266              		.size	sdelay, .-sdelay
+ 267              	.Letext0:
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 7
 
 
- 275 0015 F8000000 		.4byte	.LASF14
- 276 0019 00000000 		.4byte	.Ltext0
- 277 001d 24010000 		.4byte	.Letext0
- 278 0021 00000000 		.4byte	.Ldebug_line0
- 279 0025 02       		.uleb128 0x2
- 280 0026 01       		.byte	0x1
- 281 0027 08       		.byte	0x8
- 282 0028 4C000000 		.4byte	.LASF0
- 283 002c 02       		.uleb128 0x2
- 284 002d 02       		.byte	0x2
- 285 002e 07       		.byte	0x7
- 286 002f 16010000 		.4byte	.LASF1
- 287 0033 03       		.uleb128 0x3
- 288 0034 46010000 		.4byte	.LASF15
- 289 0038 02       		.byte	0x2
- 290 0039 1A       		.byte	0x1a
- 291 003a 3E000000 		.4byte	0x3e
- 292 003e 02       		.uleb128 0x2
- 293 003f 04       		.byte	0x4
- 294 0040 07       		.byte	0x7
- 295 0041 17000000 		.4byte	.LASF2
- 296 0045 02       		.uleb128 0x2
- 297 0046 08       		.byte	0x8
- 298 0047 07       		.byte	0x7
- 299 0048 35000000 		.4byte	.LASF3
- 300 004c 02       		.uleb128 0x2
- 301 004d 01       		.byte	0x1
- 302 004e 06       		.byte	0x6
- 303 004f 29010000 		.4byte	.LASF4
- 304 0053 02       		.uleb128 0x2
- 305 0054 02       		.byte	0x2
- 306 0055 05       		.byte	0x5
- 307 0056 35010000 		.4byte	.LASF5
- 308 005a 04       		.uleb128 0x4
- 309 005b 04       		.byte	0x4
- 310 005c 05       		.byte	0x5
- 311 005d 696E7400 		.ascii	"int\000"
- 312 0061 02       		.uleb128 0x2
- 313 0062 08       		.byte	0x8
- 314 0063 05       		.byte	0x5
- 315 0064 00000000 		.4byte	.LASF6
- 316 0068 05       		.uleb128 0x5
- 317 0069 01       		.byte	0x1
- 318 006a 71000000 		.4byte	.LASF7
- 319 006e 01       		.byte	0x1
- 320 006f 33       		.byte	0x33
- 321 0070 01       		.byte	0x1
- 322 0071 BC000000 		.4byte	.LFB2
- 323 0075 24010000 		.4byte	.LFE2
- 324 0079 00000000 		.4byte	.LLST2
- 325 007d 01       		.byte	0x1
- 326 007e 91000000 		.4byte	0x91
- 327 0082 06       		.uleb128 0x6
- 328 0083 0E000000 		.4byte	.LASF9
- 329 0087 01       		.byte	0x1
- 330 0088 33       		.byte	0x33
- 331 0089 3E000000 		.4byte	0x3e
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 8
+ 268              		.file 2 "general.h"
+ 269              		.section	.debug_info,"",%progbits
+ 270              	.Ldebug_info0:
+ 271 0000 DC000000 		.4byte	0xdc
+ 272 0004 0200     		.2byte	0x2
+ 273 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 274 000a 04       		.byte	0x4
+ 275 000b 01       		.uleb128 0x1
+ 276 000c 78000000 		.4byte	.LASF12
+ 277 0010 0C       		.byte	0xc
+ 278 0011 64000000 		.4byte	.LASF13
+ 279 0015 F8000000 		.4byte	.LASF14
+ 280 0019 00000000 		.4byte	.Ltext0
+ 281 001d 28010000 		.4byte	.Letext0
+ 282 0021 00000000 		.4byte	.Ldebug_line0
+ 283 0025 02       		.uleb128 0x2
+ 284 0026 01       		.byte	0x1
+ 285 0027 08       		.byte	0x8
+ 286 0028 4C000000 		.4byte	.LASF0
+ 287 002c 02       		.uleb128 0x2
+ 288 002d 02       		.byte	0x2
+ 289 002e 07       		.byte	0x7
+ 290 002f 16010000 		.4byte	.LASF1
+ 291 0033 03       		.uleb128 0x3
+ 292 0034 46010000 		.4byte	.LASF15
+ 293 0038 02       		.byte	0x2
+ 294 0039 1A       		.byte	0x1a
+ 295 003a 3E000000 		.4byte	0x3e
+ 296 003e 02       		.uleb128 0x2
+ 297 003f 04       		.byte	0x4
+ 298 0040 07       		.byte	0x7
+ 299 0041 17000000 		.4byte	.LASF2
+ 300 0045 02       		.uleb128 0x2
+ 301 0046 08       		.byte	0x8
+ 302 0047 07       		.byte	0x7
+ 303 0048 35000000 		.4byte	.LASF3
+ 304 004c 02       		.uleb128 0x2
+ 305 004d 01       		.byte	0x1
+ 306 004e 06       		.byte	0x6
+ 307 004f 29010000 		.4byte	.LASF4
+ 308 0053 02       		.uleb128 0x2
+ 309 0054 02       		.byte	0x2
+ 310 0055 05       		.byte	0x5
+ 311 0056 35010000 		.4byte	.LASF5
+ 312 005a 04       		.uleb128 0x4
+ 313 005b 04       		.byte	0x4
+ 314 005c 05       		.byte	0x5
+ 315 005d 696E7400 		.ascii	"int\000"
+ 316 0061 02       		.uleb128 0x2
+ 317 0062 08       		.byte	0x8
+ 318 0063 05       		.byte	0x5
+ 319 0064 00000000 		.4byte	.LASF6
+ 320 0068 05       		.uleb128 0x5
+ 321 0069 01       		.byte	0x1
+ 322 006a 71000000 		.4byte	.LASF7
+ 323 006e 01       		.byte	0x1
+ 324 006f 39       		.byte	0x39
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 8
 
 
- 332 008d 02       		.byte	0x2
- 333 008e 91       		.byte	0x91
- 334 008f 74       		.sleb128 -12
- 335 0090 00       		.byte	0
- 336 0091 05       		.uleb128 0x5
- 337 0092 01       		.byte	0x1
- 338 0093 3F010000 		.4byte	.LASF8
- 339 0097 01       		.byte	0x1
- 340 0098 23       		.byte	0x23
- 341 0099 01       		.byte	0x1
- 342 009a 58000000 		.4byte	.LFB1
- 343 009e BC000000 		.4byte	.LFE1
- 344 00a2 38000000 		.4byte	.LLST1
- 345 00a6 01       		.byte	0x1
- 346 00a7 BA000000 		.4byte	0xba
- 347 00ab 06       		.uleb128 0x6
- 348 00ac 5A000000 		.4byte	.LASF10
- 349 00b0 01       		.byte	0x1
- 350 00b1 23       		.byte	0x23
- 351 00b2 33000000 		.4byte	0x33
- 352 00b6 02       		.byte	0x2
- 353 00b7 91       		.byte	0x91
- 354 00b8 74       		.sleb128 -12
- 355 00b9 00       		.byte	0
- 356 00ba 07       		.uleb128 0x7
- 357 00bb 01       		.byte	0x1
- 358 00bc 24000000 		.4byte	.LASF16
- 359 00c0 01       		.byte	0x1
- 360 00c1 09       		.byte	0x9
- 361 00c2 01       		.byte	0x1
- 362 00c3 00000000 		.4byte	.LFB0
- 363 00c7 58000000 		.4byte	.LFE0
- 364 00cb 70000000 		.4byte	.LLST0
- 365 00cf 01       		.byte	0x1
- 366 00d0 06       		.uleb128 0x6
- 367 00d1 2B000000 		.4byte	.LASF11
- 368 00d5 01       		.byte	0x1
- 369 00d6 09       		.byte	0x9
- 370 00d7 33000000 		.4byte	0x33
- 371 00db 02       		.byte	0x2
- 372 00dc 91       		.byte	0x91
- 373 00dd 74       		.sleb128 -12
- 374 00de 00       		.byte	0
- 375 00df 00       		.byte	0
- 376              		.section	.debug_abbrev,"",%progbits
- 377              	.Ldebug_abbrev0:
- 378 0000 01       		.uleb128 0x1
- 379 0001 11       		.uleb128 0x11
- 380 0002 01       		.byte	0x1
- 381 0003 25       		.uleb128 0x25
- 382 0004 0E       		.uleb128 0xe
- 383 0005 13       		.uleb128 0x13
- 384 0006 0B       		.uleb128 0xb
- 385 0007 03       		.uleb128 0x3
- 386 0008 0E       		.uleb128 0xe
- 387 0009 1B       		.uleb128 0x1b
- 388 000a 0E       		.uleb128 0xe
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 9
+ 325 0070 01       		.byte	0x1
+ 326 0071 C4000000 		.4byte	.LFB2
+ 327 0075 28010000 		.4byte	.LFE2
+ 328 0079 00000000 		.4byte	.LLST2
+ 329 007d 01       		.byte	0x1
+ 330 007e 91000000 		.4byte	0x91
+ 331 0082 06       		.uleb128 0x6
+ 332 0083 0E000000 		.4byte	.LASF9
+ 333 0087 01       		.byte	0x1
+ 334 0088 39       		.byte	0x39
+ 335 0089 33000000 		.4byte	0x33
+ 336 008d 02       		.byte	0x2
+ 337 008e 91       		.byte	0x91
+ 338 008f 74       		.sleb128 -12
+ 339 0090 00       		.byte	0
+ 340 0091 05       		.uleb128 0x5
+ 341 0092 01       		.byte	0x1
+ 342 0093 3F010000 		.4byte	.LASF8
+ 343 0097 01       		.byte	0x1
+ 344 0098 26       		.byte	0x26
+ 345 0099 01       		.byte	0x1
+ 346 009a 60000000 		.4byte	.LFB1
+ 347 009e C4000000 		.4byte	.LFE1
+ 348 00a2 38000000 		.4byte	.LLST1
+ 349 00a6 01       		.byte	0x1
+ 350 00a7 BA000000 		.4byte	0xba
+ 351 00ab 06       		.uleb128 0x6
+ 352 00ac 5A000000 		.4byte	.LASF10
+ 353 00b0 01       		.byte	0x1
+ 354 00b1 26       		.byte	0x26
+ 355 00b2 33000000 		.4byte	0x33
+ 356 00b6 02       		.byte	0x2
+ 357 00b7 91       		.byte	0x91
+ 358 00b8 74       		.sleb128 -12
+ 359 00b9 00       		.byte	0
+ 360 00ba 07       		.uleb128 0x7
+ 361 00bb 01       		.byte	0x1
+ 362 00bc 24000000 		.4byte	.LASF16
+ 363 00c0 01       		.byte	0x1
+ 364 00c1 09       		.byte	0x9
+ 365 00c2 01       		.byte	0x1
+ 366 00c3 00000000 		.4byte	.LFB0
+ 367 00c7 60000000 		.4byte	.LFE0
+ 368 00cb 70000000 		.4byte	.LLST0
+ 369 00cf 01       		.byte	0x1
+ 370 00d0 06       		.uleb128 0x6
+ 371 00d1 2B000000 		.4byte	.LASF11
+ 372 00d5 01       		.byte	0x1
+ 373 00d6 09       		.byte	0x9
+ 374 00d7 33000000 		.4byte	0x33
+ 375 00db 02       		.byte	0x2
+ 376 00dc 91       		.byte	0x91
+ 377 00dd 74       		.sleb128 -12
+ 378 00de 00       		.byte	0
+ 379 00df 00       		.byte	0
+ 380              		.section	.debug_abbrev,"",%progbits
+ 381              	.Ldebug_abbrev0:
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 9
 
 
- 389 000b 11       		.uleb128 0x11
- 390 000c 01       		.uleb128 0x1
- 391 000d 12       		.uleb128 0x12
- 392 000e 01       		.uleb128 0x1
- 393 000f 10       		.uleb128 0x10
- 394 0010 06       		.uleb128 0x6
- 395 0011 00       		.byte	0
- 396 0012 00       		.byte	0
- 397 0013 02       		.uleb128 0x2
- 398 0014 24       		.uleb128 0x24
- 399 0015 00       		.byte	0
- 400 0016 0B       		.uleb128 0xb
- 401 0017 0B       		.uleb128 0xb
- 402 0018 3E       		.uleb128 0x3e
- 403 0019 0B       		.uleb128 0xb
- 404 001a 03       		.uleb128 0x3
- 405 001b 0E       		.uleb128 0xe
- 406 001c 00       		.byte	0
- 407 001d 00       		.byte	0
- 408 001e 03       		.uleb128 0x3
- 409 001f 16       		.uleb128 0x16
- 410 0020 00       		.byte	0
- 411 0021 03       		.uleb128 0x3
- 412 0022 0E       		.uleb128 0xe
- 413 0023 3A       		.uleb128 0x3a
- 414 0024 0B       		.uleb128 0xb
- 415 0025 3B       		.uleb128 0x3b
- 416 0026 0B       		.uleb128 0xb
- 417 0027 49       		.uleb128 0x49
- 418 0028 13       		.uleb128 0x13
- 419 0029 00       		.byte	0
- 420 002a 00       		.byte	0
- 421 002b 04       		.uleb128 0x4
- 422 002c 24       		.uleb128 0x24
- 423 002d 00       		.byte	0
- 424 002e 0B       		.uleb128 0xb
- 425 002f 0B       		.uleb128 0xb
- 426 0030 3E       		.uleb128 0x3e
- 427 0031 0B       		.uleb128 0xb
- 428 0032 03       		.uleb128 0x3
- 429 0033 08       		.uleb128 0x8
- 430 0034 00       		.byte	0
- 431 0035 00       		.byte	0
- 432 0036 05       		.uleb128 0x5
- 433 0037 2E       		.uleb128 0x2e
- 434 0038 01       		.byte	0x1
- 435 0039 3F       		.uleb128 0x3f
- 436 003a 0C       		.uleb128 0xc
- 437 003b 03       		.uleb128 0x3
- 438 003c 0E       		.uleb128 0xe
- 439 003d 3A       		.uleb128 0x3a
- 440 003e 0B       		.uleb128 0xb
- 441 003f 3B       		.uleb128 0x3b
- 442 0040 0B       		.uleb128 0xb
- 443 0041 27       		.uleb128 0x27
- 444 0042 0C       		.uleb128 0xc
- 445 0043 11       		.uleb128 0x11
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 10
+ 382 0000 01       		.uleb128 0x1
+ 383 0001 11       		.uleb128 0x11
+ 384 0002 01       		.byte	0x1
+ 385 0003 25       		.uleb128 0x25
+ 386 0004 0E       		.uleb128 0xe
+ 387 0005 13       		.uleb128 0x13
+ 388 0006 0B       		.uleb128 0xb
+ 389 0007 03       		.uleb128 0x3
+ 390 0008 0E       		.uleb128 0xe
+ 391 0009 1B       		.uleb128 0x1b
+ 392 000a 0E       		.uleb128 0xe
+ 393 000b 11       		.uleb128 0x11
+ 394 000c 01       		.uleb128 0x1
+ 395 000d 12       		.uleb128 0x12
+ 396 000e 01       		.uleb128 0x1
+ 397 000f 10       		.uleb128 0x10
+ 398 0010 06       		.uleb128 0x6
+ 399 0011 00       		.byte	0
+ 400 0012 00       		.byte	0
+ 401 0013 02       		.uleb128 0x2
+ 402 0014 24       		.uleb128 0x24
+ 403 0015 00       		.byte	0
+ 404 0016 0B       		.uleb128 0xb
+ 405 0017 0B       		.uleb128 0xb
+ 406 0018 3E       		.uleb128 0x3e
+ 407 0019 0B       		.uleb128 0xb
+ 408 001a 03       		.uleb128 0x3
+ 409 001b 0E       		.uleb128 0xe
+ 410 001c 00       		.byte	0
+ 411 001d 00       		.byte	0
+ 412 001e 03       		.uleb128 0x3
+ 413 001f 16       		.uleb128 0x16
+ 414 0020 00       		.byte	0
+ 415 0021 03       		.uleb128 0x3
+ 416 0022 0E       		.uleb128 0xe
+ 417 0023 3A       		.uleb128 0x3a
+ 418 0024 0B       		.uleb128 0xb
+ 419 0025 3B       		.uleb128 0x3b
+ 420 0026 0B       		.uleb128 0xb
+ 421 0027 49       		.uleb128 0x49
+ 422 0028 13       		.uleb128 0x13
+ 423 0029 00       		.byte	0
+ 424 002a 00       		.byte	0
+ 425 002b 04       		.uleb128 0x4
+ 426 002c 24       		.uleb128 0x24
+ 427 002d 00       		.byte	0
+ 428 002e 0B       		.uleb128 0xb
+ 429 002f 0B       		.uleb128 0xb
+ 430 0030 3E       		.uleb128 0x3e
+ 431 0031 0B       		.uleb128 0xb
+ 432 0032 03       		.uleb128 0x3
+ 433 0033 08       		.uleb128 0x8
+ 434 0034 00       		.byte	0
+ 435 0035 00       		.byte	0
+ 436 0036 05       		.uleb128 0x5
+ 437 0037 2E       		.uleb128 0x2e
+ 438 0038 01       		.byte	0x1
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 10
 
 
- 446 0044 01       		.uleb128 0x1
- 447 0045 12       		.uleb128 0x12
- 448 0046 01       		.uleb128 0x1
- 449 0047 40       		.uleb128 0x40
- 450 0048 06       		.uleb128 0x6
- 451 0049 9742     		.uleb128 0x2117
- 452 004b 0C       		.uleb128 0xc
- 453 004c 01       		.uleb128 0x1
- 454 004d 13       		.uleb128 0x13
- 455 004e 00       		.byte	0
- 456 004f 00       		.byte	0
- 457 0050 06       		.uleb128 0x6
- 458 0051 05       		.uleb128 0x5
- 459 0052 00       		.byte	0
- 460 0053 03       		.uleb128 0x3
- 461 0054 0E       		.uleb128 0xe
- 462 0055 3A       		.uleb128 0x3a
- 463 0056 0B       		.uleb128 0xb
- 464 0057 3B       		.uleb128 0x3b
- 465 0058 0B       		.uleb128 0xb
- 466 0059 49       		.uleb128 0x49
- 467 005a 13       		.uleb128 0x13
- 468 005b 02       		.uleb128 0x2
- 469 005c 0A       		.uleb128 0xa
- 470 005d 00       		.byte	0
- 471 005e 00       		.byte	0
- 472 005f 07       		.uleb128 0x7
- 473 0060 2E       		.uleb128 0x2e
- 474 0061 01       		.byte	0x1
- 475 0062 3F       		.uleb128 0x3f
- 476 0063 0C       		.uleb128 0xc
- 477 0064 03       		.uleb128 0x3
- 478 0065 0E       		.uleb128 0xe
- 479 0066 3A       		.uleb128 0x3a
- 480 0067 0B       		.uleb128 0xb
- 481 0068 3B       		.uleb128 0x3b
- 482 0069 0B       		.uleb128 0xb
- 483 006a 27       		.uleb128 0x27
- 484 006b 0C       		.uleb128 0xc
- 485 006c 11       		.uleb128 0x11
- 486 006d 01       		.uleb128 0x1
- 487 006e 12       		.uleb128 0x12
- 488 006f 01       		.uleb128 0x1
- 489 0070 40       		.uleb128 0x40
- 490 0071 06       		.uleb128 0x6
- 491 0072 9742     		.uleb128 0x2117
- 492 0074 0C       		.uleb128 0xc
- 493 0075 00       		.byte	0
- 494 0076 00       		.byte	0
- 495 0077 00       		.byte	0
- 496              		.section	.debug_loc,"",%progbits
- 497              	.Ldebug_loc0:
- 498              	.LLST2:
- 499 0000 BC000000 		.4byte	.LFB2-.Ltext0
- 500 0004 BE000000 		.4byte	.LCFI6-.Ltext0
- 501 0008 0200     		.2byte	0x2
- 502 000a 7D       		.byte	0x7d
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 11
+ 439 0039 3F       		.uleb128 0x3f
+ 440 003a 0C       		.uleb128 0xc
+ 441 003b 03       		.uleb128 0x3
+ 442 003c 0E       		.uleb128 0xe
+ 443 003d 3A       		.uleb128 0x3a
+ 444 003e 0B       		.uleb128 0xb
+ 445 003f 3B       		.uleb128 0x3b
+ 446 0040 0B       		.uleb128 0xb
+ 447 0041 27       		.uleb128 0x27
+ 448 0042 0C       		.uleb128 0xc
+ 449 0043 11       		.uleb128 0x11
+ 450 0044 01       		.uleb128 0x1
+ 451 0045 12       		.uleb128 0x12
+ 452 0046 01       		.uleb128 0x1
+ 453 0047 40       		.uleb128 0x40
+ 454 0048 06       		.uleb128 0x6
+ 455 0049 9742     		.uleb128 0x2117
+ 456 004b 0C       		.uleb128 0xc
+ 457 004c 01       		.uleb128 0x1
+ 458 004d 13       		.uleb128 0x13
+ 459 004e 00       		.byte	0
+ 460 004f 00       		.byte	0
+ 461 0050 06       		.uleb128 0x6
+ 462 0051 05       		.uleb128 0x5
+ 463 0052 00       		.byte	0
+ 464 0053 03       		.uleb128 0x3
+ 465 0054 0E       		.uleb128 0xe
+ 466 0055 3A       		.uleb128 0x3a
+ 467 0056 0B       		.uleb128 0xb
+ 468 0057 3B       		.uleb128 0x3b
+ 469 0058 0B       		.uleb128 0xb
+ 470 0059 49       		.uleb128 0x49
+ 471 005a 13       		.uleb128 0x13
+ 472 005b 02       		.uleb128 0x2
+ 473 005c 0A       		.uleb128 0xa
+ 474 005d 00       		.byte	0
+ 475 005e 00       		.byte	0
+ 476 005f 07       		.uleb128 0x7
+ 477 0060 2E       		.uleb128 0x2e
+ 478 0061 01       		.byte	0x1
+ 479 0062 3F       		.uleb128 0x3f
+ 480 0063 0C       		.uleb128 0xc
+ 481 0064 03       		.uleb128 0x3
+ 482 0065 0E       		.uleb128 0xe
+ 483 0066 3A       		.uleb128 0x3a
+ 484 0067 0B       		.uleb128 0xb
+ 485 0068 3B       		.uleb128 0x3b
+ 486 0069 0B       		.uleb128 0xb
+ 487 006a 27       		.uleb128 0x27
+ 488 006b 0C       		.uleb128 0xc
+ 489 006c 11       		.uleb128 0x11
+ 490 006d 01       		.uleb128 0x1
+ 491 006e 12       		.uleb128 0x12
+ 492 006f 01       		.uleb128 0x1
+ 493 0070 40       		.uleb128 0x40
+ 494 0071 06       		.uleb128 0x6
+ 495 0072 9742     		.uleb128 0x2117
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 11
 
 
- 503 000b 00       		.sleb128 0
- 504 000c BE000000 		.4byte	.LCFI6-.Ltext0
- 505 0010 C0000000 		.4byte	.LCFI7-.Ltext0
- 506 0014 0200     		.2byte	0x2
- 507 0016 7D       		.byte	0x7d
- 508 0017 08       		.sleb128 8
- 509 0018 C0000000 		.4byte	.LCFI7-.Ltext0
- 510 001c C2000000 		.4byte	.LCFI8-.Ltext0
- 511 0020 0200     		.2byte	0x2
- 512 0022 7D       		.byte	0x7d
- 513 0023 10       		.sleb128 16
- 514 0024 C2000000 		.4byte	.LCFI8-.Ltext0
- 515 0028 24010000 		.4byte	.LFE2-.Ltext0
- 516 002c 0200     		.2byte	0x2
- 517 002e 77       		.byte	0x77
- 518 002f 10       		.sleb128 16
- 519 0030 00000000 		.4byte	0
- 520 0034 00000000 		.4byte	0
- 521              	.LLST1:
- 522 0038 58000000 		.4byte	.LFB1-.Ltext0
- 523 003c 5A000000 		.4byte	.LCFI3-.Ltext0
- 524 0040 0200     		.2byte	0x2
- 525 0042 7D       		.byte	0x7d
- 526 0043 00       		.sleb128 0
- 527 0044 5A000000 		.4byte	.LCFI3-.Ltext0
- 528 0048 5C000000 		.4byte	.LCFI4-.Ltext0
- 529 004c 0200     		.2byte	0x2
- 530 004e 7D       		.byte	0x7d
- 531 004f 08       		.sleb128 8
- 532 0050 5C000000 		.4byte	.LCFI4-.Ltext0
- 533 0054 5E000000 		.4byte	.LCFI5-.Ltext0
- 534 0058 0200     		.2byte	0x2
- 535 005a 7D       		.byte	0x7d
- 536 005b 10       		.sleb128 16
- 537 005c 5E000000 		.4byte	.LCFI5-.Ltext0
- 538 0060 BC000000 		.4byte	.LFE1-.Ltext0
- 539 0064 0200     		.2byte	0x2
- 540 0066 77       		.byte	0x77
- 541 0067 10       		.sleb128 16
- 542 0068 00000000 		.4byte	0
- 543 006c 00000000 		.4byte	0
- 544              	.LLST0:
- 545 0070 00000000 		.4byte	.LFB0-.Ltext0
- 546 0074 02000000 		.4byte	.LCFI0-.Ltext0
- 547 0078 0200     		.2byte	0x2
- 548 007a 7D       		.byte	0x7d
- 549 007b 00       		.sleb128 0
- 550 007c 02000000 		.4byte	.LCFI0-.Ltext0
- 551 0080 04000000 		.4byte	.LCFI1-.Ltext0
- 552 0084 0200     		.2byte	0x2
- 553 0086 7D       		.byte	0x7d
- 554 0087 08       		.sleb128 8
- 555 0088 04000000 		.4byte	.LCFI1-.Ltext0
- 556 008c 06000000 		.4byte	.LCFI2-.Ltext0
- 557 0090 0200     		.2byte	0x2
- 558 0092 7D       		.byte	0x7d
- 559 0093 10       		.sleb128 16
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 12
+ 496 0074 0C       		.uleb128 0xc
+ 497 0075 00       		.byte	0
+ 498 0076 00       		.byte	0
+ 499 0077 00       		.byte	0
+ 500              		.section	.debug_loc,"",%progbits
+ 501              	.Ldebug_loc0:
+ 502              	.LLST2:
+ 503 0000 C4000000 		.4byte	.LFB2-.Ltext0
+ 504 0004 C6000000 		.4byte	.LCFI6-.Ltext0
+ 505 0008 0200     		.2byte	0x2
+ 506 000a 7D       		.byte	0x7d
+ 507 000b 00       		.sleb128 0
+ 508 000c C6000000 		.4byte	.LCFI6-.Ltext0
+ 509 0010 C8000000 		.4byte	.LCFI7-.Ltext0
+ 510 0014 0200     		.2byte	0x2
+ 511 0016 7D       		.byte	0x7d
+ 512 0017 08       		.sleb128 8
+ 513 0018 C8000000 		.4byte	.LCFI7-.Ltext0
+ 514 001c CA000000 		.4byte	.LCFI8-.Ltext0
+ 515 0020 0200     		.2byte	0x2
+ 516 0022 7D       		.byte	0x7d
+ 517 0023 10       		.sleb128 16
+ 518 0024 CA000000 		.4byte	.LCFI8-.Ltext0
+ 519 0028 28010000 		.4byte	.LFE2-.Ltext0
+ 520 002c 0200     		.2byte	0x2
+ 521 002e 77       		.byte	0x77
+ 522 002f 10       		.sleb128 16
+ 523 0030 00000000 		.4byte	0
+ 524 0034 00000000 		.4byte	0
+ 525              	.LLST1:
+ 526 0038 60000000 		.4byte	.LFB1-.Ltext0
+ 527 003c 62000000 		.4byte	.LCFI3-.Ltext0
+ 528 0040 0200     		.2byte	0x2
+ 529 0042 7D       		.byte	0x7d
+ 530 0043 00       		.sleb128 0
+ 531 0044 62000000 		.4byte	.LCFI3-.Ltext0
+ 532 0048 64000000 		.4byte	.LCFI4-.Ltext0
+ 533 004c 0200     		.2byte	0x2
+ 534 004e 7D       		.byte	0x7d
+ 535 004f 08       		.sleb128 8
+ 536 0050 64000000 		.4byte	.LCFI4-.Ltext0
+ 537 0054 66000000 		.4byte	.LCFI5-.Ltext0
+ 538 0058 0200     		.2byte	0x2
+ 539 005a 7D       		.byte	0x7d
+ 540 005b 10       		.sleb128 16
+ 541 005c 66000000 		.4byte	.LCFI5-.Ltext0
+ 542 0060 C4000000 		.4byte	.LFE1-.Ltext0
+ 543 0064 0200     		.2byte	0x2
+ 544 0066 77       		.byte	0x77
+ 545 0067 10       		.sleb128 16
+ 546 0068 00000000 		.4byte	0
+ 547 006c 00000000 		.4byte	0
+ 548              	.LLST0:
+ 549 0070 00000000 		.4byte	.LFB0-.Ltext0
+ 550 0074 02000000 		.4byte	.LCFI0-.Ltext0
+ 551 0078 0200     		.2byte	0x2
+ 552 007a 7D       		.byte	0x7d
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 12
 
 
- 560 0094 06000000 		.4byte	.LCFI2-.Ltext0
- 561 0098 58000000 		.4byte	.LFE0-.Ltext0
- 562 009c 0200     		.2byte	0x2
- 563 009e 77       		.byte	0x77
- 564 009f 10       		.sleb128 16
- 565 00a0 00000000 		.4byte	0
- 566 00a4 00000000 		.4byte	0
- 567              		.section	.debug_aranges,"",%progbits
- 568 0000 1C000000 		.4byte	0x1c
- 569 0004 0200     		.2byte	0x2
- 570 0006 00000000 		.4byte	.Ldebug_info0
- 571 000a 04       		.byte	0x4
- 572 000b 00       		.byte	0
- 573 000c 0000     		.2byte	0
- 574 000e 0000     		.2byte	0
- 575 0010 00000000 		.4byte	.Ltext0
- 576 0014 24010000 		.4byte	.Letext0-.Ltext0
- 577 0018 00000000 		.4byte	0
- 578 001c 00000000 		.4byte	0
- 579              		.section	.debug_line,"",%progbits
- 580              	.Ldebug_line0:
- 581 0000 77000000 		.section	.debug_str,"MS",%progbits,1
- 581      02003000 
- 581      00000201 
- 581      FB0E0D00 
- 581      01010101 
- 582              	.LASF6:
- 583 0000 6C6F6E67 		.ascii	"long long int\000"
- 583      206C6F6E 
- 583      6720696E 
- 583      7400
- 584              	.LASF9:
- 585 000e 64656C61 		.ascii	"delayInS\000"
- 585      79496E53 
- 585      00
- 586              	.LASF2:
- 587 0017 756E7369 		.ascii	"unsigned int\000"
- 587      676E6564 
- 587      20696E74 
- 587      00
- 588              	.LASF16:
- 589 0024 7564656C 		.ascii	"udelay\000"
- 589      617900
- 590              	.LASF11:
- 591 002b 64656C61 		.ascii	"delayInUs\000"
- 591      79496E55 
- 591      7300
- 592              	.LASF3:
- 593 0035 6C6F6E67 		.ascii	"long long unsigned int\000"
- 593      206C6F6E 
- 593      6720756E 
- 593      7369676E 
- 593      65642069 
- 594              	.LASF0:
- 595 004c 756E7369 		.ascii	"unsigned char\000"
- 595      676E6564 
- 595      20636861 
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 13
+ 553 007b 00       		.sleb128 0
+ 554 007c 02000000 		.4byte	.LCFI0-.Ltext0
+ 555 0080 04000000 		.4byte	.LCFI1-.Ltext0
+ 556 0084 0200     		.2byte	0x2
+ 557 0086 7D       		.byte	0x7d
+ 558 0087 08       		.sleb128 8
+ 559 0088 04000000 		.4byte	.LCFI1-.Ltext0
+ 560 008c 06000000 		.4byte	.LCFI2-.Ltext0
+ 561 0090 0200     		.2byte	0x2
+ 562 0092 7D       		.byte	0x7d
+ 563 0093 10       		.sleb128 16
+ 564 0094 06000000 		.4byte	.LCFI2-.Ltext0
+ 565 0098 60000000 		.4byte	.LFE0-.Ltext0
+ 566 009c 0200     		.2byte	0x2
+ 567 009e 77       		.byte	0x77
+ 568 009f 10       		.sleb128 16
+ 569 00a0 00000000 		.4byte	0
+ 570 00a4 00000000 		.4byte	0
+ 571              		.section	.debug_aranges,"",%progbits
+ 572 0000 1C000000 		.4byte	0x1c
+ 573 0004 0200     		.2byte	0x2
+ 574 0006 00000000 		.4byte	.Ldebug_info0
+ 575 000a 04       		.byte	0x4
+ 576 000b 00       		.byte	0
+ 577 000c 0000     		.2byte	0
+ 578 000e 0000     		.2byte	0
+ 579 0010 00000000 		.4byte	.Ltext0
+ 580 0014 28010000 		.4byte	.Letext0-.Ltext0
+ 581 0018 00000000 		.4byte	0
+ 582 001c 00000000 		.4byte	0
+ 583              		.section	.debug_line,"",%progbits
+ 584              	.Ldebug_line0:
+ 585 0000 7A000000 		.section	.debug_str,"MS",%progbits,1
+ 585      02003000 
+ 585      00000201 
+ 585      FB0E0D00 
+ 585      01010101 
+ 586              	.LASF6:
+ 587 0000 6C6F6E67 		.ascii	"long long int\000"
+ 587      206C6F6E 
+ 587      6720696E 
+ 587      7400
+ 588              	.LASF9:
+ 589 000e 64656C61 		.ascii	"delayInS\000"
+ 589      79496E53 
+ 589      00
+ 590              	.LASF2:
+ 591 0017 756E7369 		.ascii	"unsigned int\000"
+ 591      676E6564 
+ 591      20696E74 
+ 591      00
+ 592              	.LASF16:
+ 593 0024 7564656C 		.ascii	"udelay\000"
+ 593      617900
+ 594              	.LASF11:
+ 595 002b 64656C61 		.ascii	"delayInUs\000"
+ 595      79496E55 
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 13
 
 
- 595      7200
- 596              	.LASF10:
- 597 005a 64656C61 		.ascii	"delayInMs\000"
- 597      79496E4D 
- 597      7300
- 598              	.LASF13:
- 599 0064 61646469 		.ascii	"additional.c\000"
- 599      74696F6E 
- 599      616C2E63 
- 599      00
- 600              	.LASF7:
- 601 0071 7364656C 		.ascii	"sdelay\000"
- 601      617900
- 602              	.LASF12:
- 603 0078 474E5520 		.ascii	"GNU C11 7.3.1 20180622 (release) [ARM/embedded-7-br"
- 603      43313120 
- 603      372E332E 
- 603      31203230 
- 603      31383036 
- 604 00ab 616E6368 		.ascii	"anch revision 261907] -mcpu=arm7tdmi -mthumb -mthum"
- 604      20726576 
- 604      6973696F 
- 604      6E203236 
- 604      31393037 
- 605 00de 622D696E 		.ascii	"b-interwork -gdwarf-2 -O0\000"
- 605      74657277 
- 605      6F726B20 
- 605      2D676477 
- 605      6172662D 
- 606              	.LASF14:
- 607 00f8 433A5C45 		.ascii	"C:\\Embedded\\2138MiniDemo\\2138\000"
- 607      6D626564 
- 607      6465645C 
- 607      32313338 
- 607      4D696E69 
- 608              	.LASF1:
- 609 0116 73686F72 		.ascii	"short unsigned int\000"
- 609      7420756E 
- 609      7369676E 
- 609      65642069 
- 609      6E7400
- 610              	.LASF4:
- 611 0129 7369676E 		.ascii	"signed char\000"
- 611      65642063 
- 611      68617200 
- 612              	.LASF5:
- 613 0135 73686F72 		.ascii	"short int\000"
- 613      7420696E 
- 613      7400
- 614              	.LASF8:
- 615 013f 6D64656C 		.ascii	"mdelay\000"
- 615      617900
- 616              	.LASF15:
- 617 0146 74553332 		.ascii	"tU32\000"
- 617      00
- 618              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2018-q2-update) 7.3.1 20180622 (release) [AR
-ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s 			page 14
+ 595      7300
+ 596              	.LASF3:
+ 597 0035 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 597      206C6F6E 
+ 597      6720756E 
+ 597      7369676E 
+ 597      65642069 
+ 598              	.LASF0:
+ 599 004c 756E7369 		.ascii	"unsigned char\000"
+ 599      676E6564 
+ 599      20636861 
+ 599      7200
+ 600              	.LASF10:
+ 601 005a 64656C61 		.ascii	"delayInMs\000"
+ 601      79496E4D 
+ 601      7300
+ 602              	.LASF13:
+ 603 0064 61646469 		.ascii	"additional.c\000"
+ 603      74696F6E 
+ 603      616C2E63 
+ 603      00
+ 604              	.LASF7:
+ 605 0071 7364656C 		.ascii	"sdelay\000"
+ 605      617900
+ 606              	.LASF12:
+ 607 0078 474E5520 		.ascii	"GNU C11 7.3.1 20180622 (release) [ARM/embedded-7-br"
+ 607      43313120 
+ 607      372E332E 
+ 607      31203230 
+ 607      31383036 
+ 608 00ab 616E6368 		.ascii	"anch revision 261907] -mcpu=arm7tdmi -mthumb -mthum"
+ 608      20726576 
+ 608      6973696F 
+ 608      6E203236 
+ 608      31393037 
+ 609 00de 622D696E 		.ascii	"b-interwork -gdwarf-2 -O0\000"
+ 609      74657277 
+ 609      6F726B20 
+ 609      2D676477 
+ 609      6172662D 
+ 610              	.LASF14:
+ 611 00f8 433A5C45 		.ascii	"C:\\Embedded\\2138MiniDemo\\2138\000"
+ 611      6D626564 
+ 611      6465645C 
+ 611      32313338 
+ 611      4D696E69 
+ 612              	.LASF1:
+ 613 0116 73686F72 		.ascii	"short unsigned int\000"
+ 613      7420756E 
+ 613      7369676E 
+ 613      65642069 
+ 613      6E7400
+ 614              	.LASF4:
+ 615 0129 7369676E 		.ascii	"signed char\000"
+ 615      65642063 
+ 615      68617200 
+ 616              	.LASF5:
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 14
+
+
+ 617 0135 73686F72 		.ascii	"short int\000"
+ 617      7420696E 
+ 617      7400
+ 618              	.LASF8:
+ 619 013f 6D64656C 		.ascii	"mdelay\000"
+ 619      617900
+ 620              	.LASF15:
+ 621 0146 74553332 		.ascii	"tU32\000"
+ 621      00
+ 622              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2018-q2-update) 7.3.1 20180622 (release) [AR
+ARM GAS  C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s 			page 15
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 additional.c
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:22     .text:00000000 udelay
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:30     .text:00000000 $t
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:86     .text:00000044 $d
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:94     .text:00000058 $t
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:101    .text:00000058 mdelay
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:169    .text:000000a4 $d
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:178    .text:000000bc $t
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:185    .text:000000bc sdelay
-C:\Users\embedded\AppData\Local\Temp\ccmKFuWN.s:255    .text:00000110 $d
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:22     .text:00000000 udelay
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:30     .text:00000000 $t
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:91     .text:0000004c $d
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:99     .text:00000060 $t
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:106    .text:00000060 mdelay
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:174    .text:000000ac $d
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:183    .text:000000c4 $t
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:190    .text:000000c4 sdelay
+C:\Users\embedded\AppData\Local\Temp\ccKaWE2q.s:258    .text:00000110 $d
 
 NO UNDEFINED SYMBOLS

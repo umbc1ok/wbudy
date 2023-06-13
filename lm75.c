@@ -14,7 +14,7 @@ tS8 measureTemperature(tU8 addr, tU8 *pBuf)
 void calculateTemperatureValue(tU8 *byteArray)
 {
     // Variable for holding result of sprintf
-    tU8 *resultPtr;
+    tU8 resultHolder;
 
     // Char array used for storing temperature to be shown to the user.
     tU8 charArray[10] = {0};
@@ -48,7 +48,7 @@ void calculateTemperatureValue(tU8 *byteArray)
 	tU8 i = 0;
 
     // Parsing calculatedValue into charArray to change it accroding to appendHalf flag value
-    resultPtr = sprintf(charArray, "%d", calculatedValue);
+	resultHolder = sprintf(charArray, "%d", calculatedValue);
 
     while(charArray[i] != (tU8)0) {
         i = i + (tU8)1;

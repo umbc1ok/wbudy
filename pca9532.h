@@ -30,5 +30,5 @@
 tBool pca9532Init(void);
 void  setPca9532Pin(tU8 pinNum, tU8 value);
 tU16  getPca9532Pin(void);
-
+void blinkLeds(tU8 value, tU8 pca9532Present);
 #endif

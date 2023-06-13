@@ -3,7 +3,7 @@
 
 #include "general.h"
 #include "lpc2xxx.h"
-const tU8 myArray[];
+const tU8 samples[];
 void beep(tU16 repetitions);
 
 
