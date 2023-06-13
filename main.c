@@ -40,7 +40,7 @@ int main(void)
 	tU8 currentType = 0;
 	tU8 humidityString[10] = {0};
 	tU8 temperature[2] = {0};
-
+	
 	tU8 temp_SEC = RTC_SEC;
 	tU8 temp_MIN = RTC_MIN;
 	tU8 temp_HOUR = RTC_HOUR;
