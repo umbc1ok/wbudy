@@ -18,7 +18,7 @@
 void udelay(tU32 delayInUs)
 {
 
-  T1TCR = 0x02; // zatrzymanie i restart zegara
+  T1TCR = 0x02; // zatrzymanie i reset zegara
   T1PR  = (CORE_FREQ / 1000000) -1; //57
 
   T1MR0 = delayInUs;
@@ -49,7 +49,7 @@ void udelay(tU32 delayInUs)
 void mdelay(tU32 delayInMs)
 {
 
-  T1TCR = 0x02; // zatrzymanie i restart zegara                         
+  T1TCR = 0x02; // zatrzymanie i reset zegara                         
   T1PR  = (PERIPHERAL_CLOCK / 1000) - 1; //58 981
   T1MR0 = delayInMs;
   T1IR  = 0xFF; // zresetowanie wszystkich flag przerwań       
@@ -79,7 +79,7 @@ void mdelay(tU32 delayInMs)
 void sdelay(tU32 delayInS)
 {
 
-  T1TCR = 0x02; // zatrzymanie i restart zegara
+  T1TCR = 0x02; // zatrzymanie i reset zegara
   T1PR  = PERIPHERAL_CLOCK - 1; //58 982 399    
   T1MR0 = delayInS;
   T1IR = 0xff;  // zresetowanie wszystkich flag przerwań
