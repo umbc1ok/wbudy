@@ -1,5 +1,19 @@
 #include "rtc.h"
 
+/*!
+ *  @brief    Wyswietla zadany czas (godziny,minuty,sekundy) i podswietla wybrane pole czasu.
+ *  @param sec
+ *             Sekunda do wyswietlenia.
+ *  @param min
+ *             Sekunda do wyswietlenia.
+ *  @param hour
+ *             Sekunda do wyswietlenia.
+ *  @param highlight
+ *             Okresla wybrane pole czasu, ktore ma byc podswietlone,
+ *             0 - godziny, 1 - minuty, 2 - sekundy, inna wartosc - brak podswietlenia
+ *  @side effects:
+ *              Zmiana pozycji wskaznika lcd w srodku funkcji. Po zakonczeniu dzialania jest on w pozycji x = 90, y = 70.
+ */
 void showTime(tU8 sec,tU8 min,tU8 hour, tU8 highlight){
 	tU8 sprintfHolder;
 	tU8 tabS[3];
@@ -57,7 +71,15 @@ void showTime(tU8 sec,tU8 min,tU8 hour, tU8 highlight){
     lcdColor(0xff, 0x00);
 }
 
-
+/*!
+ *  @brief    Wlacza alarm o okreslonym czasie (tzn. ustawia rejestry alarmu oraz AMR)
+ *  @param sec
+ *             Sekunda alarmu.
+ *  @param min
+ *             Minuta alarmu.
+ *  @param hour
+ *              Godzina alarmu.
+ */
 void setAlarm(tU8 sec, tU8 min, tU8 hour){
 	RTC_ALSEC = sec;
 	RTC_ALMIN = min;

@@ -25,6 +25,13 @@
 
 tU8 init(void);
 
+
+/*!
+ *  @brief    Logika programu budzika.
+ *  @returns  W praktyce nic, zawiera petle nieskonczona zawierajaca algorytm. 
+ *  @side effects:
+ *            efekty uboczne
+ */
 int main(void)
 {
 	tU8 pca9532Present;
@@ -186,6 +193,11 @@ int main(void)
 
     }
 }
+/*!
+ *  @brief    Inicjalizacja I2C, PCA9532, RTC oraz GPIO.
+ *
+ *  @returns  TRUE jesli pca9532 zostalo poprawnie zainicjalizowane, FALSE jesli nie zostalo.
+ */
 tU8 init(void){
 	i2cInit();
 	tU8 pca9532Present;
