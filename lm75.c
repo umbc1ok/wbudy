@@ -1,13 +1,12 @@
 /*
-    Obsługa pomiaru temperatury przy pomocy temometru LM75.
-
-    Plik z kodem źródłowym funkcji.
+    Funkcje sluzace do pobierania temperatury z LM75
+    oraz wypisywania ich na ekran
 */
 
 #include "lm75.h"
 
 /*!
-* @brief Funkcja pobierajaca wartosc temperatury z I2C
+* @brief Funkcja pobierajaca wartosc temperatury przez I2C
 * @param addr
 *			Adres termometru.
 * @param addr
@@ -21,50 +20,43 @@ tS8 measureTemperature(tU8 addr, tU8 *pBuf)
 
 
 /*!
-* @brief Funkcja wypisujaca na ekran wartosc temperatury pobrana z I2C.
+* @brief Funkcja wypisujaca na ekran (w aktualnym X,Y) wartosc temperatury pobrana przez I2C.
 * @param byteArray
 *			Tablica tU8 pobrana z I2C
 * @returns void
 */ 
 void calculateTemperatureValue(tU8 *byteArray)
 {
-    // Variable for holding result of sprintf
-    tU8 resultHolder;
-    
-    // Char array used for storing temperature to be shown to the user.
+    // Tablica przetrzymujaca temperature w formie znakowej, do wypisania na ekran
     tU8 charArray[10] = {0};
 
-    // Variable for string integer part of the temperature
-    // Since the temperature can be negative (when the 8-th bit is up then this variable must be tS8).
+    // Zmienna przechowujaca wartosc temperatury
+    // Jest typu tS8, poniewaz temperatura moze byc ujemna
     tS8 calculatedValue = byteArray[0];
-
-    // Flag indicating whether temperature value is below zero or not.
+    // Flagi okreslajace czy temperatura jest ujemna i czy nalezy do niej dodac 0.5
     tU8 isNegative = 0;
-
-    // Flag indicating whether it is required to add 0.5 Celsius degree to measured temperature.
     tU8 appendHalf = 0;
     
     if (calculatedValue < 0) {
-    	// Case for negative temperature - if temperature is in fact below zero, then adding 0.5 degree will work different way.
         isNegative = 1;
     }
-    if ((isNegative == (tU8)1) && ((byteArray[1] & (tU8)0x80) == (tU8)1)){
-        // Case for temperature that is negative and most significant bit in LSB (that is for 0.5 degree bit) is up.
+    // Kiedy temperatura jest ujemna i najbardziej znaczacy bit w najmniej znaczacym BAJCIE jest rowny 1
+    if ((isNegative == (tU8)1) && ((byteArray[1] & (tU8)0x80) == (tU8)0x80)){
         calculatedValue = calculatedValue + (tS8)1;
     	appendHalf = 1;
-    } else if ((isNegative == (tU8)0) && ((byteArray[1] & (tU8)0x80) == (tU8)1)) {
-        // Case for temperature that is non negative and most significant bit in LSB (that is for 0.5 degree bit) is up.
+    } // Kiedy temperatura jest NIEujemna i najbardziej znaczacy bit w najmniej znaczacym BAJCIE jest rowny 1 
+    else if ((isNegative == (tU8)0) && ((byteArray[1] & (tU8)0x80) == (tU8)0x80)) {
     	appendHalf = 1;
     } else {
         ;
     }
 
-    // Variable used as iterator in a loop.
-	tU8 i = 0;
-
-    // Parsing calculatedValue into charArray to change it accroding to appendHalf flag value
+    // Zmienna przetrzymujaca wartosc zwracana przez funkcje sprintf (wymaganie MISRY)
+    tU8 resultHolder;
 	resultHolder = sprintf(charArray, "%d", calculatedValue);
 
+    // Iterator dla petli
+    tU8 i = 0;
     while(charArray[i] != (tU8)0) {
         i = i + (tU8)1;
     }

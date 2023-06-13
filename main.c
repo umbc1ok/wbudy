@@ -38,7 +38,6 @@ int main(void)
 
 	tU8 isTimeBeingSet = FALSE;
 	tU8 currentType = 0;
-	tU8 humidityString[10] = {0};
 	tU8 temperature[2] = {0};
 	
 	tU8 temp_SEC = RTC_SEC;
@@ -48,8 +47,6 @@ int main(void)
 	// Ponizsze linijki sa po to, zeby spelnic wymaganie MISRA.
 	const tU8 tempPrompt[] = "Temperatura: \0";
 	const tU8 tempUnitPrompt[] = "st. C \0";
-	const tU8 humidityPrompt[] = "Wilgotnosc:\0";
-	const tU8 percentPrompt[] = "%\0";
 	const tU8 setAlarmPrompt[] = "R - ustaw budzik \0";
 	const tU8 wakeUpPrompt[] = "Wake up!\0";
 	const tU8 UPrompt[] = "U - zwieksz\0";
@@ -172,22 +169,13 @@ int main(void)
 		lcdGotoxy(0, 0);
 		tS8 i2cCode;
 		i2cCode = measureTemperature(lm75address, temperature); // MISRA wymaga aby funkcje zwracajace jakas wartosc nie zwracaly jej w eter
+		
 		lcdGotoxy(0, 0);
 		lcdPuts(tempPrompt);
 		lcdGotoxy(0, 15);
 		calculateTemperatureValue(temperature);
 		lcdGotoxy(40,15);
 		lcdPuts(tempUnitPrompt);
-
-		tU16 humidity = measureHumidity();
-		tU8 sprintfHolder;
-		sprintfHolder = sprintf(humidityString,"%d",humidity);
-		lcdGotoxy(0,30);
-		lcdPuts(humidityPrompt);
-		lcdGotoxy(0,45);
-		lcdPuts(humidityString);
-		lcdGotoxy(20,45);
-		lcdPuts(percentPrompt);
 		lcdGotoxy(0,105);
 		lcdPuts(setAlarmPrompt);
     }

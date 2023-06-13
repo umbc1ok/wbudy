@@ -7,7 +7,6 @@
 * @returns void
 */ 
 void beep(tU16 repetitions){
-
 	tU32 it = 0;
 	PINSEL1 &= ~0x000C0000;
 	PINSEL1 |=  0x00080000;

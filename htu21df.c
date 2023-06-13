@@ -1,24 +1,34 @@
 /*
-    Plik z kodem źródłowym funkcji do obsługi
-    czujnika wilgotności HTU21D(F)
+    Funkcje sluzace do obslugi czujnika wilgotności HTU21D(F)
 */
 
 #include "htu21df.h"
-
+/*!
+* @brief Funkcja pobierajaca wartosc wilgotnosci przez I2C
+* @param byteArray
+*			Tablica przechowujaca tablice 2 bajtow
+* @returns Wyliczona wilgotnosc
+*/ 
 tS8 calculateHumidity(tU8 *byteArray)
 {
     /*
         Konwersja tablicy 2 bajtów na jedną zmienną 16 bitową.
         Wyłączenie bitów stanu - dla wilgotności są to ostatnie 4 bity.
     */
-
 	tU8 mask = ~(0x0F);
 	byteArray[1] = (byteArray[1] & mask);
     tU16 readData = ((byteArray[0] << 8) | byteArray[1]);
 
     return ((((tU32)125 * (tU32)readData) / ((tU32)1 << 16)) - (tU32)6);
 }
-
+/*!
+* @brief Funkcja pobierajaca wartosc wilgotnosci przez I2C
+* @param addr
+*			Adres termometru.
+* @param addr
+*			Bufor do ktorego przkeazywany jest odczyt
+* @returns Wynik wykonania operacji I2C.
+*/ 
 tS8 measureHumidity(void)
 {
     // Adres czujnika wilgotności HTU21DF
@@ -46,4 +56,21 @@ tS8 measureHumidity(void)
         }
     }
     return actualHumidity;
+}
+// do opisania
+void printHumidity(void){
+	const tU8 humidityPrompt[] = "Wilgotnosc:\0";
+	const tU8 percentPrompt[] = "%\0";
+
+    tU8 humidityString[10] = {0};
+
+    tU16 humidity = measureHumidity();
+    tU8 sprintfHolder;
+    sprintfHolder = sprintf(humidityString,"%d",humidity);
+    lcdGotoxy(0,30);
+    lcdPuts(humidityPrompt);
+    lcdGotoxy(0,45);
+    lcdPuts(humidityString);
+    lcdGotoxy(20,45);
+    lcdPuts(percentPrompt);
 }
