@@ -9,6 +9,9 @@
  *          Brak
 */ 
 void beep(tU16 repetitions){
+	//maska 0xFFFF 001F
+	// uzywamy maski zeby nie nadpisywac zarezerowanych bitow
+	tU16 DACRmask = 0xFFFF001FU;
 	tU32 it = 0;
 	PINSEL1 &= ~0x000C0000;
 	PINSEL1 |=  0x00080000;
@@ -20,7 +23,8 @@ void beep(tU16 repetitions){
 			timesPlayed++;
 		}
 		tU8 buffer = samples[it];
-		DACR = (buffer << (tU8)8) | ((tU8)1 <<(tU8)16);        //BIAS = 0, 1uS settling time
+		//DACR = (buffer << (tU8)8) | ((tU8)1 <<(tU8)16);        //BIAS = 0, 1uS settling time
+		DACR = DACRmask | ((buffer << (tU8)8) | ((tU8)1 <<(tU8)16)); 
 		it++;
 		udelay(90);
 	}
