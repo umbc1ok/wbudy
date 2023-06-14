@@ -12,6 +12,8 @@
 * @param addr
 *			Bufor do ktorego przkeazywany jest odczyt
 * @returns Wynik wykonania operacji I2C.
+ * @side effects: 
+ *          Brak
 */ 
 tS8 measureTemperature(tU8 addr, tU8 *pBuf)
 {
@@ -24,6 +26,8 @@ tS8 measureTemperature(tU8 addr, tU8 *pBuf)
 * @param byteArray
 *			Tablica tU8 pobrana z I2C
 * @returns void
+ * @side effects: 
+ *          Brak
 */ 
 void calculateTemperatureValue(tU8 *byteArray)
 {

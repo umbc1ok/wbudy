@@ -5,6 +5,8 @@
 * @param repetitions
 *			Okresla ile razy zostanie powtorzony dzwiek.
 * @returns void
+ * @side effects: 
+ *          Brak
 */ 
 void beep(tU16 repetitions){
 	tU32 it = 0;

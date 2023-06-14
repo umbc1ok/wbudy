@@ -79,6 +79,8 @@ void showTime(tU8 sec,tU8 min,tU8 hour, tU8 highlight){
  *             Minuta alarmu.
  *  @param hour
  *              Godzina alarmu.
+ *  @side effects: 
+ *          Brak
  */
 void setAlarm(tU8 sec, tU8 min, tU8 hour){
 	RTC_ALSEC = sec;

@@ -135,7 +135,7 @@ int main(void)
 					}
 				}
 				else{
-					// do nothing
+					;// do nothing
 				}
 				showTime(temp_SEC,temp_MIN,temp_HOUR,currentType);
 
@@ -169,13 +169,16 @@ int main(void)
 		lcdGotoxy(0, 0);
 		tS8 i2cCode;
 		i2cCode = measureTemperature(lm75address, temperature); // MISRA wymaga aby funkcje zwracajace jakas wartosc nie zwracaly jej w eter
-		
+		// Printowanie wilgotnosci
+		printHumidity();
+		// Printowanie temperatury
 		lcdGotoxy(0, 0);
 		lcdPuts(tempPrompt);
 		lcdGotoxy(0, 15);
 		calculateTemperatureValue(temperature);
 		lcdGotoxy(40,15);
 		lcdPuts(tempUnitPrompt);
+		// Informowanie uzytkownika o dostepnych operacjach.
 		lcdGotoxy(0,105);
 		lcdPuts(setAlarmPrompt);
     }
@@ -202,6 +205,7 @@ tU8 init(void){
 	RTC_CCR  = 0x00000011;
 	PINSEL0&=~0x3FF0000; //init GPIO for joystick
 
+	// Wlaczenie RTC i wylaczenie alarmu
 	RTC_ILR = 0x2;
 	RTC_AMR = 0xFF;
 

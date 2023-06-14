@@ -1,7 +1,5 @@
 /*
-    Obsługa pomiaru temperatury przy pomocy temometru LM75.
-
-    Plik z definicjami funkcji.
+    Plik z definicjami funkcji sluzacych do obslugi termometru LM75
 */
 
 #ifndef LM75_H

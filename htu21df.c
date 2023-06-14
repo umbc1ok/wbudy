@@ -6,8 +6,10 @@
 /*!
 * @brief Funkcja pobierajaca wartosc wilgotnosci przez I2C
 * @param byteArray
-*			Tablica przechowujaca tablice 2 bajtow
+*			Tablica 2 bajtow pobrana wczesniej przez I2C
 * @returns Wyliczona wilgotnosc
+ * @side effects: 
+ *          Brak
 */ 
 tS8 calculateHumidity(tU8 *byteArray)
 {
@@ -23,11 +25,9 @@ tS8 calculateHumidity(tU8 *byteArray)
 }
 /*!
 * @brief Funkcja pobierajaca wartosc wilgotnosci przez I2C
-* @param addr
-*			Adres termometru.
-* @param addr
-*			Bufor do ktorego przkeazywany jest odczyt
-* @returns Wynik wykonania operacji I2C.
+* @returns Wartosc wilogtnosci.
+ * @side effects: 
+ *          Brak
 */ 
 tS8 measureHumidity(void)
 {
@@ -37,12 +37,10 @@ tS8 measureHumidity(void)
     tU8 htu21ReadAddress = ((tU8)(htu21Address << 1) | (tU8)1);
     // Adres wykorzystywany do odczytu z czujnika wilgotności HTU21DF
     tU8 htu21WriteAddress = ((tU8)(htu21Address << 1));
-    // Tablica tU8 wykorzystywana do przechowania wartości wilgotności sczytanej z czujnika
+    // Tablica tU8 wykorzystywana do przechowania wartości wilgotności zczytanej z czujnika
     tU8 readHumidity[2] = {0};
     tS8 retCode;
-    /*
-        Komenda odczytu wilgotności w trybie "No Hold Master".
-    */
+    // Komenda odczytu wilgotności w trybie "No Hold Master".
     tU8 commandNoHoldMaster[1] = {0};
     commandNoHoldMaster[0] = 0xF5;
     
@@ -57,7 +55,11 @@ tS8 measureHumidity(void)
     }
     return actualHumidity;
 }
-// do opisania
+/*!
+* @brief Funkcja wypisujaca na tablice aktualna wartosc wilgotnosci
+ * @side effects: 
+ *          Ustawienie wskaznika pozycji LCD na X = 20, Y = 45
+*/ 
 void printHumidity(void){
 	const tU8 humidityPrompt[] = "Wilgotnosc:\0";
 	const tU8 percentPrompt[] = "%\0";
