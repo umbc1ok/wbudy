@@ -24,7 +24,7 @@ void beep(tU16 repetitions){
 		}
 		tU8 buffer = samples[it];
 		//DACR = (buffer << (tU8)8) | ((tU8)1 <<(tU8)16);        //BIAS = 0, 1uS settling time
-		DACR = DACRmask | ((buffer << (tU8)8) | ((tU8)1 <<(tU8)16)); 
+		DACR = DACRmask | ((buffer << (tU8)8) | ((tU8)1 <<(tU8)16)); //mozliwe ze bedzie trzeba zrobic przesuniecie bitowe
 		it++;
 		udelay(90);
 	}
