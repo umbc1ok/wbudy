@@ -158,7 +158,7 @@ getPca9532Pin(void)
  *          void
  * 
  * @side effects: 
- *          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *          brak
  */
 void 
 blinkLeds(tU8 value, tU8 pca9532Present)

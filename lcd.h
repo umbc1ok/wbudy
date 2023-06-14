@@ -15,7 +15,6 @@
 
 #include "general.h"
 #include "lcd_hw.h"
-//#include "ascii.h"
 
 void lcdInit(void);
 void lcdOff(void);
